@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Request a demo · Solden</title>
+<meta name="description" content="Map one recurring finance responsibility with Solden, the AI finance team that does the work." />
+<meta name="theme-color" content="#001137" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Request a demo · Solden" />
+<meta property="og:description" content="Map one recurring finance responsibility with the AI finance team that does the work." />
+<meta property="og:url" content="https://soldenai.com/request-demo" />
+<meta property="og:image" content="https://soldenai.com/assets/solden-mark.png" />
+<meta property="og:image:alt" content="Solden" />
+<meta name="twitter:card" content="summary" />
+<link rel="canonical" href="https://soldenai.com/request-demo" />
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+<link rel="stylesheet" href="/assets/fonts/solden-fonts.css?v=20260824a" />
+<style>
+  :root{
+    --paper:#F6F5F0;--paper-2:#EFEEE7;--ink:#14151B;--ink-2:#4C4E57;--ink-3:#8B8D95;
+    --rule:rgba(20,21,27,0.14);--rule-2:rgba(20,21,27,0.075);--accent:#00B3A8;--accent-ink:#0B7E75;
+    --dark:#121317;--mono:'Geist Mono',ui-monospace,monospace;--sans:'Inter','Helvetica Neue',Arial,sans-serif;--maxw:1180px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:400;line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+  ::selection{background:var(--ink);color:var(--paper)}
+  a{color:inherit;text-decoration:none}
+  .lbl{font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3)}
+
+  /* NAV */
+  header.nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:60px;max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  .brand{display:flex;align-items:center;gap:9px}
+  .brand .mk{width:23px;height:23px;object-fit:contain;display:block}
+  .nav-links{display:flex;align-items:center;gap:30px}
+  .nav-links a{font-family:var(--sans);font-size:11.5px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-2);transition:color .16s;white-space:nowrap}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:9px;white-space:nowrap;font-family:var(--sans);font-weight:500;font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--ink);border-radius:0;padding:10px 15px;cursor:pointer;background:transparent;color:var(--ink);transition:background .16s,color .16s}
+  .btn-out:hover{background:var(--ink);color:var(--paper)}
+  .btn .x{transition:transform .18s}
+  .btn:hover .x{transform:translate(2px,-2px)}
+
+  /* LAYOUT */
+  main{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  .grid{display:grid;grid-template-columns:0.92fr 1.08fr;gap:0;border-bottom:1px solid var(--rule);min-height:calc(100vh - 60px)}
+  .pitch{padding:72px 56px 72px 0;border-right:1px solid var(--rule-2)}
+  .pitch .tag{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+  .pitch .tag .dot{width:7px;height:7px;background:var(--accent);border-radius:50%;flex:none}
+  .pitch h1{font-family:var(--sans);font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;letter-spacing:-0.035em;text-transform:uppercase}
+  .pitch .sub{margin-top:22px;max-width:50ch;font-family:var(--sans);font-weight:400;font-size:13.5px;color:var(--ink-2);line-height:1.72;letter-spacing:0.01em}
+  .pitch .pts{margin-top:36px;border-top:1px solid var(--rule)}
+  .pitch .pt{display:grid;grid-template-columns:30px 1fr;gap:14px;padding:18px 0;border-bottom:1px solid var(--rule-2);align-items:start}
+  .pitch .pt .n{font-family:var(--sans);font-size:11px;font-weight:600;color:var(--accent-ink);padding-top:2px}
+  .pitch .pt h4{font-size:15.5px;font-weight:600;letter-spacing:-0.01em}
+  .pitch .pt p{margin-top:5px;font-family:var(--sans);font-weight:400;font-size:12px;color:var(--ink-2);line-height:1.62;letter-spacing:0.01em}
+  .pitch .meta{margin-top:36px;font-family:var(--sans);font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-3);line-height:1.9}
+
+  /* FORM */
+  .form-col{padding:72px 0 72px 56px;display:flex;align-items:center}
+  .form-card{width:100%;max-width:460px}
+  .form-card .fh{font-family:var(--sans);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:26px}
+  .interest-context{margin:-12px 0 22px;padding:12px 14px;border:1px solid var(--cl-border);border-radius:8px;background:var(--cl-teal-soft);color:var(--cl-navy);font-size:13px;line-height:20px}
+  .field{margin-bottom:20px}
+  .field label{display:block;font-size:12px;font-weight:600;letter-spacing:0.02em;text-transform:uppercase;font-family:var(--sans);color:var(--ink-2);margin-bottom:8px}
+  .field label .req{color:var(--accent-ink)}
+  .field input,.field select,.field textarea{width:100%;font-family:var(--sans);font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:0;padding:12px 13px;transition:border-color .16s,box-shadow .16s}
+  .field input::placeholder,.field textarea::placeholder{color:var(--ink-3)}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent-ink);box-shadow:inset 0 0 0 1px var(--accent-ink)}
+  .field textarea{resize:vertical;min-height:88px;line-height:1.5}
+  .field select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' stroke='%238B8D95' stroke-width='1.4' fill='none'/></svg>");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px;cursor:pointer}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .submit{width:100%;justify-content:center;background:var(--ink);color:var(--paper);border:1px solid var(--ink);font-family:var(--sans);font-weight:500;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;padding:14px 18px;cursor:pointer;display:inline-flex;align-items:center;gap:9px;transition:background .16s}
+  .submit:hover{background:var(--accent-ink);border-color:var(--accent-ink)}
+  .submit .x{transition:transform .18s}
+  .submit:hover .x{transform:translate(2px,-2px)}
+  .form-fields{display:none;border:0;min-width:0;margin:0;padding:0}
+  .js-ready .form-fields{display:block}
+  .no-js-fallback{margin-top:20px;font-size:16px;color:var(--ink-2);line-height:1.65}
+  .js-ready .no-js-fallback{display:none}
+  .no-js-fallback a{color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
+  .finehint{margin-top:14px;font-size:12px;color:var(--ink-3);line-height:1.5}
+  .form-status:not(:empty){color:var(--cl-danger);font-size:16px}
+  .finehint a{color:var(--accent-ink)}
+  /* success state */
+  .done{display:none;border:1px solid var(--ink);padding:36px 32px;background:var(--paper)}
+  .done.show{display:block;animation:fade .5s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .done .mark{width:42px;height:42px;border:1.5px solid var(--accent-ink);color:var(--accent-ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:20px}
+  .done h3{font-family:var(--sans);font-size:18px;font-weight:600;letter-spacing:-0.01em;text-transform:uppercase}
+  .done p{margin-top:12px;font-size:14.5px;color:var(--ink-2);line-height:1.6;max-width:40ch}
+  .done .back{margin-top:24px;display:inline-flex;align-items:center;gap:8px;font-family:var(--sans);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink);border-bottom:1px solid var(--accent-ink);padding-bottom:3px}
+
+  /* FOOTER */
+
+  @media(max-width:880px){
+    .nav-links{display:none}
+    .grid{grid-template-columns:1fr;min-height:0}
+    .pitch{border-right:none;padding:48px 0 36px}
+    .form-col{padding:8px 0 56px}
+    .two{grid-template-columns:1fr}
+  }
+</style>
+<link rel="stylesheet" href="/solden-landing.css?v=20260824a" />
+<link rel="stylesheet" href="/assets/site-shell.css?v=20260828c" />
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<header class="site-header" data-site-header>
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="Solden home">
+      <img class="brand-lockup" src="/assets/solden-lockup-white-212.png" width="106" height="26" alt="" />
+    </a>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <div class="nav-menu" data-nav-menu="finance-jobs">
+        <button class="nav-menu-trigger" type="button" aria-expanded="false" aria-controls="finance-jobs-menu" data-nav-trigger>Finance jobs</button>
+        <div class="mega-menu mega-menu-finance" id="finance-jobs-menu" data-nav-panel aria-label="Finance jobs" hidden></div>
+      </div>
+      <div class="nav-menu" data-nav-menu="use-cases">
+        <button class="nav-menu-trigger" type="button" aria-expanded="false" aria-controls="use-cases-menu" data-nav-trigger>Use cases</button>
+        <div class="mega-menu mega-menu-use-cases" id="use-cases-menu" data-nav-panel aria-label="Use cases" hidden></div>
+      </div>
+      <a href="/#how-it-works">How it works</a>
+      <a href="/security">Security</a>
+    </nav>
+    <a class="header-cta" href="/request-demo">Request a demo</a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open navigation">
+      <span aria-hidden="true"></span>
+    </button>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" hidden>
+    <div class="mobile-nav-root" data-mobile-nav-root>
+        <button class="mobile-nav-link" type="button" data-mobile-nav-target="finance-jobs" aria-expanded="false" aria-controls="mobile-finance-jobs-panel">Finance jobs</button>
+        <button class="mobile-nav-link" type="button" data-mobile-nav-target="use-cases" aria-expanded="false" aria-controls="mobile-use-cases-panel">Use cases</button>
+      <a href="/#how-it-works">How it works</a>
+      <a href="/security">Security</a>
+      <a class="mobile-nav-cta" href="/request-demo">Request a demo</a>
+    </div>
+    <section class="mobile-nav-panel" id="mobile-finance-jobs-panel" data-mobile-nav-panel="finance-jobs" aria-label="Finance jobs" hidden></section>
+    <section class="mobile-nav-panel" id="mobile-use-cases-panel" data-mobile-nav-panel="use-cases" aria-label="Use cases" hidden></section>
+  </nav>
+</header>
+
+<main id="main-content" class="subpage-main" tabindex="-1">
+  <div class="grid">
+    <!-- PITCH -->
+    <section class="pitch">
+      <div class="tag"><span class="dot"></span><span class="lbl">Map the finance work your team still carries</span></div>
+      <h1>Show us the finance work<br />you need completed.</h1>
+      <p class="sub">Solden is the AI finance team that does the work. Month-end close is the first supported responsibility. Tell us the recurring outcome your team still has to investigate, coordinate, and carry through manually.</p>
+      <div class="pts">
+        <div class="pt"><span class="n">01</span><div><h4>Map one complete responsibility</h4><p>We map its scope, systems, evidence, controls, human decisions, completion condition, and recurring manual work.</p></div></div>
+        <div class="pt"><span class="n">02</span><div><h4>30 minutes</h4><p>A focused working session with the team building Solden.</p></div></div>
+        <div class="pt"><span class="n">03</span><div><h4>Built around your controls</h4><p>See how Solden would work across the systems your finance work already moves through.</p></div></div>
+      </div>
+      <div class="meta">Prefer email? hello@soldenai.com</div>
+    </section>
+
+    <!-- FORM -->
+    <section class="form-col">
+      <div class="form-card">
+        <form id="demoForm" method="post" action="/api/contact">
+          <div class="fh">Request a demo</div>
+          <p id="interestContext" class="interest-context" hidden></p>
+          <p id="scriptFallback" class="no-js-fallback">The secure demo form needs JavaScript. Email <a href="mailto:hello@soldenai.com">hello@soldenai.com</a> and we will arrange the working session directly.</p>
+          <fieldset id="demoFields" class="form-fields" disabled>
+            <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden"><label for="company_website">Company website</label><input id="company_website" name="company_website" type="text" tabindex="-1" autocomplete="off" /></div>
+            <div class="two">
+              <div class="field"><label for="fname">First name <span class="req">*</span></label><input id="fname" name="fname" type="text" autocomplete="given-name" required /></div>
+              <div class="field"><label for="lname">Last name <span class="req">*</span></label><input id="lname" name="lname" type="text" autocomplete="family-name" required /></div>
+            </div>
+            <div class="field"><label for="email">Work email <span class="req">*</span></label><input id="email" name="email" type="email" placeholder="you@company.com" autocomplete="email" required /></div>
+            <div class="field"><label for="company">Company <span class="req">*</span></label><input id="company" name="company" type="text" autocomplete="organization" required /></div>
+            <div class="two">
+              <div class="field"><label for="role">Your role</label>
+                <select id="role" name="role">
+                  <option value="">Select…</option>
+                  <option>Accounting</option>
+                  <option>Finance operations</option>
+                  <option>Controller</option>
+                  <option>CFO / Head of finance</option>
+                  <option>Audit / advisory</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="field"><label for="team">Team size</label>
+                <select id="team" name="team">
+                  <option value="">Select…</option>
+                  <option>1–5</option>
+                  <option>6–20</option>
+                  <option>21–50</option>
+                  <option>50+</option>
+                </select>
+              </div>
+            </div>
+            <div class="field"><label id="ctxLabel" for="ctx">What recurring finance outcome would you want Solden to own?</label><textarea id="ctx" name="ctx" placeholder="Describe the outcome, systems, evidence, controls, approvals, and what completion should mean."></textarea></div>
+            <button type="submit" class="submit">Request a demo</button>
+            <p id="formStatus" class="finehint form-status" role="status" aria-live="polite" aria-atomic="true"></p>
+            <p class="finehint">We'll only use this to schedule your session. No newsletters. See our <a href="/privacy">privacy notice</a>.</p>
+          </fieldset>
+        </form>
+
+        <div class="done" id="doneState" role="status" aria-live="polite" aria-atomic="true" tabindex="-1">
+          <div class="mark">✓</div>
+          <h3>Request received</h3>
+          <p id="doneMsg">Thanks. We'll be in touch within two business days to set up your session.</p>
+          <a class="back" href="/">Return home</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <a class="brand" href="/" aria-label="Solden home"><img class="brand-lockup" src="/assets/solden-lockup-white-212.png" width="106" height="26" alt="" /></a>
+      <p>The AI finance team for modern companies.</p>
+    </div>
+    <nav class="footer-social" aria-label="Social media">
+      <a href="https://linkedin.com/company/soldenai" target="_blank" rel="noopener noreferrer" aria-label="Solden on LinkedIn"><img src="/assets/icons/solden-icon-linkedin.svg" width="18" height="18" alt="" /></a>
+      <a href="https://x.com/solden_ai" target="_blank" rel="noopener noreferrer" aria-label="Solden on X"><img src="/assets/icons/solden-icon-x.svg" width="18" height="18" alt="" /></a>
+    </nav>
+  </div>
+  <div class="footer-base">
+    <p>© 2026 Solden Systems Ltd.</p>
+    <nav class="footer-legal" aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms</a></nav>
+  </div>
+</footer>
+
+<script type="module" src="/assets/js/site-shell.js?v=20260828c"></script>
+<script src="/assets/js/demo.js?v=20260828a"></script>
+</body>
+</html>
