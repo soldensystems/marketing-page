@@ -25,8 +25,8 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="preload" href="/assets/fonts/Fraunces-Variable.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="/assets/fonts/solden-fonts.css?v=20261001n" />
-  <link rel="stylesheet" href="/assets/site.css?v=20261001n" />
+  <link rel="stylesheet" href="/assets/fonts/solden-fonts.css?v=20261001p" />
+  <link rel="stylesheet" href="/assets/site.css?v=20261001p" />
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","name":"Solden","legalName":"Solden Systems Ltd.","url":"https://soldenai.com/","logo":"https://soldenai.com/assets/og-card.png","description":"Solden runs finance for growing companies.","sameAs":["https://x.com/solden_ai","https://linkedin.com/company/soldenai"]}
   </script>
@@ -222,28 +222,18 @@
         <span class="eyebrow">What you are hiring</span>
         <h2 id="hiring-title">A department is something you assign work to.</h2>
         <p class="lede">Close software gave you a checklist and a dashboard. Your team still did the close. An accounting firm gives you people to coordinate and bills the hours. Solden is a finance department delivered as a service: you assign it the close and its controls, and it answers for the outcome.</p>
-        <div class="card-grid-2">
-          <div class="card">
-            <h3>The close today</h3>
-            <p class="sub">Many contributors, no owner.</p>
-            <ul class="cross">
-              <li>Two close tools later, the checklist is tidier and the work is the same. Your team still does every reconciliation.</li>
-              <li>The dashboard shows status. It does not show who is finishing the open item.</li>
-              <li>Evidence sits in the ERP, the bank portals, the shared drive and someone's inbox. Review means re-doing the work, not checking it.</li>
-              <li>When the close slips, the vendor owns the software and your team owns the slip.</li>
-            </ul>
-          </div>
-          <div class="card card-solden">
-            <h3>The close with Solden</h3>
-            <p class="sub">One owner, one boundary, one pack.</p>
-            <ul class="check">
-              <li>Solden owns the recurring work across the ERP and systems you already run.</li>
-              <li>Every figure carries its evidence. Review takes minutes, not sessions.</li>
-              <li>Only true judgement calls reach you, as a case with a proposal.</li>
-              <li>A job ends as a verified result or an exact blocker: who must act, and why.</li>
-            </ul>
-          </div>
-        </div>
+        <table class="compare">
+          <thead>
+            <tr><th scope="col"><span class="sr-only">Question</span></th><th scope="col">Close software</th><th scope="col">Accounting firm</th><th scope="col" class="is-solden">Solden</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Who does the close</th><td data-col="Close software">Your team, with a checklist</td><td data-col="Accounting firm">Their staff, by the hour</td><td data-col="Solden" class="is-solden">Solden. Your controller attests.</td></tr>
+            <tr><th scope="row">What you receive</th><td data-col="Close software">A dashboard of status</td><td data-col="Accounting firm">Reports, once the hours are in</td><td data-col="Solden" class="is-solden">The finished close with its evidence, by the agreed business day</td></tr>
+            <tr><th scope="row">What reaches you</th><td data-col="Close software">Every open item</td><td data-col="Accounting firm">Questions by email</td><td data-col="Solden" class="is-solden">Only judgement calls, as a case with a proposal</td></tr>
+            <tr><th scope="row">When it slips</th><td data-col="Close software">Your team owns the slip</td><td data-col="Accounting firm">More hours</td><td data-col="Solden" class="is-solden">An exact blocker: who must act, and why</td></tr>
+            <tr><th scope="row">How you pay</th><td data-col="Close software">Licences</td><td data-col="Accounting firm">Hours</td><td data-col="Solden" class="is-solden">One monthly price, by entities and volume</td></tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
@@ -502,7 +492,7 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20261001n" defer></script>
+  <script src="/assets/site.js?v=20261001p" defer></script>
   <script src="/_vercel/insights/script.js" defer></script>
 </body>
 </html>
