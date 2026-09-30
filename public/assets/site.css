@@ -2391,6 +2391,7 @@ main > .hero:last-child {
   padding-top: 16px;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px 24px;
   font: 400 12px/1.5 var(--mono);
   color: var(--muted);
@@ -2403,6 +2404,34 @@ main > .hero:last-child {
 
 .footer-legal a:hover {
   text-decoration: underline;
+}
+
+.footer-social {
+  display: inline-flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.footer-legal .footer-social a {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+  color: var(--muted);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.footer-legal .footer-social a:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  text-decoration: none;
+}
+
+.footer-social svg {
+  fill: currentColor;
+  display: block;
 }
 
 /* ---------------------------------------------------------------- Inner pages: tiles */
