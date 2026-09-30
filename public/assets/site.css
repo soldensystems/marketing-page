@@ -2824,8 +2824,12 @@ main > .hero:last-child {
   }
 
   .stack-mobile .erp-names img {
-    height: 18px;
-    width: auto;
+    height: 20px;
+    width: 20px;
+  }
+
+  .stack-mobile .erp-names .ns-mark {
+    border-radius: 5px;
   }
 
   .stack-mobile .erp-names .erp-sep {

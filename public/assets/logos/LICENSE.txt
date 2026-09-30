@@ -30,8 +30,8 @@ Sources
   a single fill #FF5A0A (the secondary tint on one path is flattened).
   viewBox 0 0 53 35.
 
-- netsuite.svg: NetSuite wordmark, taken from Oracle NetSuite's own site
-  asset https://www.netsuite.co.uk/portal/assets/img/Oracle-NetSuite-Logo.svg
+- netsuite-mark.png: the NetSuite product symbol, taken from the NetSuite app icon
+  published by Oracle America, Inc. on the Apple App Store (60x60 export)
   (fetched 30 September 2026). The stacked lockup carries ORACLE above
   NetSuite; only the NetSuite wordmark group is kept so it stays legible
   at 14 px, rebased to y = 0. Fill #312D2A as published by Oracle.
