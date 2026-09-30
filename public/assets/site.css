@@ -1597,23 +1597,8 @@ main > .hero:last-child {
   stroke-linejoin: round;
 }
 
-.stack-svg .solden-box {
-  fill: var(--ink);
-  filter: drop-shadow(0 24px 48px rgba(11, 21, 48, 0.28));
-}
-
-.stack-svg .solden-s {
-  fill: #fff;
-}
-
-.stack-svg .solden-t {
-  font: 600 15px var(--sans);
-  fill: #fff;
-}
-
-.stack-svg .solden-sub {
-  font: 400 12.5px var(--sans);
-  fill: var(--dark-muted);
+.stack-svg .solden-halo {
+  fill: var(--canvas);
 }
 
 .stack-mobile {
@@ -2900,45 +2885,15 @@ main > .hero:last-child {
   }
 
   .stack-mobile .sol-m {
-    flex-direction: row;
-    justify-content: center;
-    gap: 12px;
-    background: var(--ink);
-    border-color: var(--ink);
-    color: #fff;
-    text-align: left;
-    font-weight: 600;
-    font-size: 14px;
+    padding: 6px 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
   }
 
-  .stack-mobile .sol-s {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 11px;
-    background: #fff;
-  }
-
-  .stack-mobile .sol-s img {
-    width: 26px;
-    height: 26px;
-  }
-
-  .stack-mobile .sol-t {
-    min-width: 0;
-  }
-
-  .stack-mobile .sol-t b {
-    display: block;
-    font: 600 15px/1.2 var(--sans);
-  }
-
-  .stack-mobile .sol-t small {
-    display: block;
-    font: 400 12px/1.4 var(--sans);
-    color: rgba(255, 255, 255, 0.72);
+  .stack-mobile .sol-m img {
+    width: 56px;
+    height: 56px;
   }
 }
 
