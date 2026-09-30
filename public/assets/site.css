@@ -502,7 +502,7 @@ main > .hero:last-child {
 
 .frame-well {
   position: relative;
-  max-width: 1120px;
+  max-width: 1280px;
   margin-inline: auto;
   padding: 28px 28px 8px;
   border-radius: 28px 28px 0 0;
@@ -689,7 +689,7 @@ main > .hero:last-child {
 
 .frame-body {
   display: grid;
-  grid-template-columns: 172px 1fr 300px;
+  grid-template-columns: 180px 1fr 320px;
   height: 760px;
   transition: transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1);
   transform-origin: 50% 0;
