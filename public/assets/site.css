@@ -2188,6 +2188,10 @@ main > .hero:last-child {
 
 /* ---------------------------------------------------------------- Dark block with the invite form */
 
+.wrap-wide {
+  max-width: calc(1280px + 2 * var(--gutter));
+}
+
 .dark-block {
   background: var(--dark);
   color: var(--dark-muted);
