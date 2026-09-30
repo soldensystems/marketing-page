@@ -691,25 +691,12 @@ main > .hero:last-child {
   display: grid;
   grid-template-columns: 172px 1fr 300px;
   min-height: 760px;
-  transition: transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1);
-  transform-origin: 50% 0;
 }
 
 .frame-body > * {
   min-width: 0;
 }
 
-.frame[data-camera="main"] .frame-body {
-  transform: none;
-}
-
-.frame[data-camera="panel"] .frame-body {
-  transform: scale(1.03) translateX(-3%);
-}
-
-.frame[data-camera="panel"] .frame-side {
-  opacity: 0;
-}
 
 /* Sidebar */
 
@@ -1099,8 +1086,14 @@ main > .hero:last-child {
 }
 
 .who-s i {
-  background: var(--teal);
-  color: var(--navy);
+  background: #fff;
+  border: 1px solid var(--rule);
+}
+
+.who-s i img {
+  display: block;
+  width: 12px;
+  height: 12px;
 }
 
 /* Status pills. The running pulse animates a separate ring on transform and opacity, never box-shadow. */
@@ -2664,10 +2657,6 @@ main > .hero:last-child {
   .win-crumb:not(.on),
   .win-sep {
     display: none;
-  }
-
-  .frame[data-camera] .frame-body {
-    transform: none;
   }
 
   .frame-main {
