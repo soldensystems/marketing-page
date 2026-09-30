@@ -37,3 +37,6 @@ Sources
   at 14 px, rebased to y = 0. Fill #312D2A as published by Oracle.
   viewBox 0 0 200.02 39.33. NetSuite is a trademark of Oracle and/or its
   affiliates.
+
+quickbooks.svg, xero.svg, sap.svg: simple-icons (CC0), fetched 2026-09-30 from cdn.simpleicons.org. Trademarks belong to their owners; used nominatively to indicate compatibility.
+dynamics.svg: icon portion of "Microsoft Dynamics 365 Logo (2021–present).svg" from Wikimedia Commons (tagged PD-textlogo); wordmark paths removed. Microsoft trademark; used nominatively to indicate compatibility.

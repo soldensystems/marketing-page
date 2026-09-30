@@ -1564,8 +1564,13 @@ main > .hero:last-child {
   fill: var(--faint-stroke);
 }
 
-.stack-svg .erp-more {
-  font: 500 13px var(--sans);
+.stack-svg .erp-more text {
+  font: 600 13px var(--sans);
+  fill: var(--ink-soft, var(--ink));
+}
+
+.stack-svg .erp-more .erp-and {
+  font-weight: 500;
   fill: var(--muted);
 }
 
@@ -2828,8 +2833,39 @@ main > .hero:last-child {
     font-weight: 500;
   }
 
-  .stack-mobile .erp-m small {
-    font: 500 12px/1.4 var(--sans);
+  .stack-mobile .erp-more {
+    list-style: none;
+    margin: 6px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 14px;
+    font: 600 12px/1.4 var(--sans);
+    color: var(--ink);
+  }
+
+  .stack-mobile .erp-more li {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    width: auto;
+    height: auto;
+    padding: 0;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    white-space: nowrap;
+  }
+
+  .stack-mobile .erp-more img {
+    width: 14px;
+    height: 14px;
+  }
+
+  .stack-mobile .erp-more .erp-and {
+    font-weight: 500;
     color: var(--muted);
   }
 
