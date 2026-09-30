@@ -200,7 +200,7 @@ if (form) {
     [2600, () => { q("[data-approve]").classList.add("pressed"); }],
     [500, () => { q("[data-actions]").classList.add("decided"); setStatus("rev", "st-done", "Complete"); setResult("rev", "Deferred to May");
       counts.call = 0; counts.done = 4; counts.time = "22 min"; key(); badge("Running · day 3");
-      act("<time>11:07</time><span><b>A. Adeyemi</b> approved exception 3. Journal JE-0426-119 queued for review</span>"); }],
+      act("<time>11:07</time><span><b>H. Whitmore</b> approved exception 3. Journal JE-0426-119 queued for review</span>"); }],
     [1400, () => { view("activity"); camera("main"); setStatus("flux", "st-running", "Running");
       log("Explaining what moved", "13 of 15", ["Every P&L and balance-sheet line against prior period and budget", "Contractor costs −12,400.00 · two engagements ended 31 March · final invoices VB-5610, VB-5611", "ok 3 lines above threshold · drivers attached from workstreams"]); }],
     [2000, () => { setStatus("flux", "st-done", "Complete"); setResult("flux", "3 explained"); counts.done = 13; counts.ev = 241; key();
@@ -211,7 +211,7 @@ if (form) {
     [1800, () => { q("[data-lock-btn]").classList.add("pressed"); }],
     [500, () => { setStatus("lock", "st-done", "Locked"); setResult("lock", "Attested 6 May"); counts.done = 15; key(); badge("Attested and locked", "ok");
       q("[data-runlog]").classList.add("quiet"); log("Close locked", "", ["ok April 2026 locked · immutable · exportable for auditors"]);
-      act("<time>14:42</time><span><b>A. Adeyemi</b> attested and locked April 2026</span>"); view("pack"); camera("panel"); }],
+      act("<time>14:42</time><span><b>H. Whitmore</b> attested and locked April 2026</span>"); view("pack"); camera("panel"); }],
     [4200, () => { reset(); }],
     [900, () => {}],
   ];
