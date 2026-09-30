@@ -496,7 +496,7 @@ main > .hero:last-child {
 
 .frame-wrap {
   position: relative;
-  margin-top: 72px;
+  margin-top: 112px;
   padding-inline: var(--gutter);
 }
 
@@ -2789,7 +2789,7 @@ main > .hero:last-child {
 
   .frame-wrap {
     padding-inline: 12px;
-    margin-top: 48px;
+    margin-top: 72px;
   }
 
   .frame-well {
