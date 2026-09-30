@@ -304,6 +304,9 @@ if (form) {
   }
 
   reset();
+  const heroSection = document.getElementById("hero");
+  if (heroSection) heroSection.classList.add("in");
+  requestAnimationFrame(() => requestAnimationFrame(() => frame.classList.add("landed")));
   if (reduce) {
     // Static, finished state for reduced motion: the locked close and the pack, never the reset.
     stopped = true;
