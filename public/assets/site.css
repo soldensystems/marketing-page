@@ -1538,9 +1538,6 @@ main > .hero:last-child {
 .stack-svg .line:nth-child(7n + 6) { animation-delay: 3s; }
 .stack-svg .line:nth-child(7n) { animation-delay: 3.6s; }
 
-.stack-svg .line-erp {
-  stroke: rgba(11, 21, 48, 0.28);
-}
 
 .stack-svg .tile rect {
   fill: #fff;
@@ -2887,15 +2884,11 @@ main > .hero:last-child {
   }
 
   .stack-mobile .link-m {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 10px;
     padding: 6px 0;
-  }
-
-  .stack-mobile .link-m .k:first-child {
-    text-align: right;
   }
 
   .stack-mobile .link-m i {
