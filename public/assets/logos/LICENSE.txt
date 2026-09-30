@@ -1,0 +1,39 @@
+Vendor marks in this folder
+
+All marks are the trademarks of their respective owners. Solden uses them
+nominatively, only to identify the systems Solden connects to, and claims
+no endorsement or affiliation. Each file is a cleaned single-colour copy
+of the owner's published mark: explicit viewBox, no scripts, no external
+references, no metadata.
+
+Sources
+
+- Most marks: simple-icons (CC0 1.0) and gilbarbara/logos (CC0 / MIT).
+  Trademarks remain with their owners.
+
+- ramp.svg: Ramp wordmark, from Wikimedia Commons,
+  https://commons.wikimedia.org/wiki/File:Ramp_Business_Corporation_Logo.svg
+  (file page marks the artwork as public domain text and simple shapes;
+  the Ramp name and logo remain trademarks of Ramp Business Corporation).
+  Cleaned: clipPath removed, single fill #1A1A1A. viewBox 0 0 96 26.
+
+- rippling.svg: Rippling icon (the three ripples), from Rippling's own
+  vector favicon https://www.rippling.com/favicons/favicon.svg (linked
+  from https://www.rippling.com, fetched 30 September 2026). The plum
+  background tile is dropped and the glyph is filled in that same brand
+  colour, #7A005D, cropped to a square around the glyph. The same glyph
+  opens Rippling's header logo. viewBox 2.7 2.7 10.6 10.6 (square).
+
+- billcom.svg: BILL wordmark, from Bill.com's own site header asset,
+  https://cdn.prod.website-files.com/63e3da3df35cd62f54751985/649488c838360d22ac08b864_bill-logo.svg
+  (linked from https://www.bill.com, fetched 30 September 2026). Cleaned to
+  a single fill #FF5A0A (the secondary tint on one path is flattened).
+  viewBox 0 0 53 35.
+
+- netsuite.svg: NetSuite wordmark, taken from Oracle NetSuite's own site
+  asset https://www.netsuite.co.uk/portal/assets/img/Oracle-NetSuite-Logo.svg
+  (fetched 30 September 2026). The stacked lockup carries ORACLE above
+  NetSuite; only the NetSuite wordmark group is kept so it stays legible
+  at 14 px, rebased to y = 0. Fill #312D2A as published by Oracle.
+  viewBox 0 0 200.02 39.33. NetSuite is a trademark of Oracle and/or its
+  affiliates.
