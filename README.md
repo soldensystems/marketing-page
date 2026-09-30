@@ -10,10 +10,9 @@ Everything the visitor can fetch lives in `public/`. Vercel serves that director
 
 | Route | File | Purpose |
 | --- | --- | --- |
-| `/` | `public/index.html` | Hero with the animated close frame, the systems diagram (`#connects`), what you are hiring (`#hiring`), the close end to end (`#close`), the five stages (`#stages`), the boundary (`#boundary`), access and controls (`#controls`), the vision (`#department`), the buying test (`#test`), invite form (`#invite`) |
-| `/product` | `public/product.html` | The fifteen workstreams of the close (`#close`), the pack as the unit of delivery (`#pack`), the order functions are built in (`#order`), principles (`#principles`), invite CTA (`#next`) |
-| `/how-it-works` | `public/how-it-works.html` | Five stages from read-only to live (`#stages`), who decides (`#who-decides`), the controls register (`#controls`, also `#security`), what happens when it is wrong (`#when-wrong`), invite CTA (`#next`) |
-| `/about` | `public/about.html` | Team (`#team`), the story so far (`#story`), invite form (`#contact`) |
+| `/` | `public/index.html` | Hero with the animated close frame, the systems diagram (`#connects`), what you are hiring (`#hiring`), the close end to end (`#close`), the boundary (`#boundary`), access and controls (`#controls`), the vision (`#department`), the buying test (`#test`), invite form (`#invite`) |
+| `/how-it-works` | `public/how-it-works.html` | What Solden takes on (`#work`), the pack (`#pack`), who decides (`#who-decides`), the controls register (`#controls`, also `#security`), what happens when it is wrong (`#when-wrong`) |
+| `/about` | `public/about.html` | Team (`#team`), the story so far (`#story`), the order of functions (`#order`), invite form (`#contact`) |
 | `/privacy`, `/terms` | `public/privacy.html`, `public/terms.html` | Legal |
 | `/thanks` | `public/thanks.html` | Success page for a form post made without JavaScript. `noindex`, no canonical |
 | any other path | `public/404.html` | Not found. `noindex`, no canonical |
@@ -26,6 +25,7 @@ Redirects, all permanent (308), from `vercel.json`:
 | `/request-demo` | `/about#contact` |
 | `/security` | `/how-it-works#security` |
 | `/careers` | `/about` (there is no careers page) |
+| `/product` | `/how-it-works` (the product content lives there now) |
 
 `public/robots.txt` allows everything except `/api/`; `public/sitemap.xml` lists the six indexable pages. Both are checked by the tests.
 

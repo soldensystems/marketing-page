@@ -29,6 +29,11 @@
       "source": "/careers",
       "destination": "/about",
       "permanent": true
+    },
+    {
+      "source": "/product",
+      "destination": "/how-it-works",
+      "permanent": true
     }
   ],
   "headers": [
