@@ -408,15 +408,6 @@ h2 + .lede {
   background: var(--canvas);
 }
 
-.hero-fit {
-  margin: 18px auto 0;
-  max-width: 54ch;
-  font: 500 12px/1.6 var(--mono);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -507,6 +498,15 @@ main > .hero:last-child {
   position: relative;
   margin-top: 72px;
   padding-inline: var(--gutter);
+}
+
+.frame-cap {
+  margin: 0 auto 18px;
+  max-width: 76ch;
+  text-wrap: balance;
+  text-align: center;
+  font: 400 14px/1.5 var(--sans);
+  color: var(--muted);
 }
 
 .frame-well {
