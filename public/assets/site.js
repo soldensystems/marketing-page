@@ -143,6 +143,13 @@ if (form) {
     row(k).classList.toggle("sel", cls === "st-call");
   }
   function setResult(k, text) { const r = row(k).querySelector("[data-res]"); r.textContent = text; r.classList.add("in"); }
+  // Handover: the workstream's owner changes from a named team member to Solden, with a short flash on the row.
+  function assign(k) {
+    const r = row(k);
+    r.dataset.owner = "solden";
+    r.classList.add("handoff");
+    setTimeout(() => r.classList.remove("handoff"), 400);
+  }
   function key() {
     q("[data-k-done]").textContent = counts.done; q("[data-k-review]").textContent = counts.review; q("[data-k-call]").textContent = counts.call;
     q("[data-k-ev]").textContent = counts.ev; q("[data-k-time]").textContent = counts.time;
@@ -186,7 +193,13 @@ if (form) {
   }
 
   const T = [
-    [0, () => { camera("main"); badge("Running · day 1"); setStatus("bank", "st-running", "Running");
+    [600, () => assign("bank")],
+    [600, () => assign("ic")],
+    [600, () => assign("acc")],
+    [600, () => assign("rev")],
+    [600, () => assign("flux")],
+    [600, () => assign("fs")],
+    [900, () => { camera("main"); badge("Running · day 1"); setStatus("bank", "st-running", "Running");
       log("Reconciling bank accounts", "1 of 15", ["Operating GBP · statement 1,904,317.20 · ledger 1,889,112.20", "4 outstanding payments matched to the register · 15,205.00", "ok Difference 0.00 · workpaper attached", "Operating USD, EUR, savings, cards · tied out"]); }],
     [2200, () => { setStatus("bank", "st-done", "Complete"); setResult("bank", "diff 0.00"); counts.done = 1; counts.ev = 48; key();
       setStatus("ic", "st-running", "Running"); log("Matching intercompany balances", "2 of 15", ["UK to NL · management fee · 42,000.00 both sides", "UK to US · recharge · 118,250.00 both sides", "ok Both pairs agree · elimination entries prepared"]); }],
@@ -209,13 +222,13 @@ if (form) {
       setStatus("lock", "st-call", "Ready to attest"); q("[data-lock-btn]").classList.remove("pbtn-disabled"); badge("Ready to attest"); camera("wide");
       log("Waiting on the controller", "15 of 15", ["All workstreams complete · evidence attached · exceptions resolved", "Sign-off gate open"]); }],
     [1800, () => { q("[data-lock-btn]").classList.add("pressed"); }],
-    [500, () => { setStatus("lock", "st-done", "Locked"); setResult("lock", "Attested 6 May"); counts.done = 15; key(); badge("Attested and locked", "ok");
+    [500, () => { setStatus("lock", "st-done", "Locked"); setResult("lock", "Attested 6 May"); row("lock").classList.add("signed"); counts.done = 15; key(); badge("Attested and locked", "ok");
       q("[data-runlog]").classList.add("quiet"); log("Close locked", "", ["ok April 2026 locked · immutable · exportable for auditors"]);
       act("<time>14:42</time><span><b>H. Whitmore</b> attested and locked April 2026</span>"); view("pack"); camera("panel"); }],
     [4200, () => { reset(); }],
     [900, () => {}],
   ];
-  const LOCKED_STEPS = 12; // T[0..11] ends on "Attested and locked"; T[12] is the reset.
+  const LOCKED_STEPS = 18; // T[0..5] hand the work over, T[6..17] end on "Attested and locked"; T[18] is the reset.
 
   // Loop control. Two independent pauses: out of view (visibility) and the Pause button (user).
   let i = 0, hidden = false, userPaused = false, timer = null, stopped = false;
@@ -245,7 +258,7 @@ if (form) {
     if (!paused() && timer === null) next();
   }
 
-  // Pause button. It may live inside the frame (rebuilt on every reset) or be absent, so delegate and re-sync.
+  // Pause button. It lives in the figure caption below the frame (outside the rebuilt markup), so delegate on the document and re-sync.
   function syncPauseButtons() {
     for (const b of document.querySelectorAll("[data-demo-pause]")) {
       b.setAttribute("aria-pressed", userPaused ? "true" : "false");
