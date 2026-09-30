@@ -408,6 +408,15 @@ h2 + .lede {
   background: var(--canvas);
 }
 
+.hero-fit {
+  margin: 18px auto 0;
+  max-width: 54ch;
+  font: 500 12px/1.6 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -2608,6 +2617,53 @@ main > .hero:last-child {
 
 .compare td::before {
   display: none;
+}
+
+/* What leaves your week, under the comparison register */
+
+.leaves {
+  margin-top: 28px;
+  display: grid;
+  gap: 12px;
+}
+
+.leaves-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.leaves-k {
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-right: 8px;
+}
+
+.leaves ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.leaves li {
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid rgba(11, 21, 48, 0.1);
+  font: 500 13px/1.2 var(--sans);
+  color: var(--ink);
+}
+
+.leaves-row:last-child li {
+  background: var(--teal-soft);
+  border-color: transparent;
+  color: var(--teal-ink);
 }
 
 /* ================================================================ Responsive */
