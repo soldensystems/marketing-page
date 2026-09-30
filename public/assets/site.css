@@ -2724,8 +2724,15 @@ main > .hero:last-child {
   }
 
   .footer-nav {
-    justify-content: flex-start;
-    row-gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    justify-content: start;
+    gap: 12px 24px;
+  }
+
+  .paper .k {
+    white-space: normal;
+    line-height: 1.5;
   }
 
   /* Connections: the phone list replaces the diagram. */
