@@ -585,6 +585,13 @@ main > .hero:last-child {
   text-align: left;
   font-size: 13px;
   color: var(--ink-soft);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Locked: a teal ring on the frame. The border width is unchanged, so the outer height stays the same. */
+.frame.locked {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px var(--teal-soft), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 24px 48px -16px rgba(0, 17, 55, 0.35), 0 64px 120px -40px rgba(0, 17, 55, 0.5);
 }
 
 .frame p + p {
@@ -705,7 +712,7 @@ main > .hero:last-child {
 }
 
 .demo-pause[aria-pressed="true"] {
-  color: #fff;
+  color: var(--ink);
   text-decoration: underline;
 }
 
@@ -715,8 +722,14 @@ main > .hero:last-child {
   display: grid;
   grid-template-columns: 180px 1fr 240px;
   height: 760px;
-  transition: transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.35s ease;
   transform-origin: 50% 0;
+}
+
+/* Reset: the body fades out, the markup is swapped while it is invisible, then it fades back in. The height is fixed, so the frame never moves. */
+.frame.resetting .frame-body {
+  opacity: 0;
+  transition: opacity 0.35s ease;
 }
 
 .frame[data-camera="panel"] .frame-body {
@@ -1496,12 +1509,12 @@ main > .hero:last-child {
   font-variant-numeric: tabular-nums;
 }
 
-/* Pause control: everything animated inside the frame, and the diagram lines, hold still. */
+/* Pause control: everything animated inside the frame, and the diagram's write line, hold still. */
 
 .frame[data-paused] *,
 .frame[data-paused] *::before,
 .frame[data-paused] *::after,
-#connects[data-paused] .line {
+#connects[data-paused] .write {
   animation-play-state: paused;
 }
 
@@ -1555,11 +1568,6 @@ main > .hero:last-child {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: color 0.2s ease;
-}
-
-.sigline.is-signed {
-  color: var(--ink);
 }
 
 .stage-strip {
@@ -1637,20 +1645,7 @@ main > .hero:last-child {
   stroke-width: 1.3;
   stroke-dasharray: 3 6;
   stroke-linecap: round;
-  animation: flow 6s linear infinite;
 }
-
-/* The offset is a whole number of dash periods (3 + 6 = 9), so the loop never snaps. */
-@keyframes flow {
-  to { stroke-dashoffset: -63; }
-}
-
-.stack-svg .line:nth-child(7n + 2) { animation-delay: 0.6s; }
-.stack-svg .line:nth-child(7n + 3) { animation-delay: 1.2s; }
-.stack-svg .line:nth-child(7n + 4) { animation-delay: 1.8s; }
-.stack-svg .line:nth-child(7n + 5) { animation-delay: 2.4s; }
-.stack-svg .line:nth-child(7n + 6) { animation-delay: 3s; }
-.stack-svg .line:nth-child(7n) { animation-delay: 3.6s; }
 
 .stack-svg .tile rect {
   fill: #fff;
@@ -1697,9 +1692,18 @@ main > .hero:last-child {
   fill: var(--muted);
 }
 
+/* Only the write line moves: dashes flow from the mark up to the ERP. The read spokes hold still. */
 .stack-svg .write {
   stroke: var(--teal);
   stroke-width: 2;
+  stroke-dasharray: 4 8;
+  stroke-linecap: round;
+  animation: flow-write 6s linear infinite;
+}
+
+/* The offset is a whole number of dash periods (4 + 8 = 12), so the loop never snaps. */
+@keyframes flow-write {
+  to { stroke-dashoffset: -72; }
 }
 
 .stack-svg .write-arrow {
@@ -1881,20 +1885,6 @@ main > .hero:last-child {
   color: var(--ink);
 }
 
-.paper-dark {
-  background: var(--navy);
-  color: #c9d3ea;
-  border-color: transparent;
-}
-
-.paper-dark h4 {
-  color: #fff;
-}
-
-.paper-dark .k {
-  color: #8f9cbf;
-}
-
 .rows {
   list-style: none;
   padding: 0;
@@ -1922,18 +1912,6 @@ main > .hero:last-child {
 
 .rows .ok {
   color: var(--teal-ink);
-}
-
-.paper-dark .rows li {
-  border-color: var(--dark-rule);
-}
-
-.paper-dark .rows .n {
-  color: #fff;
-}
-
-.paper-dark .rows .ok {
-  color: var(--teal);
 }
 
 .trail {
@@ -2641,10 +2619,6 @@ main > .hero:last-child {
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
 }
 
-.split .mini-grid + .sigstrip {
-  margin-top: 20px;
-}
-
 /* ---------------------------------------------------------------- Reveal on scroll (progressive; content is visible without JS) */
 
 .js .reveal {
@@ -2657,6 +2631,11 @@ main > .hero:last-child {
   opacity: 1;
   transform: none;
 }
+
+/* A run of adjacent reveals inside a section arrives in a short cascade. Whole sections (children of main) are not staggered. */
+.js :where(:not(main)) > .reveal + .reveal { transition-delay: 0.08s; }
+.js :where(:not(main)) > .reveal + .reveal + .reveal { transition-delay: 0.16s; }
+.js :where(:not(main)) > .reveal + .reveal + .reveal + .reveal { transition-delay: 0.24s; }
 
 /* Comparison register: close software, accounting firm, Solden */
 
@@ -2793,7 +2772,7 @@ main > .hero:last-child {
   }
 
   .ws-group .mini-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .team {
@@ -2810,6 +2789,10 @@ main > .hero:last-child {
   .card-grid-2,
   .dark-block {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ws-group .mini-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .feature:nth-child(even) > :first-child {
@@ -2981,6 +2964,10 @@ main > .hero:last-child {
   .mini-grid-3,
   .mini-grid-4 {
     grid-template-columns: 1fr;
+  }
+
+  .ws-group .mini-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .sig-cell + .sig-cell {
@@ -3257,14 +3244,6 @@ main > .hero:last-child {
     font-size: 11px;
     padding: 6px 8px;
   }
-
-  .paper-dark.overlap {
-    margin-top: 16px;
-  }
-
-  .paper-dark .rows li > span:first-child {
-    white-space: nowrap;
-  }
 }
 
 /* ================================================================ Reduced motion */
@@ -3281,12 +3260,21 @@ main > .hero:last-child {
   }
 
   .btn,
+  .frame,
   .frame-body,
   .frame-side,
   .progress-bar i,
   .wtable td,
   .st,
-  .pbtn.pressed {
+  .pbtn.pressed,
+  .head-badge,
+  .wtable-demo .res,
+  .runlog {
+    transition: none;
+  }
+
+  .frame.resetting .frame-body {
+    opacity: 1;
     transition: none;
   }
 
@@ -3296,13 +3284,13 @@ main > .hero:last-child {
   .activity li.new,
   .frame-panel .pv,
   .wtable tr[data-owner="solden"] .who-s,
-  .stack-svg .line {
+  .stack-svg .line,
+  .stack-svg .write {
     animation: none;
   }
 
   .who,
-  .wtable tr.handoff td,
-  .sigline {
+  .wtable tr.handoff td {
     transition: none;
   }
 

@@ -179,17 +179,33 @@ if (form) {
   function camera(c) { frame.dataset.camera = c; }
   function badge(t, cls) { const b = q("[data-head-badge]"); b.textContent = t; b.className = "head-badge " + (cls || ""); }
 
+  // Reset: fade the body out (.resetting), swap the markup while it is invisible, then fade it back in.
+  // The first call and reduced motion swap at once. innerHTML replacement does not clear the frame's own classes, so .locked is removed here.
+  let resetTimer = null;
+  let firstReset = true;
   function reset() {
     clearLogTimers();
-    const refocus = document.activeElement && document.activeElement.matches("[data-demo-pause]");
-    frame.innerHTML = snapshot;
-    counts = { done: 0, review: 0, call: 0, ev: 0, time: "0 min" };
-    key(); view("activity"); camera("wide");
-    ["bank", "ic", "acc", "rev", "flux", "fs", "lock"].forEach((k) => setStatus(k, "st-queued", "Queued"));
-    act("<time>08:00</time><span>NetSuite sync completed, 1,204 records, read-only</span>");
-    act("<time>08:01</time><span>Solden opened the April close, 15 workstreams</span>");
-    syncPauseButtons();
-    if (refocus) { const b = q("[data-demo-pause]"); if (b) b.focus(); }
+    if (resetTimer !== null) { clearTimeout(resetTimer); resetTimer = null; }
+    const swap = () => {
+      const refocus = document.activeElement && document.activeElement.matches("[data-demo-pause]");
+      frame.innerHTML = snapshot;
+      frame.classList.remove("locked");
+      counts = { done: 0, review: 0, call: 0, ev: 0, time: "0 min" };
+      key(); view("activity"); camera("wide");
+      ["bank", "ic", "acc", "rev", "flux", "fs", "lock"].forEach((k) => setStatus(k, "st-queued", "Queued"));
+      act("<time>08:00</time><span>NetSuite sync completed, 1,204 records, read-only</span>");
+      act("<time>08:01</time><span>Solden opened the April close, 15 workstreams</span>");
+      syncPauseButtons();
+      if (refocus) { const b = q("[data-demo-pause]"); if (b) b.focus(); }
+    };
+    if (firstReset || reduce) { firstReset = false; swap(); frame.classList.remove("resetting"); return; }
+    frame.classList.add("resetting");
+    resetTimer = setTimeout(() => {
+      resetTimer = null;
+      swap();
+      void frame.offsetHeight; // give the swapped-in body a computed style at opacity 0, so removing the class fades it in
+      requestAnimationFrame(() => frame.classList.remove("resetting"));
+    }, 350);
   }
 
   const T = [
@@ -222,7 +238,7 @@ if (form) {
       setStatus("lock", "st-call", "Ready to attest"); q("[data-lock-btn]").classList.remove("pbtn-disabled"); badge("Ready to attest"); camera("wide");
       log("Waiting on the controller", "15 of 15", ["All workstreams complete · evidence attached · exceptions resolved", "Sign-off gate open"]); }],
     [1800, () => { q("[data-lock-btn]").classList.add("pressed"); }],
-    [500, () => { setStatus("lock", "st-done", "Locked"); setResult("lock", "Attested 6 May"); row("lock").classList.add("signed"); counts.done = 15; key(); badge("Attested and locked", "ok");
+    [500, () => { setStatus("lock", "st-done", "Locked"); setResult("lock", "Attested 6 May"); row("lock").classList.add("signed"); frame.classList.add("locked"); counts.done = 15; key(); badge("Attested and locked", "ok");
       q("[data-runlog]").classList.add("quiet"); log("Close locked", "", ["ok April 2026 locked · immutable · exportable for auditors"]);
       act("<time>14:42</time><span><b>H. Whitmore</b> attested and locked April 2026</span>"); view("pack"); camera("panel"); }],
     [4200, () => { reset(); }],
