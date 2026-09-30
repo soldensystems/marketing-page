@@ -40,3 +40,4 @@ Sources
 
 quickbooks.svg, xero.svg, sap.svg: simple-icons (CC0), fetched 2026-09-30 from cdn.simpleicons.org. Trademarks belong to their owners; used nominatively to indicate compatibility.
 dynamics.svg: icon portion of "Microsoft Dynamics 365 Logo (2021–present).svg" from Wikimedia Commons (tagged PD-textlogo); wordmark paths removed. Microsoft trademark; used nominatively to indicate compatibility.
+microsoftoutlook.svg: simple-icons v9 (CC0), fetched 2026-09-30 from cdn.jsdelivr.net/npm/simple-icons@9. Microsoft trademark; used nominatively to indicate compatibility.
