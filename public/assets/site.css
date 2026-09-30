@@ -2901,7 +2901,7 @@ main > .hero:last-child {
 
   .stack-mobile .sol-m {
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 12px;
     background: var(--ink);
     border-color: var(--ink);
