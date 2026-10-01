@@ -25,8 +25,8 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="preload" href="/assets/fonts/Fraunces-Variable.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="/assets/fonts/solden-fonts.css?v=20261005i" />
-  <link rel="stylesheet" href="/assets/site.css?v=20261005i" />
+  <link rel="stylesheet" href="/assets/fonts/solden-fonts.css?v=20261005k" />
+  <link rel="stylesheet" href="/assets/site.css?v=20261005k" />
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","name":"Solden","legalName":"Solden Systems Ltd.","url":"https://soldenai.com/","logo":"https://soldenai.com/assets/og-card.png","description":"Solden runs finance for growing companies.","sameAs":["https://x.com/solden_ai","https://linkedin.com/company/soldenai"]}
   </script>
@@ -385,18 +385,34 @@
     </section>
 
     <section class="section" id="controls" aria-labelledby="controls-title">
-      <div class="wrap split">
-        <div class="body-col reveal">
-          <span class="eyebrow">Access and controls</span>
-          <h2 id="controls-title">Built for the security review your team will run.</h2>
-          <p class="lede">Read-only by default. Every action gated by review. Nothing overwritten, every view logged, and your data never trains a model. Every control is designed and written down before any connection is made.</p>
-        </div>
-        <div class="trust">
-          <div class="trust-row reveal"><strong>Read-only until you activate writes</strong><span>A separate activation you sign, logged with actor and time.</span></div>
-          <div class="trust-row reveal"><strong>Review gates every action that touches your books</strong><span>Nothing posts, pays, files or locks without passing through it.</span></div>
-          <div class="trust-row reveal"><strong>No training on your data</strong><span>Your ledger, documents and decisions never train a model, ours or a vendor's.</span></div>
-          <div class="trust-row reveal"><strong>Nothing overwritten, everything logged</strong><span>Versioned policies, mappings and journals. Named reviewers, every view logged.</span></div>
-          <a class="trust-more reveal" href="/how-it-works#controls">The full controls register</a>
+      <div class="wrap">
+        <div class="feature feature-solo reveal">
+          <div>
+            <span class="eyebrow">Access and controls</span>
+            <h2 id="controls-title">Built for the security review your team will run.</h2>
+            <p class="lede">Read-only by default, every action gated by review, and every control written down before any connection is made.</p>
+            <ul class="check">
+              <li>Read-only until you activate writes</li>
+              <li>Review gates every action that touches your books</li>
+              <li>No training on your data, ours or a vendor's</li>
+              <li>Nothing overwritten, every view logged</li>
+            </ul>
+            <p class="feature-more"><a class="link" href="/how-it-works#controls">The full controls register</a></p>
+          </div>
+          <div class="collage" aria-hidden="true">
+            <div class="paper p-a">
+              <div class="p-head"><strong>Connection grant</strong><span>NetSuite</span></div>
+              <div class="p-lines"></div>
+              <div class="fig fig-word">Read-only</div>
+              <div class="fig-l">Six scopes, each shown before you grant it. Writes: none.</div>
+            </div>
+            <div class="paper p-b">
+              <div class="p-head"><strong>Write activation</strong><span>Signed 6 May</span></div>
+              <div class="sigline">H. Whitmore</div>
+              <div class="fig-l">Journals only, read back from the ERP</div>
+            </div>
+            <div class="seal"><i></i>Every view logged, nothing overwritten</div>
+          </div>
         </div>
       </div>
     </section>
@@ -466,7 +482,7 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20261005i" defer></script>
+  <script src="/assets/site.js?v=20261005k" defer></script>
   <script src="/_vercel/insights/script.js" defer></script>
 </body>
 </html>

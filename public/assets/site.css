@@ -1812,6 +1812,14 @@ main > .hero:last-child {
   border-top: 1px solid var(--rule);
 }
 
+.feature-solo {
+  padding-block: 0;
+}
+
+.feature-more {
+  margin-top: 28px;
+}
+
 .feature h3 {
   font-family: var(--serif);
   font-optical-sizing: auto;
@@ -1935,6 +1943,10 @@ main > .hero:last-child {
   font-size: 24px;
 }
 
+.fig-word {
+  font-variant-numeric: normal;
+}
+
 .fig-l {
   margin-top: 10px;
   font: 400 13px/1.5 var(--sans);
@@ -2050,7 +2062,7 @@ main > .hero:last-child {
   background: var(--teal-soft);
 }
 
-/* ---------------------------------------------------------------- Boundary and trust */
+/* ---------------------------------------------------------------- Boundary */
 
 .boundary {
   margin-top: 56px;
@@ -2061,54 +2073,6 @@ main > .hero:last-child {
   margin-bottom: 16px;
 }
 
-.trust {
-  margin-top: 0;
-  background: #fff;
-  border: 1px solid rgba(11, 21, 48, 0.12);
-  border-radius: var(--radius);
-  overflow: hidden;
-  text-align: left;
-}
-
-.trust-row {
-  display: grid;
-  gap: 4px;
-  padding: 24px;
-  border-top: 1px solid var(--rule);
-  font-size: 15px;
-}
-
-.trust-row:first-child {
-  border-top: 0;
-}
-
-.trust-row strong {
-  font-weight: 600;
-}
-
-.trust-row span {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.trust-more {
-  display: block;
-  padding: 12px 24px;
-  border-top: 1px solid var(--rule);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ink);
-  text-decoration: none;
-  background: var(--canvas);
-}
-
-.trust-more::after {
-  content: " →";
-}
-
-.trust-more:hover {
-  text-decoration: underline;
-}
 
 /* ---------------------------------------------------------------- Org chart */
 
