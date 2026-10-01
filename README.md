@@ -133,6 +133,6 @@ These are enforced by `tests/site_language.test.mjs` and `tests/site_structure.t
 
 ## Founder decisions, settled
 
-- Vision line: "The finance department becomes infrastructure. Always running, always proven, and a person still signs." Chosen 1 October 2026 (the earlier "The CFO stays. The grunt work goes." line was judged not visionary) and placed as the heading of the order section on About.
+- Vision line: "The finance department becomes infrastructure. Always running, always proven." Chosen by the founder on 1 October 2026 (the earlier "The CFO stays. The grunt work goes." line was judged not visionary) and placed as the heading of the order section on About.
 - Team visibility: names and one-line bios on About, no photos, by decision.
 - Analytics: Plausible, chosen for being cookieless and EU-hosted, so no consent banner. The script tag and the CSP entries are in place; data appears once a Plausible site for `soldenai.com` exists on the account.
