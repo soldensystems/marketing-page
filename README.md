@@ -81,9 +81,9 @@ Cache tokens (`?v=`) on the CSS and JS links are bumped by hand when those files
 
 ## Deploying to Railway
 
-The site runs on Railway in the project **Solden AI**, as the service **marketing**, from the `main` branch of `soldensystems/marketing-page`. Every push to `main` redeploys. `railway.json` sets the start command, the `/healthz` health check and the restart policy; Nixpacks detects Node from `package.json` and runs `npm ci`.
+The site runs on Railway in the project **Solden AI**, as the service **solden**, from the `main` branch of `soldensystems/marketing-page`. That service already owns the custom domains `soldenai.com` and `www.soldenai.com` and already holds the Resend key and the inbox, so a deploy to it brings the domain back without any DNS change. (The service called **marketing** in the same project is a different product's site, clearledgr.com; leave it alone.) Every push to `main` redeploys. `railway.json` sets the start command, the `/healthz` health check and the restart policy; Nixpacks detects Node from `package.json` and runs `npm ci`.
 
-1. In the Railway service, connect the GitHub repo and branch `main`, root directory `/`. No build command.
+1. In the service's Settings, Source: connect the GitHub repo `soldensystems/marketing-page`, branch `main`, root directory `/` (the previous source was `soldensystems/solden` with root `/soldenai-landing`; both must change). No build command.
 2. Variables on the service:
 
    | Variable | Required | Purpose |
@@ -102,9 +102,9 @@ The site runs on Railway in the project **Solden AI**, as the service **marketin
    The handler never waits on the database: connecting, the recent-count check and the insert are each capped at two seconds, and on a timeout or error the lead is emailed anyway and the failure is logged. A failed connection is retried on the next request.
 
 3. Verify on the service's `*.up.railway.app` URL: pages, redirects, `/healthz` answers `ok`, `/api/contact` answers `405` to a GET, `/README.md` and `/lib/contact.js` answer `404`, and one real form submission reaches `hello@soldenai.com`.
-4. Add the custom domains `soldenai.com` and `www.soldenai.com` to the service. Railway shows a target for each.
-5. At Namecheap, change ONLY two records: the apex record for `soldenai.com` (an `ALIAS` record to the Railway target; Namecheap supports `ALIAS` at the apex) and the `CNAME` for `www`, to the values Railway shows. Keep every other record exactly as it is. The zone carries the Microsoft 365 mail records (`MX`, the SPF `TXT`, DKIM `CNAME`s, the `_dmarc` `TXT`) and the Resend sending records (DKIM and return-path `TXT`/`MX`); deleting or replacing any of them stops founder mail or lead delivery. The `www` host redirects to the apex in `server.js`.
-6. Retire the old production service **solden** in the same project once the new one answers on the domain; it still holds the previous site's variables and nothing else needs it. Keep **leads-db**.
+4. The custom domains `soldenai.com` and `www.soldenai.com` are already on the service, and Namecheap already points at their Railway targets (the apex as an `ALIAS`, `www` as a `CNAME`). Nothing to add.
+5. Only if a domain is ever moved to another service: at Namecheap, change ONLY two records: the apex record for `soldenai.com` (an `ALIAS` record to the Railway target; Namecheap supports `ALIAS` at the apex) and the `CNAME` for `www`, to the values Railway shows. Keep every other record exactly as it is. The zone carries the Microsoft 365 mail records (`MX`, the SPF `TXT`, DKIM `CNAME`s, the `_dmarc` `TXT`) and the Resend sending records (DKIM and return-path `TXT`/`MX`); deleting or replacing any of them stops founder mail or lead delivery. The `www` host redirects to the apex in `server.js`.
+6. Keep **leads-db**. Nothing else in the project serves this site.
 
 ## Lead history
 
