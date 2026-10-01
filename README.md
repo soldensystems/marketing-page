@@ -50,7 +50,7 @@ Redirects, all permanent (308), from `routes.json`:
 
 ## Analytics
 
-Umami Cloud, free tier. Cookieless, so no consent banner. The content security policy allows `https://cloud.umami.is` for the script and `https://gateway.umami.is` for the events it posts, and `track()` in `site.js` forwards events to `window.umami` when the script is present and does nothing otherwise.
+Umami Cloud, free tier, with the website in the EU region (Frankfurt). Cookieless, so no consent banner. Umami serves one script host for every region and stores the data where the website is registered, so the tag below is correct for an EU site. The content security policy allows `https://cloud.umami.is` for the script and `https://gateway.umami.is` for the events it posts, and `track()` in `site.js` forwards events to `window.umami` when the script is present and does nothing otherwise.
 
 The site is registered on the account; this tag sits after `site.js` on every page:
 
@@ -143,4 +143,4 @@ These are enforced by `tests/site_language.test.mjs` and `tests/site_structure.t
 
 - Vision line: "The finance department becomes infrastructure. Always running, always proven." Chosen by the founder on 1 October 2026 (the earlier "The CFO stays. The grunt work goes." line was judged not visionary) and placed as the heading of the order section on About.
 - Team visibility: names and one-line bios on About, no photos, by decision.
-- Analytics: Umami Cloud, free tier, chosen by the founder on 1 October 2026 and live the same day (see Analytics).
+- Analytics: Umami Cloud, free tier, EU region (Frankfurt), chosen by the founder on 1 October 2026 and live the same day (see Analytics).
