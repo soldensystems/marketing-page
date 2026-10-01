@@ -1848,11 +1848,11 @@ main > .hero:last-child {
 /* The collage: two tilted papers, one figure each, and a seal across their foot. */
 .collage {
   position: relative;
-  min-height: 444px;
+  min-height: 404px;
 }
 
 .collage-tall {
-  min-height: 484px;
+  min-height: 444px;
 }
 
 /* The back paper's caption stays clear of the front paper. */
@@ -1985,40 +1985,24 @@ main > .hero:last-child {
   border-color: var(--ink);
 }
 
+/* The attestation stamp lands on the front paper's bottom corner, the way a stamp lands on a document. */
 .seal {
   position: absolute;
-  left: 50%;
-  bottom: 36px;
-  z-index: 2;
-  transform: translateX(-50%);
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 16px 9px 9px;
-  border-radius: 999px;
-  background: #fff;
-  border: 1px solid rgba(11, 21, 48, 0.08);
-  box-shadow: 0 10px 30px -10px rgba(11, 21, 48, 0.22);
-  font: 500 14px/1 var(--sans);
-  color: var(--ink);
+  right: 16px;
+  bottom: -15px;
+  transform: rotate(-3deg);
+  display: inline-block;
+  padding: 9px 12px;
+  border: 1.5px solid var(--teal-ink);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.94);
+  font: 500 11px/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal-ink);
   white-space: nowrap;
 }
 
-.seal i {
-  display: grid;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--teal);
-  color: var(--navy);
-  font: 700 12px/1 var(--sans);
-  font-style: normal;
-}
-
-.seal i::before {
-  content: "✓";
-}
 
 /* ---------------------------------------------------------------- Stages */
 
@@ -2841,16 +2825,14 @@ main > .hero:last-child {
   }
 
   .collage .paper {
-    position: static;
+    position: relative;
+    inset: auto;
     width: auto;
     transform: none;
   }
 
-  .seal {
-    position: static;
-    transform: none;
-    justify-self: start;
-    white-space: normal;
+  .collage {
+    padding-bottom: 18px;
   }
 
   .frame-body {
