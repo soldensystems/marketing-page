@@ -1525,6 +1525,7 @@ main > .hero:last-child {
 .frame[data-paused] *,
 .frame[data-paused] *::before,
 .frame[data-paused] *::after,
+#connects[data-paused] .line,
 #connects[data-paused] .write {
   animation-play-state: paused;
 }
@@ -1643,10 +1644,10 @@ main > .hero:last-child {
 
 .stack-svg .line {
   fill: none;
-  stroke: rgba(11, 21, 48, 0.3);
-  stroke-width: 1.3;
-  stroke-dasharray: 3 6;
+  stroke: rgba(11, 21, 48, 0.26);
+  stroke-width: 1.4;
   stroke-linecap: round;
+  stroke-dasharray: 8 14;
 }
 
 .stack-svg .tile rect {
@@ -3314,13 +3315,24 @@ main > .hero:last-child {
 }
 
 .js .stack.reveal .line {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
+  opacity: 0;
 }
 
+/* Each spoke draws in from its tile, then its dashes travel toward Solden: data flowing in.
+   The write line flows the other way, up to the ERP. Direction is the meaning. */
 .js .stack.reveal.in .line {
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset 0.6s ease;
+  opacity: 1;
+  animation: draw-in 0.7s ease-out both, flow-in 1.8s linear infinite;
+}
+
+@keyframes draw-in {
+  from { stroke-dasharray: 1000 1000; stroke-dashoffset: 1000; }
+  to { stroke-dasharray: 1000 1000; stroke-dashoffset: 0; }
+}
+
+@keyframes flow-in {
+  from { stroke-dasharray: 8 14; stroke-dashoffset: 22; }
+  to { stroke-dasharray: 8 14; stroke-dashoffset: 0; }
 }
 
 .js .stack.reveal .tile {
@@ -3345,29 +3357,29 @@ main > .hero:last-child {
   transition: opacity 0.6s ease 1.3s;
 }
 
-.js .stack.reveal.in .lines .line:nth-child(1) { transition-delay: 0ms; }
-.js .stack.reveal.in .lines .line:nth-child(2) { transition-delay: 30ms; }
-.js .stack.reveal.in .lines .line:nth-child(3) { transition-delay: 60ms; }
-.js .stack.reveal.in .lines .line:nth-child(4) { transition-delay: 90ms; }
-.js .stack.reveal.in .lines .line:nth-child(5) { transition-delay: 120ms; }
-.js .stack.reveal.in .lines .line:nth-child(6) { transition-delay: 150ms; }
-.js .stack.reveal.in .lines .line:nth-child(7) { transition-delay: 180ms; }
-.js .stack.reveal.in .lines .line:nth-child(8) { transition-delay: 210ms; }
-.js .stack.reveal.in .lines .line:nth-child(9) { transition-delay: 240ms; }
-.js .stack.reveal.in .lines .line:nth-child(10) { transition-delay: 270ms; }
-.js .stack.reveal.in .lines .line:nth-child(11) { transition-delay: 300ms; }
-.js .stack.reveal.in .lines .line:nth-child(12) { transition-delay: 330ms; }
-.js .stack.reveal.in .lines .line:nth-child(13) { transition-delay: 360ms; }
-.js .stack.reveal.in .lines .line:nth-child(14) { transition-delay: 390ms; }
-.js .stack.reveal.in .lines .line:nth-child(15) { transition-delay: 420ms; }
-.js .stack.reveal.in .lines .line:nth-child(16) { transition-delay: 450ms; }
-.js .stack.reveal.in .lines .line:nth-child(17) { transition-delay: 480ms; }
-.js .stack.reveal.in .lines .line:nth-child(18) { transition-delay: 510ms; }
-.js .stack.reveal.in .lines .line:nth-child(19) { transition-delay: 540ms; }
-.js .stack.reveal.in .lines .line:nth-child(20) { transition-delay: 570ms; }
-.js .stack.reveal.in .lines .line:nth-child(21) { transition-delay: 600ms; }
-.js .stack.reveal.in .lines .line:nth-child(22) { transition-delay: 630ms; }
-.js .stack.reveal.in .lines .line:nth-child(23) { transition-delay: 660ms; }
+.js .stack.reveal.in .lines .line:nth-child(1) { animation-delay: 0ms, 1600ms; }
+.js .stack.reveal.in .lines .line:nth-child(2) { animation-delay: 30ms, 2330ms; }
+.js .stack.reveal.in .lines .line:nth-child(3) { animation-delay: 60ms, 1260ms; }
+.js .stack.reveal.in .lines .line:nth-child(4) { animation-delay: 90ms, 1990ms; }
+.js .stack.reveal.in .lines .line:nth-child(5) { animation-delay: 120ms, 2720ms; }
+.js .stack.reveal.in .lines .line:nth-child(6) { animation-delay: 150ms, 1650ms; }
+.js .stack.reveal.in .lines .line:nth-child(7) { animation-delay: 180ms, 2380ms; }
+.js .stack.reveal.in .lines .line:nth-child(8) { animation-delay: 210ms, 1310ms; }
+.js .stack.reveal.in .lines .line:nth-child(9) { animation-delay: 240ms, 2040ms; }
+.js .stack.reveal.in .lines .line:nth-child(10) { animation-delay: 270ms, 2770ms; }
+.js .stack.reveal.in .lines .line:nth-child(11) { animation-delay: 300ms, 1700ms; }
+.js .stack.reveal.in .lines .line:nth-child(12) { animation-delay: 330ms, 2430ms; }
+.js .stack.reveal.in .lines .line:nth-child(13) { animation-delay: 360ms, 1360ms; }
+.js .stack.reveal.in .lines .line:nth-child(14) { animation-delay: 390ms, 2090ms; }
+.js .stack.reveal.in .lines .line:nth-child(15) { animation-delay: 420ms, 2820ms; }
+.js .stack.reveal.in .lines .line:nth-child(16) { animation-delay: 450ms, 1750ms; }
+.js .stack.reveal.in .lines .line:nth-child(17) { animation-delay: 480ms, 2480ms; }
+.js .stack.reveal.in .lines .line:nth-child(18) { animation-delay: 510ms, 1410ms; }
+.js .stack.reveal.in .lines .line:nth-child(19) { animation-delay: 540ms, 2140ms; }
+.js .stack.reveal.in .lines .line:nth-child(20) { animation-delay: 570ms, 2870ms; }
+.js .stack.reveal.in .lines .line:nth-child(21) { animation-delay: 600ms, 1800ms; }
+.js .stack.reveal.in .lines .line:nth-child(22) { animation-delay: 630ms, 2530ms; }
+.js .stack.reveal.in .lines .line:nth-child(23) { animation-delay: 660ms, 3260ms; }
 .js .stack.reveal.in .tiles .tile:nth-child(1) { transition-delay: 60ms; }
 .js .stack.reveal.in .tiles .tile:nth-child(2) { transition-delay: 90ms; }
 .js .stack.reveal.in .tiles .tile:nth-child(3) { transition-delay: 120ms; }
@@ -3421,8 +3433,8 @@ main > .hero:last-child {
   }
 
   .js .stack.reveal .line {
-    stroke-dashoffset: 0;
-    transition: none;
+    opacity: 1;
+    animation: none;
   }
 
   .wtable-demo .st-done {
