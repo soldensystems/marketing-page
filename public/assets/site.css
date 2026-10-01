@@ -547,7 +547,7 @@ main > .hero:last-child {
 .stage {
   position: relative;
   display: flow-root;
-  margin-top: 40px;
+  margin-top: 84px;
   padding: 0 var(--gutter) 0;
 }
 
@@ -2929,7 +2929,7 @@ main > .hero:last-child {
   }
 
   .stage {
-    margin-top: 32px;
+    margin-top: 52px;
     padding: 0 12px 0;
   }
 
