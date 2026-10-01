@@ -233,6 +233,56 @@ h2 + .lede {
   margin-top: 56px;
 }
 
+/* About, 01: the why, set as prose. The opening paragraph in the darker ink, the rest muted,
+   and one closing line in the display face that hands over to the vision line in 02. */
+.centre .why-title {
+  max-width: 26ch;
+}
+
+.why-title span {
+  display: block;
+}
+
+.why {
+  max-width: 60ch;
+  margin-top: 24px;
+}
+
+.why p {
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.why p + p {
+  margin-top: 18px;
+}
+
+.why p:first-child {
+  color: var(--ink-soft);
+}
+
+.why-line {
+  margin-top: 44px;
+  max-width: 24ch;
+  font-family: var(--serif);
+  font-optical-sizing: auto;
+  font-variation-settings: "opsz" 96;
+  font-weight: 560;
+  font-size: clamp(26px, 2.6vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+@media (max-width: 720px) {
+  .why p {
+    font-size: 17px;
+  }
+}
+
 .cycle-tail {
   margin-top: 36px;
   font-size: 18px;

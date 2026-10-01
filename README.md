@@ -12,7 +12,7 @@ Everything the visitor can fetch lives in `public/`. The server serves that dire
 | --- | --- | --- |
 | `/` | `public/index.html` | Hero with the animated close frame, the systems diagram (`#connects`), what you are hiring (`#hiring`), the close end to end (`#close`), the boundary (`#boundary`), access and controls (`#controls`), the buying test (`#test`), invite form (`#invite`) |
 | `/how-it-works` | `public/how-it-works.html` | What Solden takes on (`#work`), the pack (`#pack`), who decides (`#who-decides`), the controls register (`#controls`, also `#security`), what happens when it is wrong (`#when-wrong`) |
-| `/about` | `public/about.html` | Team (`#team`), the story so far (`#story`), the order of functions (`#order`), invite form (`#contact`) |
+| `/about` | `public/about.html` | Why Solden (`#why`), the order of functions (`#order`), invite form (`#contact`) |
 | `/privacy`, `/terms` | `public/privacy.html`, `public/terms.html` | Legal |
 | `/thanks` | `public/thanks.html` | Success page for a form post made without JavaScript. `noindex`, no canonical |
 | any other path | `public/404.html` | Not found. `noindex`, no canonical |
@@ -148,4 +148,5 @@ These are enforced by `tests/site_language.test.mjs` and `tests/site_structure.t
 - No marketing page states hosting, retention or contracting terms; they live in the terms and the customer agreement. Decided by the founder on 1 October 2026 ("You don't plaster this all over").
 - One scenario everywhere: the April 2026 close (three entities, attested 8 May) in the hero demo, the close-section cards, the controls card and the deck stills.
 - Team: no team section, names, bios or photos on About for now. The About lede describes the team in one sentence. Decided by the founder on 1 October 2026.
+- About, section 01 is the why, not discovery: "AI can do the work. It cannot answer for it.", set as prose with one closing line that hands over to the vision line in 02. Asked for by the founder on 1 October 2026 ("it should be about the Why of solden. why AI finance department?").
 - Analytics: Umami Cloud, free tier, EU region (Frankfurt), chosen by the founder on 1 October 2026 and live the same day (see Analytics).
