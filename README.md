@@ -55,7 +55,7 @@ Umami Cloud, free tier. Cookieless, so no consent banner. The content security p
 The site is registered on the account; this tag sits after `site.js` on every page:
 
 ```html
-<script defer src="https://cloud.umami.is/script.js" data-website-id="acc68f86-db4f-4a1f-b46f-77ef17ac6cdd"></script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="99baca41-1d1e-4286-8ea0-66d90959767c"></script>
 ```
 
 Besides page views the pages send two custom events:
