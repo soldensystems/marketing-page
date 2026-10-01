@@ -59,11 +59,31 @@ test("valid submission emails the founder inbox with reply-to set", async () => 
   await handle(fakeRequest({ body: valid }), res);
   assert.equal(res.statusCode, 200);
   assert.equal(JSON.parse(res.body).ok, true);
-  assert.equal(calls.length, 1);
+  assert.equal(calls.length, 2, "team note, then the prospect confirmation");
   assert.equal(calls[0].url, "https://api.resend.com/emails");
   assert.deepEqual(calls[0].init.to, ["founders@example.com"]);
   assert.equal(calls[0].init.reply_to, "ada@example.com");
   assert.match(calls[0].init.text, /four entities/);
+  assert.match(calls[0].init.html, /Analytical Engines Ltd/);
+  assert.match(calls[0].init.html, /<!doctype html>/i);
+  assert.deepEqual(calls[1].init.to, ["ada@example.com"]);
+  assert.equal(calls[1].init.reply_to, "founders@example.com");
+  assert.equal(calls[1].init.subject, "Your invite request to Solden");
+  assert.match(calls[1].init.html, /Thanks, Ada\./);
+  assert.match(calls[1].init.text, /two business days/);
+});
+
+test("a failed prospect confirmation does not fail the request", async () => {
+  const calls = [];
+  const fetch = async (url, init) => {
+    calls.push({ url, init: JSON.parse(init.body) });
+    return { ok: calls.length === 1, status: calls.length === 1 ? 200 : 500 };
+  };
+  const handle = createContactHandler({ env, fetch });
+  const res = fakeResponse();
+  await quiet(() => handle(fakeRequest({ body: valid }), res));
+  assert.equal(res.statusCode, 200);
+  assert.equal(calls.length, 2);
 });
 
 test("email subject is an invite request and never uses retired language", async () => {
@@ -73,6 +93,7 @@ test("email subject is an invite request and never uses retired language", async
   assert.equal(calls[0].init.subject, "Invite request: Analytical Engines Ltd");
   assert.doesNotMatch(calls[0].init.subject, /design[- ]partner/i);
   assert.doesNotMatch(calls[0].init.text, /design[- ]partner/i);
+  assert.doesNotMatch(calls[0].init.html + calls[1].init.html, /design[- ]partner|founder inbox/i);
 });
 
 test("missing fields return 400 and send nothing", async () => {
@@ -118,25 +139,25 @@ test("bot timing: t is elapsed milliseconds, only a fast finite value is rejecte
   res = fakeResponse();
   await handle(fakeRequest({ body: { ...valid, t: "8500" } }), res);
   assert.equal(res.statusCode, 200);
-  assert.equal(calls.length, 1);
+  assert.equal(calls.length, 2);
 
   // Missing t passes through.
   res = fakeResponse();
   await handle(fakeRequest({ body: valid }), res);
-  assert.equal(calls.length, 2);
+  assert.equal(calls.length, 4);
 
   // Empty and non-numeric t pass through as well.
   res = fakeResponse();
   await handle(fakeRequest({ body: { ...valid, t: "" } }), res);
-  assert.equal(calls.length, 3);
+  assert.equal(calls.length, 6);
   res = fakeResponse();
   await handle(fakeRequest({ body: { ...valid, t: "abc" } }), res);
-  assert.equal(calls.length, 4);
+  assert.equal(calls.length, 8);
 
   // A negative value is not in [0, MIN_FILL_MS), so it passes too.
   res = fakeResponse();
   await handle(fakeRequest({ body: { ...valid, t: "-4" } }), res);
-  assert.equal(calls.length, 5);
+  assert.equal(calls.length, 10);
 });
 
 test("per-IP rate limit applies after the configured number of sends", async () => {
@@ -150,7 +171,7 @@ test("per-IP rate limit applies after the configured number of sends", async () 
   const res = fakeResponse();
   await handle(fakeRequest({ body: valid }), res);
   assert.equal(res.statusCode, 429);
-  assert.equal(calls.length, 2);
+  assert.equal(calls.length, 4);
 });
 
 test("rate limit window slides: hits older than an hour are swept", async () => {
@@ -165,7 +186,7 @@ test("rate limit window slides: hits older than an hour are swept", async () => 
   res = fakeResponse();
   await handle(fakeRequest({ body: valid }), res);
   assert.equal(res.statusCode, 200);
-  assert.equal(calls.length, 3);
+  assert.equal(calls.length, 6);
 });
 
 test("rate limit key prefers req.ip, then x-real-ip, over x-forwarded-for", async () => {
@@ -284,7 +305,7 @@ test("plain form posts redirect to /thanks and are stored when a store is presen
   assert.equal(res.headers.location, "/thanks");
   assert.equal(inserted.length, 1);
   assert.equal(inserted[0].email, "ada@example.com");
-  assert.match(calls[0].init.text, /Lead ID: 42/);
+  assert.match(calls[0].init.text, /Lead: 42/);
 });
 
 test("plain form posts that fail redirect back to the form with a reason", async () => {
@@ -334,8 +355,8 @@ test("a hanging or failing store never blocks the email", async () => {
   const startedAt = Date.now();
   await quiet(() => handle(fakeRequest({ body: valid }), res));
   assert.equal(res.statusCode, 200);
-  assert.equal(calls.length, 1);
-  assert.doesNotMatch(calls[0].init.text, /Lead ID/);
+  assert.equal(calls.length, 2);
+  assert.doesNotMatch(calls[0].init.text, /Lead:/);
   assert.ok(Date.now() - startedAt < 1000);
 
   const failing = {
@@ -350,14 +371,14 @@ test("a hanging or failing store never blocks the email", async () => {
   res = fakeResponse();
   await quiet(() => handle(fakeRequest({ body: valid }), res));
   assert.equal(res.statusCode, 200);
-  assert.equal(calls.length, 2);
+  assert.equal(calls.length, 4);
 
   // A store factory that hangs on connect is raced too.
   handle = createContactHandler({ env, fetch: okFetch(calls), getStore: () => new Promise(() => {}), storeTimeoutMs: 20 });
   res = fakeResponse();
   await quiet(() => handle(fakeRequest({ body: valid }), res));
   assert.equal(res.statusCode, 200);
-  assert.equal(calls.length, 3);
+  assert.equal(calls.length, 6);
 });
 
 test("the store's recent count enforces the limit when it answers in time", async () => {
