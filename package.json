@@ -1,17 +1,16 @@
 {
   "name": "solden-marketing-page",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Marketing site for soldenai.com with Express contact handling.",
+  "description": "Marketing site for soldenai.com. Static pages served by a small Node server with one contact handler.",
   "type": "module",
   "engines": {
-    "node": "24.x"
+    "node": ">=20"
   },
   "scripts": {
     "start": "node server.js",
-    "test": "node --test",
-    "leads": "node scripts/list-leads.js",
-    "email:recover": "node scripts/recover-email-delivery.js"
+    "dev": "node server.js",
+    "test": "node --test"
   },
   "dependencies": {
     "express": "^4.22.2",

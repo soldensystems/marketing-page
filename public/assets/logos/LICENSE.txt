@@ -1,0 +1,50 @@
+Vendor marks in this folder
+
+All marks are the trademarks of their respective owners. Solden uses them
+nominatively, only to identify the systems Solden connects to, and claims
+no endorsement or affiliation. Each file is a cleaned single-colour copy
+of the owner's published mark: explicit viewBox, no scripts, no external
+references, no metadata.
+
+Sources
+
+- Most marks: simple-icons (CC0 1.0) and gilbarbara/logos (CC0 / MIT).
+  Trademarks remain with their owners.
+
+- ramp.svg: Ramp wordmark, from Wikimedia Commons,
+  https://commons.wikimedia.org/wiki/File:Ramp_Business_Corporation_Logo.svg
+  (file page marks the artwork as public domain text and simple shapes;
+  the Ramp name and logo remain trademarks of Ramp Business Corporation).
+  Cleaned: clipPath removed, single fill #1A1A1A. viewBox 0 0 96 26.
+
+- rippling.svg: Rippling icon (the three ripples), from Rippling's own
+  vector favicon https://www.rippling.com/favicons/favicon.svg (linked
+  from https://www.rippling.com, fetched 30 September 2026). The plum
+  background tile is dropped and the glyph is filled in that same brand
+  colour, #7A005D, cropped to a square around the glyph. The same glyph
+  opens Rippling's header logo. viewBox 2.7 2.7 10.6 10.6 (square).
+
+- billcom.svg: BILL wordmark, from Bill.com's own site header asset,
+  https://cdn.prod.website-files.com/63e3da3df35cd62f54751985/649488c838360d22ac08b864_bill-logo.svg
+  (linked from https://www.bill.com, fetched 30 September 2026). Cleaned to
+  a single fill #FF5A0A (the secondary tint on one path is flattened).
+  viewBox 0 0 53 35.
+
+- netsuite-mark.png: the NetSuite product symbol, taken from the NetSuite app icon
+  published by Oracle America, Inc. on the Apple App Store (60x60 export)
+  (fetched 30 September 2026). The stacked lockup carries ORACLE above
+  NetSuite; only the NetSuite wordmark group is kept so it stays legible
+  at 14 px, rebased to y = 0. Fill #312D2A as published by Oracle.
+  viewBox 0 0 200.02 39.33. NetSuite is a trademark of Oracle and/or its
+  affiliates.
+
+quickbooks.svg, xero.svg, sap.svg: simple-icons (CC0), fetched 2026-09-30 from cdn.simpleicons.org. Trademarks belong to their owners; used nominatively to indicate compatibility.
+dynamics.svg: icon portion of "Microsoft Dynamics 365 Logo (2021–present).svg" from Wikimedia Commons (tagged PD-textlogo); wordmark paths removed. Microsoft trademark; used nominatively to indicate compatibility.
+microsoftoutlook.svg: simple-icons v9 (CC0), fetched 2026-09-30 from cdn.jsdelivr.net/npm/simple-icons@9. Microsoft trademark; used nominatively to indicate compatibility.
+googledrive.svg: Google Drive product icon, 2026 version, from Google's own product-logo asset https://www.gstatic.com/images/branding/productlogos/drive_2026/v2/web/192px.svg (the SVG that https://www.google.com/drive/ and https://workspace.google.com/products/drive/ use for the Drive logo; fetched 30 September 2026; replaces the simple-icons single-colour silhouette). Cleaned: root width/height dropped, viewBox tightened to the rounded-triangle mask bounds plus 1 unit padding (viewBox 11.91 10.91 168.18 168.18, square); the alpha mask and the three linearGradients (yellow #ffe921/#fec700, blue #a9a8ff/#6d97ff/#3186ff, green/cyan #0ebc5f/#78c9ff) are kept as published. No Google licence is granted for the artwork; it is Google's trademark, used nominatively to indicate compatibility (Google's brand guidance for third parties: https://about.google/brand-resource-center/).
+microsoftteams.svg: current Microsoft Teams icon (2025 refresh), "Microsoft Office Teams (2025–present).svg" from Wikimedia Commons, https://commons.wikimedia.org/wiki/File:Microsoft_Office_Teams_(2025%E2%80%93present).svg (tagged PD-textlogo; Commons source https://www.microsoft.com/microsoft-365), fetched 2026-09-30. Verified against the favicon Microsoft serves on https://teams.microsoft.com (evergreen-assets/icons/microsoft_teams_logo_refresh_v2025.ico). Kept verbatim: radial/linear gradients inline, viewBox 4 4 36 38 already tight. Replaces the simple-icons single-colour 2019 silhouette. Microsoft trademark; used nominatively to indicate compatibility.
+gmail.svg: current Gmail M (2020), from gilbarbara/logos (CC0), google-gmail.svg, fetched 2026-09-30. Google trademark; used nominatively to indicate compatibility.
+slack.svg: current Slack mark (2019), from gilbarbara/logos (CC0), slack-icon.svg, fetched 2026-09-30. Slack trademark; used nominatively to indicate compatibility.
+googlesheets.svg: current Google Sheets icon (2020), "Google Sheets 2020 Logo.svg" from Wikimedia Commons (PD-shape), fetched 2026-09-30. Google trademark; used nominatively to indicate compatibility.
+microsoftexcel.svg: current Excel icon (2019 to present), "Microsoft Office Excel (2019–present).svg" from Wikimedia Commons (free content, simple-shape logo), cleaned of Adobe metadata and entities, fetched 2026-09-30. Microsoft trademark; used nominatively to indicate compatibility.
+microsoftoutlook.svg: current Outlook icon (2018 to present), "Microsoft Office Outlook (2018–present).svg" from Wikimedia Commons (free content, simple-shape logo), fetched 2026-09-30; replaces the simple-icons silhouette. Microsoft trademark; used nominatively to indicate compatibility.
