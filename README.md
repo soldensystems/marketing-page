@@ -50,7 +50,15 @@ Redirects, all permanent (308), from `routes.json`:
 
 ## Analytics
 
-Plausible, loaded from `https://plausible.io/js/script.js` on every page with `data-domain="soldenai.com"`. It is cookieless and EU-hosted, so there is no consent banner, and the content security policy allows exactly that host for scripts and requests. Besides page views the pages send two custom events through `window.plausible` when it is present, and do nothing otherwise:
+Umami Cloud, free tier, EU region. Cookieless, so no consent banner. The content security policy allows exactly `https://eu.umami.is` for scripts and requests, and `track()` in `site.js` forwards events to `window.umami` when the script is present and does nothing otherwise.
+
+To turn it on: create an account at cloud.umami.is (choose the EU region), add the website `soldenai.com`, copy its website ID, and add this tag after `site.js` on every page:
+
+```html
+<script defer src="https://eu.umami.is/script.js" data-website-id="THE-WEBSITE-ID"></script>
+```
+
+Besides page views the pages send two custom events:
 
 | Event | Data | Fired when |
 | --- | --- | --- |
@@ -135,4 +143,4 @@ These are enforced by `tests/site_language.test.mjs` and `tests/site_structure.t
 
 - Vision line: "The finance department becomes infrastructure. Always running, always proven." Chosen by the founder on 1 October 2026 (the earlier "The CFO stays. The grunt work goes." line was judged not visionary) and placed as the heading of the order section on About.
 - Team visibility: names and one-line bios on About, no photos, by decision.
-- Analytics: Plausible, chosen for being cookieless and EU-hosted, so no consent banner. The script tag and the CSP entries are in place; data appears once a Plausible site for `soldenai.com` exists on the account.
+- Analytics: Umami Cloud, free tier, EU region, chosen by the founder on 1 October 2026. Events and the CSP are wired; the script tag goes in once the website ID exists (see Analytics).

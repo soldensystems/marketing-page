@@ -5,10 +5,10 @@ const loadedAt = Date.now();
 
 document.documentElement.classList.add("js");
 
-// Analytics: Plausible (cookieless, EU-hosted) when its script is present; nothing otherwise.
+// Analytics: Umami (cookieless, EU region) when its script is present; nothing otherwise.
 function track(name, data) {
-  if (typeof window.plausible === "function") {
-    window.plausible(name, { props: data });
+  if (window.umami && typeof window.umami.track === "function") {
+    window.umami.track(name, data);
   }
 }
 
