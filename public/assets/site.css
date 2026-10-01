@@ -40,7 +40,7 @@
   --wrap: 1160px;
   --gutter: 24px;
   --section: 112px;
-  --radius: 14px;
+  --radius: 10px;
   --radius-lg: 22px;
   --shadow-card: 0 1px 2px rgba(11, 21, 48, 0.04), 0 14px 44px rgba(11, 21, 48, 0.08);
   --shadow-soft: 0 1px 2px rgba(11, 21, 48, 0.04), 0 6px 20px rgba(11, 21, 48, 0.06);
@@ -224,7 +224,7 @@ h2 + .lede {
 .centre .lede + .stack,
 .centre .lede + .compare,
 .centre .lede + .test-cells,
-.centre .lede + .ws-groups,
+.centre .lede + .ws-reg,
 .centre .lede + .stages,
 .centre .lede + .mini-grid,
 .centre .lede + .org,
@@ -1600,14 +1600,9 @@ main > .hero:last-child {
 }
 
 .strip-cell {
-  background: #fff;
-  border: 1px solid rgba(11, 21, 48, 0.07);
-  border-radius: 12px;
-  padding: 16px;
   display: grid;
   gap: 10px;
   align-content: start;
-  box-shadow: var(--shadow-soft);
 }
 
 .strip-cell .label {
@@ -1625,10 +1620,6 @@ main > .hero:last-child {
 .test-cells {
   margin-top: 56px;
   text-align: left;
-}
-
-.test-cells .strip-cell {
-  padding: 24px;
 }
 
 .test-cells .strip-cell p {
@@ -1735,11 +1726,6 @@ main > .hero:last-child {
 /* ---------------------------------------------------------------- Cards and lists */
 
 .card {
-  background: #fff;
-  border: 1px solid rgba(11, 21, 48, 0.07);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
-  padding: 32px;
   text-align: left;
 }
 
@@ -1750,18 +1736,10 @@ main > .hero:last-child {
 .card .sub {
   color: var(--muted);
   font-size: 15px;
-  margin-bottom: 20px;
-}
-
-.card-solden {
-  border-color: rgba(24, 191, 176, 0.5);
-  box-shadow: 0 1px 2px rgba(11, 21, 48, 0.04), 0 14px 44px rgba(24, 191, 176, 0.16);
 }
 
 .card-grid-2 {
-  display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
   margin-top: 56px;
 }
 
@@ -2033,19 +2011,12 @@ main > .hero:last-child {
   list-style: none;
   padding: 0;
   margin: 56px 0 0;
-  display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
   counter-reset: stage;
 }
 
 .stages li {
   counter-increment: stage;
-  background: #fff;
-  border: 1px solid rgba(11, 21, 48, 0.07);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-soft);
-  padding: 22px 20px;
   position: relative;
 }
 
@@ -2073,27 +2044,14 @@ main > .hero:last-child {
 }
 
 .stages li.live {
-  border-color: rgba(24, 191, 176, 0.5);
+  background: var(--teal-soft);
 }
 
 /* ---------------------------------------------------------------- Boundary and trust */
 
 .boundary {
   margin-top: 56px;
-  display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  background: #fff;
-  border: 1px solid rgba(11, 21, 48, 0.07);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
-  padding: 40px;
-  text-align: left;
-}
-
-.boundary > div + div {
-  border-left: 1px solid var(--rule);
-  padding-left: 48px;
 }
 
 .boundary h3 {
@@ -2103,9 +2061,8 @@ main > .hero:last-child {
 .trust {
   margin-top: 0;
   background: #fff;
-  border: 1px solid rgba(11, 21, 48, 0.07);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(11, 21, 48, 0.12);
+  border-radius: var(--radius);
   overflow: hidden;
   text-align: left;
 }
@@ -2113,7 +2070,7 @@ main > .hero:last-child {
 .trust-row {
   display: grid;
   gap: 4px;
-  padding: 14px 24px;
+  padding: 24px;
   border-top: 1px solid var(--rule);
   font-size: 15px;
 }
@@ -2161,7 +2118,7 @@ main > .hero:last-child {
 .org .node {
   background: #fff;
   border: 1px solid rgba(11, 21, 48, 0.1);
-  border-radius: 12px;
+  border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
   padding: 14px 28px;
   font-weight: 600;
@@ -2219,7 +2176,7 @@ main > .hero:last-child {
   position: relative;
   background: #fff;
   border: 1px solid rgba(11, 21, 48, 0.07);
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 16px;
   text-align: center;
   font-size: 14px;
@@ -2253,18 +2210,7 @@ main > .hero:last-child {
   list-style: none;
   padding: 0;
   margin: 48px 0 0;
-  display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  align-items: start;
-}
-
-.team li {
-  background: #fff;
-  border: 1px solid rgba(11, 21, 48, 0.07);
-  border-radius: var(--radius);
-  padding: 22px;
-  box-shadow: var(--shadow-soft);
 }
 
 .team strong {
@@ -2531,25 +2477,64 @@ main > .hero:last-child {
 
 /* ---------------------------------------------------------------- Inner pages: tiles */
 
-.mini-grid {
+/* Register: the house container. One border, one radius, hairline-divided cells, no per-cell
+   chrome. Every cell draws its top and left hairline and reaches 1px past its area, so the
+   container's own edge covers the first column and first row at any column count, and a later
+   cell's hairline paints over the cell before it even when that cell carries a fill. */
+
+.reg {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  gap: 0;
+  background: #fff;
+  border: 1px solid rgba(11, 21, 48, 0.12);
+  border-radius: var(--radius);
+  overflow: hidden;
   text-align: left;
 }
 
-.mini-grid-2 { grid-template-columns: repeat(2, 1fr); }
+/* Every cell draws all four hairlines; a later cell's white fill covers the earlier cell's
+   overlapping right and bottom line, so internal rules stay single, the container clips the outer
+   ones, and an empty grid area still inherits the rules of the cells beside and above it. */
+.reg > * {
+  min-width: 0;
+  margin: -1px;
+  padding: 24px;
+  border: 1px solid var(--rule);
+  background: #fff;
+}
+
+.mini-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
 .mini-grid-3 { grid-template-columns: repeat(3, 1fr); }
 .mini-grid-4 { grid-template-columns: repeat(4, 1fr); }
 
 .mini {
-  background: #fff;
-  border: 1px solid rgba(11, 21, 48, 0.07);
-  border-radius: 14px;
-  box-shadow: var(--shadow-soft);
-  padding: 18px 18px 16px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 8px;
+}
+
+.mini > * {
+  align-self: stretch;
+}
+
+.mini .decide,
+.mini .mini-tag {
+  align-self: flex-start;
+}
+
+/* The owner line sits at the tile foot, so every tile in a row shares one baseline. */
+.mini .decide {
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+/* In the workstream register two decisions wrap beside their key; reserving the second line on
+   every tile keeps the key itself on one line across the row. */
+.ws-reg .mini .decide {
+  min-height: 41px;
   align-content: start;
 }
 
@@ -2579,54 +2564,134 @@ main > .hero:last-child {
   justify-self: start;
 }
 
+/* The control owner on each tile: a small amber key on the words "You decide" only, then the
+   decision itself as quiet text, so fifteen of them read as a column, not fifteen alerts. */
 .decide {
   justify-self: start;
-  display: inline-block;
+  display: inline-grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 4px 8px;
   margin-top: 4px;
-  font: 500 11px/1 var(--sans);
-  letter-spacing: 0.01em;
-  padding: 6px 9px;
-  border-radius: 6px;
+  font: 400 13px/1.4 var(--sans);
+  color: var(--muted);
+}
+
+.decide-k {
+  display: inline-block;
+  font: 500 11px/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 6px;
+  border-radius: 2px;
   background: var(--amber-soft);
   color: var(--amber-ink);
   white-space: nowrap;
 }
 
-.decide-k {
-  font-weight: 600;
-  color: var(--amber-ink);
-}
-
-.decide-k::after {
-  content: " ·";
-}
-
 .decide-quiet {
-  background: var(--canvas-2);
   color: var(--muted);
 }
 
-.ws-groups {
-  display: grid;
-  gap: 32px;
+/* Workstreams: fifteen tiles in one four-column register, each group label a full-width row. */
+.ws-reg {
   margin-top: 48px;
-}
-
-.ws-group {
-  text-align: left;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .ws-label {
-  display: block;
+  grid-column: 1 / -1;
+  padding: 24px 24px 18px;
+  font: 520 22px/1.2 var(--serif);
+  font-optical-sizing: auto;
+  font-variation-settings: "opsz" 48;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.ws-n {
+  display: inline-block;
+  margin-right: 12px;
+  font: 500 11px/1 var(--mono);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+/* The close pack as one sheet: a document, not a set of tiles. */
+.sheet {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin-left: auto;
+  padding: 48px;
+  background: #fff;
+  border: 1px solid rgba(11, 21, 48, 0.12);
+  border-radius: 4px;
+  box-shadow: 0 24px 60px rgba(11, 21, 48, 0.1);
+  text-align: left;
+}
+
+.sheet-head {
   margin: 0 0 12px;
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.sheet-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sheet-list li {
+  padding-block: 20px;
+}
+
+.sheet-list li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.sheet-list h3 {
+  margin: 0 0 6px;
+  font: 520 22px/1.2 var(--serif);
+  font-optical-sizing: auto;
+  font-variation-settings: "opsz" 48;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+
+.sheet-list p {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.sheet-sig {
+  margin-top: 28px;
+}
+
+.sheet-sig-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-block: 14px;
+  border-top: 1px solid var(--rule);
+}
+
+.sheet-sig-row .label {
   font: 500 11px/1 var(--mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
-.ws-group .mini-grid {
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+.sheet-sig-row .sigline {
+  width: 220px;
+  max-width: 60%;
 }
 
 /* ---------------------------------------------------------------- Reveal on scroll (progressive; content is visible without JS) */
@@ -2655,9 +2720,8 @@ main > .hero:last-child {
   border-collapse: separate;
   border-spacing: 0;
   background: #fff;
-  border: 1px solid rgba(11, 21, 48, 0.08);
-  border-radius: 20px;
-  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(11, 21, 48, 0.12);
+  border-radius: var(--radius);
   overflow: hidden;
   font-size: 15px;
   line-height: 1.45;
@@ -2703,7 +2767,7 @@ main > .hero:last-child {
 }
 
 .compare tbody tr:last-child .is-solden {
-  border-bottom-right-radius: 20px;
+  border-bottom-right-radius: 10px;
 }
 
 .compare td::before {
@@ -2781,10 +2845,6 @@ main > .hero:last-child {
     font-size: 13px;
   }
 
-  .ws-group .mini-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .team {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -2801,7 +2861,7 @@ main > .hero:last-child {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .ws-group .mini-grid {
+  .ws-reg {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -2829,7 +2889,7 @@ main > .hero:last-child {
   }
 
   .split {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 32px;
   }
 
@@ -2837,17 +2897,12 @@ main > .hero:last-child {
     position: static;
   }
 
-  .boundary {
-    grid-template-columns: 1fr;
-    gap: 32px;
-    padding: 28px;
+  .sheet {
+    margin-left: 0;
   }
 
-  .boundary > div + div {
-    border-left: 0;
-    padding-left: 0;
-    border-top: 1px solid var(--rule);
-    padding-top: 32px;
+  .boundary {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -2970,14 +3025,18 @@ main > .hero:last-child {
   .sigstrip,
   .form-grid,
   .mini-grid,
-  .mini-grid-2,
   .mini-grid-3,
   .mini-grid-4 {
     grid-template-columns: 1fr;
   }
 
-  .ws-group .mini-grid {
+  .ws-reg {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sheet {
+    max-width: none;
+    padding: 28px;
   }
 
   .sig-cell + .sig-cell {
@@ -3043,7 +3102,7 @@ main > .hero:last-child {
     height: 44px;
     background: #fff;
     border: 1px solid rgba(11, 21, 48, 0.08);
-    border-radius: 12px;
+    border-radius: 8px;
     box-shadow: var(--shadow-soft);
   }
 
@@ -3071,7 +3130,7 @@ main > .hero:last-child {
     width: 100%;
     margin: 0;
     padding: 16px 14px;
-    border-radius: 16px;
+    border-radius: 8px;
     background: #fff;
     border: 1px solid rgba(11, 21, 48, 0.08);
     box-shadow: var(--shadow-soft);
@@ -3231,7 +3290,7 @@ main > .hero:last-child {
   .compare td.is-solden {
     margin: 6px 12px 0;
     padding: 10px 12px 12px;
-    border-radius: 12px;
+    border-radius: 8px;
     background: var(--teal-soft);
   }
 
@@ -3242,10 +3301,6 @@ main > .hero:last-child {
 }
 
 @media (max-width: 480px) {
-  .card {
-    padding: 22px;
-  }
-
   .actions-mini {
     gap: 5px;
   }
