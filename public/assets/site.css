@@ -937,7 +937,7 @@ main > .hero:last-child {
   color: var(--teal-ink);
 }
 
-/* Progress: the bar is driven by p-D-R-C classes from the script (done, review, call) out of 15 */
+/* Progress: the bar is driven by p-D-R-C classes from the script (done, review, call) out of 16 */
 
 .progress {
   margin: 16px 0 14px;
@@ -967,24 +967,25 @@ main > .hero:last-child {
   min-width: 0;
 }
 
+/* Sixteen workstreams: the done, review and call segments share the track with the remainder. */
 .progress-bar.p-1-0-0 .done { flex: 1; }
 .progress-bar.p-2-0-0 .done { flex: 2; }
 .progress-bar.p-3-0-0 .done { flex: 3; }
 .progress-bar.p-3-0-1 .done { flex: 3; }
 .progress-bar.p-3-0-1 .call { flex: 1; }
 .progress-bar.p-4-0-0 .done { flex: 4; }
-.progress-bar.p-13-0-0 .done { flex: 13; }
 .progress-bar.p-14-0-0 .done { flex: 14; }
 .progress-bar.p-15-0-0 .done { flex: 15; }
+.progress-bar.p-16-0-0 .done { flex: 16; }
 
-.progress-bar.p-1-0-0::after { flex: 14; }
-.progress-bar.p-2-0-0::after { flex: 13; }
-.progress-bar.p-3-0-0::after { flex: 12; }
-.progress-bar.p-3-0-1::after { flex: 11; }
-.progress-bar.p-4-0-0::after { flex: 11; }
-.progress-bar.p-13-0-0::after { flex: 2; }
-.progress-bar.p-14-0-0::after { flex: 1; }
-.progress-bar.p-15-0-0::after { flex: 0.001; }
+.progress-bar.p-1-0-0::after { flex: 15; }
+.progress-bar.p-2-0-0::after { flex: 14; }
+.progress-bar.p-3-0-0::after { flex: 13; }
+.progress-bar.p-3-0-1::after { flex: 12; }
+.progress-bar.p-4-0-0::after { flex: 12; }
+.progress-bar.p-14-0-0::after { flex: 2; }
+.progress-bar.p-15-0-0::after { flex: 1; }
+.progress-bar.p-16-0-0::after { flex: 0.001; }
 
 .progress-key {
   display: flex;
@@ -2517,7 +2518,7 @@ main > .hero:last-child {
 }
 
 /* The control owner on each tile: a small amber key on the words "You decide" only, then the
-   decision itself as quiet text, so fifteen of them read as a column, not fifteen alerts. */
+   decision itself as quiet text, so sixteen of them read as a column, not sixteen alerts. */
 .decide {
   justify-self: start;
   display: inline-grid;
@@ -2545,7 +2546,7 @@ main > .hero:last-child {
   color: var(--muted);
 }
 
-/* Workstreams: fifteen tiles in one four-column register, each group label a full-width row. */
+/* Workstreams: sixteen tiles in one four-column register, each group label a full-width row. */
 .ws-reg {
   margin-top: 48px;
   grid-template-columns: repeat(4, minmax(0, 1fr));

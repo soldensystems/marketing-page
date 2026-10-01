@@ -194,7 +194,7 @@ if (form) {
       key(); view("activity"); camera("wide");
       ["bank", "ic", "acc", "rev", "flux", "fs", "lock"].forEach((k) => setStatus(k, "st-queued", "Queued"));
       act("<time>08:00</time><span>NetSuite sync completed, 1,204 records, read-only</span>");
-      act("<time>08:01</time><span>Solden opened the April close, 15 workstreams</span>");
+      act("<time>08:01</time><span>Solden opened the April close, 16 workstreams</span>");
       syncPauseButtons();
       if (refocus) { const b = q("[data-demo-pause]"); if (b) b.focus(); }
     };
@@ -216,13 +216,13 @@ if (form) {
     [600, () => assign("flux")],
     [600, () => assign("fs")],
     [900, () => { camera("main"); badge("Running · day 1"); setStatus("bank", "st-running", "Running");
-      log("Reconciling bank accounts", "1 of 15", ["Operating GBP · statement 1,904,317.20 · ledger 1,889,112.20", "4 outstanding payments matched to the register · 15,205.00", "ok Difference 0.00 · workpaper attached", "Operating USD, EUR, savings, cards · tied out"]); }],
+      log("Reconciling bank accounts", "1 of 16", ["Operating GBP · statement 1,904,317.20 · ledger 1,889,112.20", "4 outstanding payments matched to the register · 15,205.00", "ok Difference 0.00 · workpaper attached", "Operating USD, EUR, savings, cards · tied out"]); }],
     [2200, () => { setStatus("bank", "st-done", "Complete"); setResult("bank", "diff 0.00"); counts.done = 1; counts.ev = 48; key();
-      setStatus("ic", "st-running", "Running"); log("Matching intercompany balances", "2 of 15", ["UK to NL · management fee · 42,000.00 both sides", "UK to US · recharge · 118,250.00 both sides", "ok Both pairs agree · elimination entries prepared"]); }],
+      setStatus("ic", "st-running", "Running"); log("Matching intercompany balances", "2 of 16", ["UK to NL · management fee · 42,000.00 both sides", "UK to US · recharge · 118,250.00 both sides", "ok Both pairs agree · elimination entries prepared"]); }],
     [1900, () => { setStatus("ic", "st-done", "Complete"); setResult("ic", "2 pairs · agree"); counts.done = 2; counts.ev = 70; key();
-      setStatus("acc", "st-running", "Running"); log("Preparing accruals and prepaids", "3 of 15", ["31 recurring journals drafted from templates", "Recruitment fee · vendor bill VB-5588 · 27,500.00 accrued to April", "Prepaid insurance · schedule ties to policy · 4,166.67", "ok Every entry tied to a contract or invoice"]); }],
+      setStatus("acc", "st-running", "Running"); log("Preparing accruals and prepaids", "3 of 16", ["31 recurring journals drafted from templates", "Recruitment fee · vendor bill VB-5588 · 27,500.00 accrued to April", "Prepaid insurance · schedule ties to policy · 4,166.67", "ok Every entry tied to a contract or invoice"]); }],
     [2000, () => { setStatus("acc", "st-done", "Complete"); setResult("acc", "31 journals"); counts.done = 3; counts.ev = 133; key();
-      setStatus("rev", "st-running", "Running"); log("Reviewing revenue cut-off", "4 of 15", ["Recognised revenue tied to billings and delivery evidence", "INV-2041 · £18,400 · invoiced 28 April · delivered 1 May", "Cut-off crosses the period under policy v3", "Needs a decision · raising to the controller"]); }],
+      setStatus("rev", "st-running", "Running"); log("Reviewing revenue cut-off", "4 of 16", ["Recognised revenue tied to billings and delivery evidence", "INV-2041 · £18,400 · invoiced 28 April · delivered 1 May", "Cut-off crosses the period under policy v3", "Needs a decision · raising to the controller"]); }],
     [2300, () => { setStatus("rev", "st-call", "Needs your call"); setResult("rev", "1 question"); counts.call = 1; counts.ev = 142; key();
       badge("Needs your call", "warn"); act("<time>11:02</time><span>Solden raised exception 3 with a proposal and three evidence files</span>");
       view("case"); camera("panel"); }],
@@ -231,14 +231,14 @@ if (form) {
       counts.call = 0; counts.done = 4; counts.time = "22 min"; key(); badge("Running · day 3");
       act("<time>11:07</time><span><b>H. Whitmore</b> approved exception 3. Journal JE-0426-119 queued for review</span>"); }],
     [1400, () => { view("activity"); camera("main"); setStatus("flux", "st-running", "Running");
-      log("Explaining what moved", "13 of 15", ["Every P&L and balance-sheet line against prior period and budget", "Contractor costs −12,400.00 · two engagements ended 31 March · final invoices VB-5610, VB-5611", "ok 3 lines above threshold · drivers attached from workstreams"]); }],
-    [2000, () => { setStatus("flux", "st-done", "Complete"); setResult("flux", "3 explained"); counts.done = 13; counts.ev = 241; key();
-      setStatus("fs", "st-running", "Running"); log("Assembling the statements", "14 of 15", ["P&L, balance sheet and cash flow from locked workstreams", "ok Net income ties · cash ties · statements articulate", "Reviewer J. Mensah released the pack"]); }],
-    [1900, () => { setStatus("fs", "st-done", "Complete"); setResult("fs", "Articulated"); counts.done = 14; counts.ev = 287; counts.time = "1.7 h"; key();
+      log("Explaining what moved", "14 of 16", ["Every P&L and balance-sheet line against prior period and budget", "Contractor costs −12,400.00 · two engagements ended 31 March · final invoices VB-5610, VB-5611", "ok 3 lines above threshold · drivers attached from workstreams"]); }],
+    [2000, () => { setStatus("flux", "st-done", "Complete"); setResult("flux", "3 explained"); counts.done = 14; counts.ev = 241; key();
+      setStatus("fs", "st-running", "Running"); log("Assembling the statements", "15 of 16", ["P&L, balance sheet and cash flow from locked workstreams", "ok Net income ties · cash ties · statements articulate", "Reviewer J. Mensah released the pack"]); }],
+    [1900, () => { setStatus("fs", "st-done", "Complete"); setResult("fs", "Articulated"); counts.done = 15; counts.ev = 287; counts.time = "1.7 h"; key();
       setStatus("lock", "st-call", "Ready to attest"); q("[data-lock-btn]").classList.remove("pbtn-disabled"); badge("Ready to attest"); camera("wide");
-      log("Waiting on the controller", "15 of 15", ["All workstreams complete · evidence attached · exceptions resolved", "Sign-off gate open"]); }],
+      log("Waiting on the controller", "16 of 16", ["All workstreams complete · evidence attached · exceptions resolved", "Sign-off gate open"]); }],
     [1800, () => { q("[data-lock-btn]").classList.add("pressed"); }],
-    [500, () => { setStatus("lock", "st-done", "Locked"); setResult("lock", "Attested 6 May"); row("lock").classList.add("signed"); frame.classList.add("locked"); counts.done = 15; key(); badge("Attested and locked", "ok");
+    [500, () => { setStatus("lock", "st-done", "Locked"); setResult("lock", "Attested 6 May"); row("lock").classList.add("signed"); frame.classList.add("locked"); counts.done = 16; key(); badge("Attested and locked", "ok");
       q("[data-runlog]").classList.add("quiet"); log("Close locked", "", ["ok April 2026 locked · immutable · exportable for auditors"]);
       act("<time>14:42</time><span><b>H. Whitmore</b> attested and locked April 2026</span>"); view("pack"); camera("panel"); }],
     [4200, () => { reset(); }],
