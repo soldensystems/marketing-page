@@ -147,5 +147,5 @@ These are enforced by `tests/site_language.test.mjs` and `tests/site_structure.t
 - The ERP box keeps every ERP it shows, and the site does not name the go-live ERPs. Reaffirmed by the founder on 1 October 2026.
 - No marketing page states hosting, retention or contracting terms; they live in the terms and the customer agreement. Decided by the founder on 1 October 2026 ("You don't plaster this all over").
 - One scenario everywhere: the April 2026 close (three entities, attested 8 May) in the hero demo, the close-section cards, the controls card and the deck stills.
-- Team visibility: names and one-line bios on About, no photos, by decision.
+- Team: no team section, names, bios or photos on About for now. The About lede describes the team in one sentence. Decided by the founder on 1 October 2026.
 - Analytics: Umami Cloud, free tier, EU region (Frankfurt), chosen by the founder on 1 October 2026 and live the same day (see Analytics).
