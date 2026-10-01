@@ -87,7 +87,7 @@ Production deploys from `main`. Every push to `main` becomes the live site; othe
    | Variable | Required | Purpose |
    | --- | --- | --- |
    | `RESEND_API_KEY` | yes | Sends the lead email |
-   | `LEAD_NOTIFY_TO` | yes | Founder inbox. Comma-separate for several |
+   | `LEAD_NOTIFY_TO` | yes | `hello@soldenai.com`, the same inbox the previous site used. Comma-separate for several |
    | `LEAD_NOTIFY_FROM` | no | Verified sender. Defaults to `Solden <leads@soldenai.com>` |
    | `IP_HASH_SECRET` | recommended | Long random string. Rate-limit keys and the stored `ip_hash` become an HMAC of the visitor's IP instead of a plain hash, so the column cannot be reversed to an address. Rotate occasionally; rotation only resets the hourly counters |
    | `CONTACT_MAX_PER_IP_PER_HOUR` | no | Defaults to 5. Anything that is not a positive number falls back to 5 |
@@ -130,7 +130,6 @@ These are enforced by `tests/site_language.test.mjs` and `tests/site_structure.t
 
 ## Founder decisions still open
 
-- Contact routing: confirm the inbox for `LEAD_NOTIFY_TO`.
 - Vision line: "The CFO stays. The grunt work goes. Solden becomes the department under them." is not on the site and is not approved for external use. Approve it or replace it.
 - Team visibility: names and one-line bios are on About. No photos.
 - Launch timing: ship before outreach references the site.
