@@ -25,8 +25,8 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="preload" href="/assets/fonts/Fraunces-Variable.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="/assets/fonts/solden-fonts.css?v=20261005e" />
-  <link rel="stylesheet" href="/assets/site.css?v=20261005e" />
+  <link rel="stylesheet" href="/assets/fonts/solden-fonts.css?v=20261005i" />
+  <link rel="stylesheet" href="/assets/site.css?v=20261005i" />
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","name":"Solden","legalName":"Solden Systems Ltd.","url":"https://soldenai.com/","logo":"https://soldenai.com/assets/og-card.png","description":"Solden runs finance for growing companies.","sameAs":["https://x.com/solden_ai","https://linkedin.com/company/soldenai"]}
   </script>
@@ -247,22 +247,25 @@
             <h3>Reconciliations that tie out, with the workpaper attached.</h3>
             <p class="lede">Bank, balance-sheet and intercompany. Every difference explained, every reconciling item evidenced, stale items rolled forward and named.</p>
             <ul class="check">
-              <li>Bank feeds matched by amount, date and reference; near-misses proposed, not assumed</li>
-              <li>Every in-scope balance-sheet account proved, expected against actual</li>
-              <li>Intercompany pairs matched across entities and currencies</li>
+              <li>Bank and card feeds, matched line by line</li>
+              <li>Every balance-sheet account proved</li>
+              <li>Intercompany pairs across entities and currencies</li>
             </ul>
           </div>
-          <div class="artifact">
-            <div class="paper tilt-l">
-              <div class="k">Bank rec · GBP · 31 Aug</div>
-              <ul class="rows">
-                <li><span>Statement closing balance</span><span class="n">2,146,880.35</span></li>
-                <li><span>Ledger balance</span><span class="n">2,137,430.35</span></li>
-                <li><span>Outstanding payments (3)</span><span class="n">9,450.00</span></li>
-                <li><span>Difference</span><span class="n ok">0.00</span></li>
-              </ul>
-              <span class="seal">Tied out · workpaper attached</span>
+          <div class="collage" aria-hidden="true">
+            <div class="paper p-a">
+              <div class="p-head"><strong>Bank statement</strong><span>31 Aug</span></div>
+              <div class="p-lines"></div>
+              <div class="fig">2,146,880.35</div>
+              <div class="fig-l">Closing balance</div>
             </div>
+            <div class="paper p-b">
+              <div class="p-head"><strong>General ledger</strong><span>Operating GBP</span></div>
+              <div class="p-lines"></div>
+              <div class="fig">2,137,430.35</div>
+              <div class="fig-l">Ledger balance. Three outstanding payments, 9,450.00</div>
+            </div>
+            <div class="seal"><i></i>Difference 0.00, workpaper attached</div>
           </div>
         </div>
 
@@ -271,26 +274,25 @@
             <h3>Exceptions arrive as a case, never as an alert.</h3>
             <p class="lede">What happened, what Solden proposes, why it needs you, and the evidence behind the proposal. You approve, adjust or reject with a note, and the work resumes.</p>
             <ul class="check">
-              <li>Unmatched items, missing support, threshold breaches, cut-off crossings, duplicates</li>
-              <li>The decision, the decider and the time go into the record</li>
-              <li>A blocker is a named, owned state with a date on it, not silence</li>
+              <li>Unmatched items, missing support, cut-off crossings</li>
+              <li>The decision, the decider and the time on the record</li>
+              <li>A blocker is named and owned, never silent</li>
             </ul>
           </div>
-          <div class="artifact">
-            <div class="paper tilt-r">
-              <div class="k">Your call · Intercompany · UK to NL</div>
-              <h4>Out of balance by €3,760.00</h4>
-              <p>NL booked the August management fee at the July rate. Proposed: true-up journal in NL at the August rate. Evidence: both entries, the rate source.</p>
-              <div class="actions-mini" aria-hidden="true"><span>Approve</span><span>Adjust</span><span>Reject with note</span></div>
+          <div class="collage collage-tall" aria-hidden="true">
+            <div class="paper p-a">
+              <div class="p-head"><strong>Exception, intercompany</strong><span>UK to NL</span></div>
+              <div class="fig">€3,760.00</div>
+              <div class="fig-l">Out of balance. NL booked the August fee at the July rate. Proposed: a true-up journal at the August rate.</div>
+              <div class="actions-mini"><span>Approve</span><span>Adjust</span><span>Reject with note</span></div>
             </div>
-            <div class="paper overlap">
-              <div class="k">Recorded</div>
-              <ul class="rows">
-                <li><span>Decided by</span><span class="n">H. Whitmore, Controller</span></li>
-                <li><span>At</span><span class="n">2 Sep · 15:24</span></li>
-                <li><span>Outcome</span><span class="n ok">Approved · work resumed</span></li>
-              </ul>
+            <div class="paper p-b">
+              <div class="p-head"><strong>Recorded</strong><span>2 Sep, 15:24</span></div>
+              <div class="p-lines"></div>
+              <div class="sigline">H. Whitmore</div>
+              <div class="fig-l">Controller</div>
             </div>
+            <div class="seal"><i></i>Approved, work resumed</div>
           </div>
         </div>
 
@@ -299,21 +301,25 @@
             <h3>Every number proves itself, down to the document.</h3>
             <p class="lede">From any figure, one click opens the trail: the journal, the transaction, the source document. Each step shows who produced it, when, and from which system.</p>
             <ul class="check">
-              <li>Lineage is written on the same path as the number</li>
-              <li>Adjustments create new versions; nothing is overwritten</li>
-              <li>Challenge any step and it routes back as an exception with your note</li>
+              <li>Lineage written on the same path as the number</li>
+              <li>Nothing overwritten, every version kept</li>
+              <li>Challenge any step and it routes back with your note</li>
             </ul>
           </div>
-          <div class="artifact">
-            <div class="paper">
-              <div class="k">Evidence trail · Accruals</div>
-              <ol class="trail">
-                <li><small>Figure</small>Accrued liabilities, 96,410.00</li>
-                <li><small>Journal</small>JE-0826-117, prepared by Solden, reviewed by Solden</li>
-                <li><small>Transaction</small>Vendor bill VB-5731, legal fees, 18,200.00</li>
-                <li><small>Source document</small>invoice-counsel-0831.pdf, received 2 Sep</li>
-              </ol>
+          <div class="collage" aria-hidden="true">
+            <div class="paper p-a">
+              <div class="p-head"><strong>Accrued liabilities</strong><span>31 Aug</span></div>
+              <div class="p-lines"></div>
+              <div class="fig">96,410.00</div>
+              <div class="fig-l">Journal JE-0826-117, prepared and reviewed by Solden</div>
             </div>
+            <div class="paper p-b">
+              <div class="p-head"><strong>invoice-counsel-0831.pdf</strong><span>Received 2 Sep</span></div>
+              <div class="p-lines p-lines-long"></div>
+              <div class="fig fig-sm">18,200.00</div>
+              <div class="fig-l">Vendor bill VB-5731, legal fees</div>
+            </div>
+            <div class="seal"><i></i>Figure to document in one click</div>
           </div>
         </div>
 
@@ -322,29 +328,26 @@
             <h3>You receive the pack. Then you attest, and it locks.</h3>
             <p class="lede">Not a dashboard. The finished close and everything needed to trust it: the statements, the completeness checklist, the evidence index, the exception log, the attestation trail. Immutable once locked, exportable for your auditors.</p>
             <ul class="check">
-              <li>Sign-off is refused while evidence is missing or an exception is open</li>
-              <li>Reviewer time, the minutes your reviewer spends per close, measured from shadow mode onward against your own baseline</li>
+              <li>Sign-off refused while evidence is missing</li>
+              <li>Reviewer time measured against your own baseline</li>
             </ul>
           </div>
-          <div class="artifact">
-            <div class="paper tilt-l">
-              <div class="k">Close pack · August 2026</div>
-              <h4>Attested and locked</h4>
-              <ul class="rows">
-                <li><span>Completeness checklist</span><span class="n ok">15 / 15</span></li>
-                <li><span>Evidence index</span><span class="n">312 links</span></li>
-                <li><span>Exceptions</span><span class="n">4 resolved</span></li>
-                <li><span>Attested by</span><span class="n">H. Whitmore · 3 Sep</span></li>
-              </ul>
+          <div class="collage" aria-hidden="true">
+            <div class="paper p-a">
+              <div class="p-head"><strong>Close pack</strong><span>August 2026</span></div>
+              <div class="p-lines"></div>
+              <div class="fig">15 / 15</div>
+              <div class="fig-l">Completeness checklist. 312 evidence links, 4 exceptions resolved</div>
             </div>
-            <div class="paper overlap tilt-r">
-              <div class="k">Flux · Contractors · Aug vs Jul</div>
-              <h4>−12,400.00</h4>
-              <p>Two engagements ended 31 July and their final invoices landed in July. Workpaper attached.</p>
+            <div class="paper p-b">
+              <div class="p-head"><strong>Attested by</strong><span>3 Sep</span></div>
+              <div class="sigline">H. Whitmore</div>
+              <div class="fig-l">Controller</div>
             </div>
+            <div class="seal"><i></i>Locked, exportable for auditors</div>
           </div>
         </div>
-      </div>
+
       <div class="wrap centre mid-cta reveal">
         <p class="lede">If this is the close you want to receive, request an invite. It starts with a replay of one you have already done.</p>
         <div class="actions"><a class="btn" href="#invite" data-cta="mid">Request an invite</a><a class="link" href="/how-it-works#work">All fifteen workstreams</a></div>
@@ -463,7 +466,7 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20261005e" defer></script>
+  <script src="/assets/site.js?v=20261005i" defer></script>
   <script src="/_vercel/insights/script.js" defer></script>
 </body>
 </html>

@@ -1787,8 +1787,9 @@ main > .hero:last-child {
 
 .check li::before {
   content: "✓";
-  background: var(--teal-soft);
+  background: none;
   color: var(--teal-ink);
+  font-size: 14px;
 }
 
 .cross li::before {
@@ -1797,22 +1798,18 @@ main > .hero:last-child {
   color: var(--muted);
 }
 
-/* ---------------------------------------------------------------- Feature rows with artifacts */
+/* ---------------------------------------------------------------- Feature rows with paper collages */
 
 .feature {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  gap: 72px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 96px;
   align-items: center;
-  padding-block: 64px;
+  padding-block: 96px;
 }
 
 .feature + .feature {
   border-top: 1px solid var(--rule);
-}
-
-.feature:nth-child(even) > :first-child {
-  order: 2;
 }
 
 .feature h3 {
@@ -1820,145 +1817,144 @@ main > .hero:last-child {
   font-optical-sizing: auto;
   font-variation-settings: "opsz" 96;
   font-weight: 560;
-  font-size: 34px;
-  letter-spacing: -0.01em;
-  margin-bottom: 14px;
+  font-size: 36px;
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  margin-bottom: 18px;
 }
 
 .feature .lede {
-  font-size: 17px;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 44ch;
 }
 
 .feature .check {
-  margin-top: 22px;
+  margin-top: 28px;
+  gap: 14px;
+  font-size: 16px;
+  color: var(--ink-soft);
 }
 
-.artifact {
+/* The collage: two tilted papers, one figure each, and a seal across their foot. */
+.collage {
   position: relative;
-  display: grid;
-  gap: 16px;
-  padding: 24px;
-  background: var(--canvas-2);
-  border-radius: var(--radius-lg);
-  min-height: 340px;
-  align-content: center;
+  min-height: 444px;
+}
+
+.collage-tall {
+  min-height: 484px;
+}
+
+/* The back paper's caption stays clear of the front paper. */
+.collage .p-a .fig-l {
+  max-width: 58%;
+}
+
+.collage-tall .p-a .fig-l {
+  max-width: 82%;
 }
 
 .paper {
   min-width: 0;
   background: #fff;
-  border-radius: 12px;
-  border: 1px solid rgba(11, 21, 48, 0.07);
-  box-shadow: var(--shadow-card);
-  padding: 18px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(11, 21, 48, 0.08);
+  box-shadow: 0 1px 2px rgba(11, 21, 48, 0.05), 0 18px 40px -12px rgba(11, 21, 48, 0.18);
+  padding: 24px 26px 26px;
   font-size: 14px;
   color: var(--ink-soft);
 }
 
-.paper .k {
-  font: 500 11px/1 var(--mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--faint);
-  margin-bottom: 8px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.collage .paper {
+  position: absolute;
+  width: min(300px, 60%);
 }
 
-.paper h4 {
-  margin: 0 0 10px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--ink);
+.collage .p-a {
+  left: 0;
+  top: 0;
+  transform: rotate(-3deg);
 }
 
-.rows {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.collage .p-b {
+  right: 0;
+  top: 132px;
+  transform: rotate(2.2deg);
+  z-index: 1;
 }
 
-.rows li {
+.collage-tall .p-b {
+  top: 188px;
+}
+
+.p-head {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
-  padding: 8px 0;
-  border-top: 1px solid var(--rule);
-  font-size: 13px;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 14px;
 }
 
-.rows li:first-child {
-  border-top: 0;
-}
-
-.rows .n {
-  font-family: var(--mono);
+.p-head strong {
+  font: 600 15px/1.3 var(--sans);
   color: var(--ink);
+}
+
+.p-head span {
+  font: 400 12px/1.3 var(--sans);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.p-lines {
+  height: 28px;
+  margin-bottom: 18px;
+  background: repeating-linear-gradient(to bottom, var(--rule) 0 1px, transparent 1px 9px);
+  background-size: 68% 100%;
+  background-repeat: no-repeat;
+}
+
+.p-lines-long {
+  height: 37px;
+  background-size: 100% 100%;
+}
+
+.fig {
+  display: inline-block;
+  font: 600 30px/1.1 var(--sans);
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
-}
-
-.rows .ok {
-  color: var(--teal-ink);
-}
-
-.trail {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-size: 12px;
-}
-
-.trail li {
-  position: relative;
-  padding: 6px 0 6px 20px;
   color: var(--ink);
+  padding: 0 3px;
+  background: linear-gradient(transparent 60%, var(--teal-soft) 60%);
 }
 
-.trail li::before {
-  content: "";
-  position: absolute;
-  left: 5px;
-  top: 0;
-  bottom: 0;
-  border-left: 1px solid var(--rule-strong);
+.fig-sm {
+  font-size: 24px;
 }
 
-.trail li::after {
-  content: "";
-  position: absolute;
-  left: 2px;
-  top: 12px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid var(--teal-ink);
+.fig-l {
+  margin-top: 10px;
+  font: 400 13px/1.5 var(--sans);
+  color: var(--muted);
 }
 
-.trail li:first-child::before {
-  top: 12px;
-}
-
-.trail li:last-child::before {
-  bottom: auto;
-  height: 12px;
-}
-
-.trail small {
+.collage .sigline {
   display: block;
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--faint);
+  width: auto;
+  max-width: 200px;
+  margin-top: 8px;
+  font-size: 22px;
+  color: var(--ink);
 }
 
 .actions-mini {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 12px;
+  margin-top: 16px;
 }
 
 .actions-mini span {
@@ -1978,31 +1974,38 @@ main > .hero:last-child {
 }
 
 .seal {
+  position: absolute;
+  left: 50%;
+  bottom: 36px;
+  z-index: 2;
+  transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font: 500 11px/1 var(--mono);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--teal-ink);
-  background: var(--teal-soft);
+  gap: 10px;
+  padding: 9px 16px 9px 9px;
   border-radius: 999px;
-  padding: 8px 12px;
-  margin-top: 12px;
+  background: #fff;
+  border: 1px solid rgba(11, 21, 48, 0.08);
+  box-shadow: 0 10px 30px -10px rgba(11, 21, 48, 0.22);
+  font: 500 14px/1 var(--sans);
+  color: var(--ink);
+  white-space: nowrap;
 }
 
-.tilt-l {
-  transform: rotate(-1.2deg);
+.seal i {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: var(--navy);
+  font: 700 12px/1 var(--sans);
+  font-style: normal;
 }
 
-.tilt-r {
-  transform: rotate(1deg);
-}
-
-.overlap {
-  margin-top: -36px;
-  margin-left: 40px;
-  z-index: 1;
+.seal i::before {
+  content: "✓";
 }
 
 /* ---------------------------------------------------------------- Stages */
@@ -2279,7 +2282,7 @@ main > .hero:last-child {
 }
 
 .dark-block .check li::before {
-  background: rgba(24, 191, 176, 0.18);
+  background: none;
   color: var(--teal);
 }
 
@@ -2866,8 +2869,24 @@ main > .hero:last-child {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .feature:nth-child(even) > :first-child {
-    order: 0;
+  .collage {
+    min-height: 0;
+    display: grid;
+    gap: 14px;
+    padding-top: 8px;
+  }
+
+  .collage .paper {
+    position: static;
+    width: auto;
+    transform: none;
+  }
+
+  .seal {
+    position: static;
+    transform: none;
+    justify-self: start;
+    white-space: normal;
   }
 
   .frame-body {
@@ -3050,15 +3069,6 @@ main > .hero:last-child {
     width: 100%;
   }
 
-  .overlap {
-    margin-left: 0;
-  }
-
-  .tilt-l,
-  .tilt-r {
-    transform: none;
-  }
-
   .footer-inner {
     grid-template-columns: 1fr;
     gap: 24px;
@@ -3069,11 +3079,6 @@ main > .hero:last-child {
     grid-template-columns: repeat(3, max-content);
     justify-content: start;
     gap: 12px 24px;
-  }
-
-  .paper .k {
-    white-space: normal;
-    line-height: 1.5;
   }
 
   /* Connections: the phone list replaces the diagram. */
