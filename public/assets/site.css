@@ -1034,6 +1034,12 @@ main > .hero:last-child {
   font-size: 13px;
 }
 
+.wtable th small {
+  font-weight: 400;
+  color: var(--faint);
+  margin-left: 6px;
+}
+
 .wtable th {
   text-align: left;
   font: 500 11px/1 var(--sans);
