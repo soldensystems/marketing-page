@@ -141,6 +141,10 @@ These are enforced by `tests/site_language.test.mjs` and `tests/site_structure.t
 
 ## Founder decisions, settled
 
-- Vision line: "The finance department becomes infrastructure. Always running, always proven." Chosen by the founder on 1 October 2026 (the earlier "The CFO stays. The grunt work goes." line was judged not visionary) and placed as the heading of the order section on About.
+- Vision line: "The finance department becomes infrastructure. Always running, always proven." Chosen by the founder on 1 October 2026 (the earlier "The CFO stays. The grunt work goes." line was judged not visionary), placed as the heading of the order section on About and, from the same day, as the footer line on every page. The schema.org description carries the hero line.
+- ERP writes follow one model everywhere: the controller signs a single write activation; after it, every post passes Solden's review and is read back from the ERP, and material journals still wait for the controller's decision. Never write it as the controller signing each entry. Decided 1 October 2026.
+- "Review time" is the customer controller's own time, written "your review time". The hero demo keeps it at 0 min while Solden works and moves it only when the controller decides a judgement call and reviews the pack before attesting. Solden's own review hours are an internal margin metric and stay off the site. Decided 1 October 2026.
+- The ERP box keeps every ERP it shows, and the site does not name the go-live ERPs. Reaffirmed by the founder on 1 October 2026.
+- One scenario everywhere: the April 2026 close (three entities, attested 8 May) in the hero demo, the close-section cards, the controls card and the deck stills.
 - Team visibility: names and one-line bios on About, no photos, by decision.
 - Analytics: Umami Cloud, free tier, EU region (Frankfurt), chosen by the founder on 1 October 2026 and live the same day (see Analytics).

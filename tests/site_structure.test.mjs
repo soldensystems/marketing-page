@@ -32,7 +32,7 @@ function pageFor(target, current) {
   return `${route.slice(1)}.html`;
 }
 
-const FOOTER_LINE = "Solden runs finance for growing companies.";
+const FOOTER_LINE = "The finance department becomes infrastructure. Always running, always proven.";
 const CTA = "Request an invite";
 
 // ------------------------------------------------------------------ Anchors
