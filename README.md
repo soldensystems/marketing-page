@@ -132,7 +132,7 @@ From outside the project, Railway's public TCP proxy presents a self-signed cert
 - No invented customer results, logos or testimonials. Vendor marks in the diagram are the real marks of systems Solden connects to; the only other mark is Solden's own. Never a substitute letter or icon.
 - NetSuite and Sage Intacct are the first ERPs Solden goes live on. The promise on the page is "your ERP" and "the systems you already run"; the first two are never presented as a limit.
 - Solden's reviewers are qualified, experienced accountants and controllers, and the site says so.
-- Hosting is in the UK and EU, with other regions served as local law requires.
+- Hosting location, retention schedules and contract terms such as the DPA, subprocessors and data-protection law belong in the terms and the customer agreement, never on the marketing pages. For the agreement: hosting is in the UK and EU, with other regions served as local law requires.
 - The animated hero frame is an accepted device: a directed sequence inside a product-like close workspace, with a pause control and a static finished state under reduced motion. It shows how the work runs, not a customer's numbers.
 - Every statistic names its source in the same sentence or block.
 - British spelling. Never copy a competitor's lines or devices.
@@ -145,7 +145,7 @@ These are enforced by `tests/site_language.test.mjs` and `tests/site_structure.t
 - ERP writes follow one model everywhere: the controller signs a single write activation; after it, every post passes Solden's review and is read back from the ERP, and material journals still wait for the controller's decision. Never write it as the controller signing each entry. Decided 1 October 2026.
 - "Review time" is the customer controller's own time, written "your review time". The hero demo keeps it at 0 min while Solden works and moves it only when the controller decides a judgement call and reviews the pack before attesting. Solden's own review hours are an internal margin metric and stay off the site. Decided 1 October 2026.
 - The ERP box keeps every ERP it shows, and the site does not name the go-live ERPs. Reaffirmed by the founder on 1 October 2026.
-- The home page does not state hosting. The UK and EU hosting line lives on How it works only. Decided by the founder on 1 October 2026.
+- No marketing page states hosting, retention or contracting terms; they live in the terms and the customer agreement. Decided by the founder on 1 October 2026 ("You don't plaster this all over").
 - One scenario everywhere: the April 2026 close (three entities, attested 8 May) in the hero demo, the close-section cards, the controls card and the deck stills.
 - Team visibility: names and one-line bios on About, no photos, by decision.
 - Analytics: Umami Cloud, free tier, EU region (Frankfurt), chosen by the founder on 1 October 2026 and live the same day (see Analytics).
