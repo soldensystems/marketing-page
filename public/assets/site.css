@@ -2412,6 +2412,7 @@ main > .hero:last-child {
 
 .footer-nav {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 8px 20px;
@@ -2450,10 +2451,10 @@ main > .hero:last-child {
 .footer-social {
   display: inline-flex;
   gap: 8px;
-  margin-left: auto;
+  margin-left: 12px;
 }
 
-.footer-legal .footer-social a {
+.footer-social a {
   display: grid;
   place-items: center;
   width: 32px;
@@ -2464,7 +2465,7 @@ main > .hero:last-child {
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.footer-legal .footer-social a:hover {
+.footer-social a:hover {
   color: var(--ink);
   border-color: var(--ink);
   text-decoration: none;
