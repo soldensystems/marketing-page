@@ -30,7 +30,6 @@ const BANNED = [
   [/never do again|out of the loop|one set of books out|many systems in|operating layer|one accountable (?:service|function)|mcp server/i, "LAC's messaging pattern"],
   [/nothing touches the present|read before write|one path to your books|one department, function by function|start with a replay of your last close/i, "heading from the rejected draft"],
   [/delivered as software|rebuilt as software|\bSaaS\b/i, "Solden is a department delivered as a service"],
-  [/the grunt work goes|becomes the department under them/i, "vision line not approved for external use"],
   [/soc 2 type ii certified|iso 27001|>certified<|>implemented</i, "never claim a certification the company does not hold"],
   [/customer-proven|on the roadmap|>Specified<|>Planned<|>Pre-build<|illustrative/i, "no apologetic copy: never announce what is missing or its build status"],
 ];

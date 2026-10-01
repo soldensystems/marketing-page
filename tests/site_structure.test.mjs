@@ -90,7 +90,7 @@ function sharedHead(html) {
     /<link rel="stylesheet"[^>]*>/g,
   ];
   const tags = picks.flatMap((re) => head.match(re) || []);
-  const scripts = html.match(/<script src="[^"]+"[^>]*>/g) || [];
+  const scripts = html.match(/<script[^>]*src="[^"]+"[^>]*>/g) || [];
   return [...tags, ...scripts].map((t) => t.replace(/\?v=[^"]+/, "")).sort();
 }
 
@@ -103,13 +103,21 @@ test("icons, theme-color, viewport, social image and scripts are identical on ev
   }
 });
 
-test("every script tag is deferred and served from the site itself", () => {
+const SCRIPT_HOSTS = ["https://plausible.io/"]; // the analytics script; everything else is same-origin
+test("every script tag is deferred and served from the site or the analytics host", () => {
   for (const page of pages) {
-    for (const tag of read(page).match(/<script src="[^"]+"[^>]*>/g) || []) {
+    for (const tag of read(page).match(/<script[^>]*src="[^"]+"[^>]*>/g) || []) {
       assert.match(tag, /\sdefer\b/, `${page}: ${tag} is not deferred`);
-      assert.match(tag, /src="\//, `${page}: ${tag} is not same-origin`);
+      const src = tag.match(/src="([^"]+)"/)[1];
+      assert.ok(src.startsWith("/") || SCRIPT_HOSTS.some((h) => src.startsWith(h)), `${page}: ${tag} is not an allowed origin`);
     }
   }
+});
+
+test("the analytics host is allowed by the content security policy", () => {
+  const csp = routes.headers.flatMap((r) => r.headers).find((h) => h.key === "Content-Security-Policy").value;
+  assert.match(csp, /script-src [^;]*https:\/\/plausible\.io/);
+  assert.match(csp, /connect-src [^;]*https:\/\/plausible\.io/);
 });
 
 // ------------------------------------------------------------------ Shared chrome

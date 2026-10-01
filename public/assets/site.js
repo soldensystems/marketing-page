@@ -5,9 +5,10 @@ const loadedAt = Date.now();
 
 document.documentElement.classList.add("js");
 
+// Analytics: Plausible (cookieless, EU-hosted) when its script is present; nothing otherwise.
 function track(name, data) {
-  if (typeof window.va === "function") {
-    window.va("event", { name, data });
+  if (typeof window.plausible === "function") {
+    window.plausible(name, { props: data });
   }
 }
 

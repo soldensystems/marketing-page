@@ -50,14 +50,14 @@ Redirects, all permanent (308), from `routes.json`:
 
 ## Analytics
 
-None yet. The pages emit two events through `window.va` when an analytics script that provides it is present, and do nothing otherwise:
+Plausible, loaded from `https://plausible.io/js/script.js` on every page with `data-domain="soldenai.com"`. It is cookieless and EU-hosted, so there is no consent banner, and the content security policy allows exactly that host for scripts and requests. Besides page views the pages send two custom events through `window.plausible` when it is present, and do nothing otherwise:
 
 | Event | Data | Fired when |
 | --- | --- | --- |
 | `cta_click` | `cta`: `header`, `menu`, `hero`, `mid`, `product-footer`, `how-footer`, `contact-submit` | any element with `data-cta` is clicked |
 | `contact_submitted` | `source`: `home` or `about` | the JSON submission returned 2xx |
 
-To add a provider, load its script from the site's own origin or add its host to `script-src` and `connect-src` in `routes.json`; the CSP blocks anything else.
+To switch provider, change the script tag on every page, the `track()` function in `site.js`, and the host in `script-src` and `connect-src` in `routes.json`; the CSP blocks anything else.
 
 A form post made without JavaScript lands on `/thanks`, so that page view is the no-script conversion. Nothing else is tracked.
 
@@ -131,8 +131,8 @@ From outside the project, Railway's public TCP proxy presents a self-signed cert
 
 These are enforced by `tests/site_language.test.mjs` and `tests/site_structure.test.mjs`. Keep them green.
 
-## Founder decisions still open
+## Founder decisions, settled
 
-- Vision line: "The CFO stays. The grunt work goes. Solden becomes the department under them." is not on the site and is not approved for external use. Approve it or replace it.
-- Team visibility: names and one-line bios are on About. No photos.
-- Launch timing: ship before outreach references the site.
+- Vision line: "The CFO stays. The grunt work goes. Solden becomes the department under them." Approved 1 October 2026 and placed as the heading of the order section on About.
+- Team visibility: names and one-line bios on About, no photos, by decision.
+- Analytics: Plausible, chosen for being cookieless and EU-hosted, so no consent banner. The script tag and the CSP entries are in place; data appears once a Plausible site for `soldenai.com` exists on the account.
