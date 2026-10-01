@@ -2406,7 +2406,7 @@ main > .hero:last-child {
   gap: 48px;
 }
 
-.footer-inner p {
+.footer-inner > div > p {
   max-width: 44ch;
 }
 
