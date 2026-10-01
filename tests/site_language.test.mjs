@@ -10,8 +10,8 @@ import { fileURLToPath } from "node:url";
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const root = path.join(repo, "public");
 const pages = fs.readdirSync(root).filter((name) => name.endsWith(".html"));
-const vercel = JSON.parse(fs.readFileSync(path.join(repo, "vercel.json"), "utf8"));
-const redirectSources = new Set((vercel.redirects || []).filter((r) => !r.has).map((r) => r.source));
+const routes = JSON.parse(fs.readFileSync(path.join(repo, "routes.json"), "utf8"));
+const redirectSources = new Set((routes.redirects || []).filter((r) => !r.has).map((r) => r.source));
 
 function read(name) {
   return fs.readFileSync(path.join(root, name), "utf8");
@@ -97,7 +97,7 @@ test("internal links resolve to a page, an asset or a redirect", () => {
 });
 
 test("redirect destinations exist", () => {
-  for (const rule of vercel.redirects || []) {
+  for (const rule of routes.redirects || []) {
     if (rule.has) continue;
     const target = rule.destination.split("#")[0];
     assert.ok(fs.existsSync(path.join(root, `${target}.html`)), `${rule.source} -> ${rule.destination}`);

@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const root = path.join(repo, "public");
 const pages = fs.readdirSync(root).filter((name) => name.endsWith(".html")).sort();
-const vercel = JSON.parse(fs.readFileSync(path.join(repo, "vercel.json"), "utf8"));
+const routes = JSON.parse(fs.readFileSync(path.join(repo, "routes.json"), "utf8"));
 const siteJs = fs.readFileSync(path.join(root, "assets", "site.js"), "utf8");
 const siteCss = fs.readFileSync(path.join(root, "assets", "site.css"), "utf8");
 
@@ -51,7 +51,7 @@ test("every fragment link resolves to an id in the target page", () => {
 });
 
 test("every redirect destination with a fragment resolves to an id in the target page", () => {
-  for (const rule of vercel.redirects || []) {
+  for (const rule of routes.redirects || []) {
     if (rule.has || !rule.destination.includes("#")) continue;
     const [route, fragment] = rule.destination.split("#");
     const file = route === "/" ? "index.html" : `${route.slice(1)}.html`;
@@ -61,7 +61,7 @@ test("every redirect destination with a fragment resolves to an id in the target
 });
 
 test("the retired routes redirect permanently and nothing links to a careers page", () => {
-  const rules = new Map((vercel.redirects || []).filter((r) => !r.has).map((r) => [r.source, r]));
+  const rules = new Map((routes.redirects || []).filter((r) => !r.has).map((r) => [r.source, r]));
   for (const source of ["/request-demo", "/security", "/careers"]) {
     const rule = rules.get(source);
     assert.ok(rule, `${source} has a redirect`);
@@ -97,7 +97,6 @@ function sharedHead(html) {
 test("icons, theme-color, viewport, social image and scripts are identical on every page", () => {
   const reference = sharedHead(read("index.html"));
   assert.ok(reference.some((t) => t.startsWith('<link rel="apple-touch-icon"')), "index.html declares an apple-touch-icon");
-  assert.ok(reference.some((t) => t.includes("/_vercel/insights/script.js")), "index.html loads the analytics script");
   assert.ok(reference.some((t) => t.includes("/assets/site.js")), "index.html loads site.js");
   for (const page of pages) {
     assert.deepEqual(sharedHead(read(page)), reference, `${page}: shared head block differs from index.html`);

@@ -6,7 +6,7 @@ Content follows the marketing site brief (17 September 2026) and the founder-loc
 
 ## Pages
 
-Everything the visitor can fetch lives in `public/`. Vercel serves that directory and nothing else (`outputDirectory` in `vercel.json`), so `lib/`, `tests/`, `server.js`, the config files and this README are never public.
+Everything the visitor can fetch lives in `public/`. The server serves that directory and nothing else, so `lib/`, `tests/`, this README and the config files are never public.
 
 | Route | File | Purpose |
 | --- | --- | --- |
@@ -17,7 +17,7 @@ Everything the visitor can fetch lives in `public/`. Vercel serves that director
 | `/thanks` | `public/thanks.html` | Success page for a form post made without JavaScript. `noindex`, no canonical |
 | any other path | `public/404.html` | Not found. `noindex`, no canonical |
 
-Redirects, all permanent (308), from `vercel.json`:
+Redirects, all permanent (308), from `routes.json`:
 
 | From | To |
 | --- | --- |
@@ -44,18 +44,20 @@ Redirects, all permanent (308), from `vercel.json`:
   2. **Demo.** Runs the hero frame's timeline: reset, seven workstreams, one exception raised as a case with a proposal, the controller's approval, flux, statements, attest and lock, then reset. It pauses when scrolled out of view or when the Pause button is pressed, and under reduced motion it plays the finished state statically. A thrown error stops the loop and logs it rather than freezing the frame half-way.
   3. **Form.** Submits the invite form as JSON to `/api/contact`, marks the button `aria-busy`, writes the result into the `role="status"` region (switched to `role="alert"` on failure) and moves focus to it. It sends the elapsed time since page load, never a timestamp. If a script-blocked post failed and redirected back with `?sent=0&why=…`, it explains why.
   4. **Menu.** The mobile menu is a `<details>` element and needs no script; the script only closes it on Escape (returning focus to its summary) and on a click outside.
-- **`api/contact.js`** is the Vercel Node function for `POST /api/contact`. The logic lives in `lib/contact.js` so it is testable and host-independent: it validates, traps bots with a honeypot and a minimum fill time, rate limits per hashed IP, optionally records the lead in Postgres (`lib/store.js`) and emails the founder inbox through Resend with the prospect as reply-to and the subject `Invite request: <company>`. The store is attached lazily and every database call is capped, so a slow or dead database never blocks the email.
-- **`vercel.json`** sets the output directory, clean URLs, the redirects above, a strict content security policy (`script-src 'self'; style-src 'self'`, so no inline scripts, no inline styles, no event handler attributes; `application/ld+json` is data and is allowed) and cache headers.
-- **`server.js`** is the local preview server. It mirrors the Vercel config (clean URLs, redirects, headers, the 404 page, an empty analytics script so consoles stay clean) and is a working host if the site ever runs on a plain Node server again. Set `TRUST_PROXY` only behind a known reverse proxy.
+- **`api/contact.js`** is the handler for `POST /api/contact`, mounted by `server.js`. The logic lives in `lib/contact.js` so it is testable and host-independent: it validates, traps bots with a honeypot and a minimum fill time, rate limits per hashed IP, optionally records the lead in Postgres (`lib/store.js`) and emails the founder inbox through Resend with the prospect as reply-to and the subject `Invite request: <company>`. The store is attached lazily and every database call is capped, so a slow or dead database never blocks the email.
+- **`routes.json`** holds the routing rules the server applies: clean URLs, the redirects above (including `www` to the apex), a strict content security policy (no inline scripts or styles anywhere), security headers and cache headers (one year, immutable, for the versioned CSS, JS and fonts; one day for images).
+- **`server.js`** is the production server. Railway runs it with `npm start`; the same file is the local preview. It serves `public/` with clean URLs, applies `routes.json`, hosts the contact handler, blocks dotfiles, serves the 404 page and answers `/healthz` for the platform's health check. Behind Railway it trusts one proxy hop so the rate limit sees the visitor's address.
 
 ## Analytics
 
-Every page loads `/_vercel/insights/script.js` (cookieless Vercel Web Analytics). Page views plus two events:
+None yet. The pages emit two events through `window.va` when an analytics script that provides it is present, and do nothing otherwise:
 
 | Event | Data | Fired when |
 | --- | --- | --- |
 | `cta_click` | `cta`: `header`, `menu`, `hero`, `mid`, `product-footer`, `how-footer`, `contact-submit` | any element with `data-cta` is clicked |
 | `contact_submitted` | `source`: `home` or `about` | the JSON submission returned 2xx |
+
+To add a provider, load its script from the site's own origin or add its host to `script-src` and `connect-src` in `routes.json`; the CSP blocks anything else.
 
 A form post made without JavaScript lands on `/thanks`, so that page view is the no-script conversion. Nothing else is tracked.
 
@@ -77,37 +79,38 @@ Set `RESEND_API_KEY` and `LEAD_NOTIFY_TO` to test real email delivery locally. W
 
 Cache tokens (`?v=`) on the CSS and JS links are bumped by hand when those files change; the parity test ignores them so all pages can move together.
 
-## Deploying to Vercel
+## Deploying to Railway
 
-Production deploys from `main`. Every push to `main` becomes the live site; other branches get preview URLs.
+The site runs on Railway in the project **Solden AI**, as the service **marketing**, from the `main` branch of `soldensystems/marketing-page`. Every push to `main` redeploys. `railway.json` sets the start command, the `/healthz` health check and the restart policy; Nixpacks detects Node from `package.json` and runs `npm ci`.
 
-1. In Vercel, import `soldensystems/marketing-page`. Framework preset: **Other**. No build command. `vercel.json` sets `outputDirectory` to `public`, so only the pages and assets are served; `api/contact.js` becomes a function and `lib/`, `tests/`, this README and the config files are never public.
-2. Environment variables (Production):
+1. In the Railway service, connect the GitHub repo and branch `main`, root directory `/`. No build command.
+2. Variables on the service:
 
    | Variable | Required | Purpose |
    | --- | --- | --- |
-   | `RESEND_API_KEY` | yes | Sends the lead email |
+   | `RESEND_API_KEY` | yes | Sends the lead email. Mint a fresh key in Resend rather than reusing the retired service's |
    | `LEAD_NOTIFY_TO` | yes | `hello@soldenai.com`, the same inbox the previous site used. Comma-separate for several |
    | `LEAD_NOTIFY_FROM` | no | Verified sender. Defaults to `Solden <leads@soldenai.com>` |
    | `IP_HASH_SECRET` | recommended | Long random string. Rate-limit keys and the stored `ip_hash` become an HMAC of the visitor's IP instead of a plain hash, so the column cannot be reversed to an address. Rotate occasionally; rotation only resets the hourly counters |
    | `CONTACT_MAX_PER_IP_PER_HOUR` | no | Defaults to 5. Anything that is not a positive number falls back to 5 |
-   | `DATABASE_URL` | no | Postgres for lead history and durable rate limits |
-   | `DB_SSL` | no | `true` to connect over TLS and verify the server certificate against the public CAs (Neon, Supabase, RDS) |
+   | `DATABASE_URL` | no | Postgres for lead history and durable rate limits. In the same project use the private reference `${{leads-db.DATABASE_URL}}`: no TLS needed on the private network |
+   | `DB_SSL` | no | `true` to connect over TLS and verify the server certificate against the public CAs |
    | `DB_SSL_CA` | no | PEM certificate authority to verify against instead. Paste the certificate, newlines as `\n` are accepted. Implies TLS |
-   | `DB_SSL_NO_VERIFY` | no | `true` to encrypt without verifying the certificate. Only for providers that present a self-signed certificate, such as Railway's public TCP proxy. Implies TLS |
+   | `DB_SSL_NO_VERIFY` | no | `true` to encrypt without verifying the certificate. Only for Railway's public TCP proxy from outside the project. Implies TLS |
+   | `TRUST_PROXY` | no | Set automatically to one hop on Railway. Set it by hand (`1` or `loopback`) only on another host behind a known proxy |
 
-   The function never waits on the database: connecting, the recent-count check and the insert are each capped at two seconds, and on a timeout or error the lead is emailed anyway and the failure is logged. A failed connection is retried on the next request.
+   The handler never waits on the database: connecting, the recent-count check and the insert are each capped at two seconds, and on a timeout or error the lead is emailed anyway and the failure is logged. A failed connection is retried on the next request.
 
-3. Verify on the `*.vercel.app` URL: pages, redirects, `/api/contact` answers `405` to a GET, `/README.md` and `/lib/contact.js` answer `404`, and one real form submission.
-4. Enable **Web Analytics** on the Vercel project. The pages already load `/_vercel/insights/script.js`; it is cookieless and counts page views and the `cta_click` and `contact_submitted` events described above. Nothing else is tracked.
-5. Add the domains `soldenai.com` and `www.soldenai.com` to the project. Vercel will show the DNS records it needs.
-6. At Namecheap, change ONLY two records: the apex `A` (or `ALIAS`) record for `soldenai.com`, and the `CNAME` for `www`, to the values Vercel shows. Keep every other record exactly as it is. The zone carries the Microsoft 365 mail records (`MX`, the SPF `TXT`, DKIM `CNAME`s, the `_dmarc` `TXT`) and the Resend sending records (DKIM and return-path `TXT`/`MX`); deleting or replacing any of them stops founder mail or lead delivery. The `www` host redirects to the apex via `vercel.json`.
+3. Verify on the service's `*.up.railway.app` URL: pages, redirects, `/healthz` answers `ok`, `/api/contact` answers `405` to a GET, `/README.md` and `/lib/contact.js` answer `404`, and one real form submission reaches `hello@soldenai.com`.
+4. Add the custom domains `soldenai.com` and `www.soldenai.com` to the service. Railway shows a target for each.
+5. At Namecheap, change ONLY two records: the apex record for `soldenai.com` (an `ALIAS` record to the Railway target; Namecheap supports `ALIAS` at the apex) and the `CNAME` for `www`, to the values Railway shows. Keep every other record exactly as it is. The zone carries the Microsoft 365 mail records (`MX`, the SPF `TXT`, DKIM `CNAME`s, the `_dmarc` `TXT`) and the Resend sending records (DKIM and return-path `TXT`/`MX`); deleting or replacing any of them stops founder mail or lead delivery. The `www` host redirects to the apex in `server.js`.
+6. Retire the old production service **solden** in the same project once the new one answers on the domain; it still holds the previous site's variables and nothing else needs it. Keep **leads-db**.
 
 ## Lead history
 
-The previous site stored submissions in the `leads-db` Postgres on Railway (project "Solden Non-Production"). That database is still online. Either point `DATABASE_URL` at it or export it and import into a new provider before retiring Railway. The new function writes the same `leads` table, a subset of the old columns, so history stays in one place.
+The previous site stored submissions in the `leads-db` Postgres in the same Railway project. It is still online, so point `DATABASE_URL` at it with the private reference and history stays in one place: the handler writes the same `leads` table, a subset of the old columns.
 
-Railway's public TCP proxy presents a self-signed certificate, so with the public connection URL set `DB_SSL_NO_VERIFY=true` (encrypted, unverified). With a provider that offers a real certificate chain use `DB_SSL=true`, or `DB_SSL_CA` with the provider's CA, so the connection is verified. The table and index are created on the first request of each function instance with `CREATE ... IF NOT EXISTS`, so no migration step is needed.
+From outside the project, Railway's public TCP proxy presents a self-signed certificate, so with the public connection URL set `DB_SSL_NO_VERIFY=true` (encrypted, unverified). With a provider that offers a real certificate chain use `DB_SSL=true`, or `DB_SSL_CA` with the provider's CA, so the connection is verified. The table and index are created on the first request with `CREATE ... IF NOT EXISTS`, so no migration step is needed.
 
 ## Content rules
 

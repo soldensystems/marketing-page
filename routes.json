@@ -1,6 +1,4 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "outputDirectory": "public",
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
@@ -111,10 +109,5 @@
         }
       ]
     }
-  ],
-  "functions": {
-    "api/contact.js": {
-      "maxDuration": 10
-    }
-  }
+  ]
 }

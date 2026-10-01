@@ -1,4 +1,4 @@
-// Vercel serverless function: POST /api/contact
+// POST /api/contact, mounted by server.js
 //
 // The handler is built immediately so a request never waits on Postgres. The store is
 // attached lazily on the first request that needs it; a failed connection is logged,

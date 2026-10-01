@@ -2,7 +2,7 @@
   "name": "solden-marketing-page",
   "version": "2.0.0",
   "private": true,
-  "description": "Marketing site for soldenai.com. Static pages plus one serverless contact function.",
+  "description": "Marketing site for soldenai.com. Static pages served by a small Node server with one contact handler.",
   "type": "module",
   "engines": {
     "node": ">=20"

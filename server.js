@@ -1,7 +1,7 @@
-// Local preview server. Mirrors Vercel's behaviour closely enough to QA the site:
-// clean URLs and no trailing slashes (308 redirects), the redirects and headers from
-// vercel.json, the contact function, dotfile blocking, and the 404 page.
-// Production runs on Vercel; this file is for `npm start` on a laptop or any Node host.
+// The site's server. Production runs this on Railway (`npm start`); the same file is the local
+// preview. It serves public/ with clean URLs and no trailing slashes (308 redirects), applies the
+// redirects and headers from routes.json, hosts the contact handler, blocks dotfiles, and serves
+// the 404 page.
 
 import express from "express";
 import { readFile } from "node:fs/promises";
@@ -11,16 +11,21 @@ import contact from "./api/contact.js";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const site = path.join(root, "public");
-const vercel = JSON.parse(await readFile(path.join(root, "vercel.json"), "utf8"));
+const routes = JSON.parse(await readFile(path.join(root, "routes.json"), "utf8"));
 const port = Number(process.env.PORT || 8080);
 
 const app = express();
 app.disable("x-powered-by");
-// Off by default so a client cannot spoof its address through X-Forwarded-For; the contact
-// handler reads req.ip. Behind a known reverse proxy set TRUST_PROXY (e.g. "1" or "loopback").
-app.set("trust proxy", process.env.TRUST_PROXY ? parseTrustProxy(process.env.TRUST_PROXY) : false);
+// Behind Railway's edge proxy the visitor's address arrives in X-Forwarded-For, so trust one hop
+// there (the contact handler's rate limit reads req.ip). Elsewhere it is off unless TRUST_PROXY
+// is set (e.g. "1" or "loopback"), so a client cannot spoof its address.
+const trustProxy = process.env.TRUST_PROXY ? parseTrustProxy(process.env.TRUST_PROXY) : process.env.RAILWAY_ENVIRONMENT ? 1 : false;
+app.set("trust proxy", trustProxy);
 
-// Nothing under a dot-directory or dotfile is ever served (.git, .env, .gstack, .vercel).
+// Health check for the platform. Answers before any redirect or header rule.
+app.get("/healthz", (_req, res) => res.type("text/plain").set("Cache-Control", "no-store").send("ok"));
+
+// Nothing under a dot-directory or dotfile is ever served (.git, .env, .gstack).
 app.use((req, res, next) => {
   if (req.path.split("/").some((segment) => segment.startsWith(".") && segment !== "." && segment !== "..")) {
     return notFound(res);
@@ -29,8 +34,8 @@ app.use((req, res, next) => {
 });
 
 // Apply each header rule only to the paths its `source` pattern matches, in order,
-// so later rules override earlier ones exactly as Vercel does.
-for (const rule of vercel.headers || []) {
+// so later rules override earlier ones.
+for (const rule of routes.headers || []) {
   const pattern = sourceToRegExp(rule.source);
   app.use((req, res, next) => {
     if (pattern.test(req.path)) {
@@ -40,8 +45,19 @@ for (const rule of vercel.headers || []) {
   });
 }
 
-for (const rule of vercel.redirects || []) {
-  if (rule.has) continue; // host-based rules are Vercel-only
+// Host rules first (www to the apex), then path redirects.
+for (const rule of routes.redirects || []) {
+  if (!rule.has) continue;
+  const host = rule.has.find((h) => h.type === "host")?.value;
+  if (!host) continue;
+  app.use((req, res, next) => {
+    if (req.hostname !== host) return next();
+    const target = rule.destination.replace("$1", req.originalUrl.replace(/^\//, ""));
+    res.redirect(rule.permanent ? 308 : 307, target);
+  });
+}
+for (const rule of routes.redirects || []) {
+  if (rule.has) continue;
   app.get(rule.source, (_req, res) => res.redirect(rule.permanent ? 308 : 307, rule.destination));
 }
 
@@ -53,9 +69,6 @@ app.get(/^\/(.*)\.html$/, (req, res) => {
 app.get(/^\/(.+)\/$/, (req, res) => {
   res.redirect(308, `/${req.params[0]}` + queryString(req));
 });
-
-// Vercel Web Analytics only exists on Vercel. Serve an empty script locally so consoles stay clean.
-app.get("/_vercel/insights/script.js", (_req, res) => res.type("application/javascript").send(""));
 
 app.use("/api", express.json({ limit: "32kb" }));
 app.use("/api", express.urlencoded({ extended: false, limit: "32kb" }));
@@ -71,7 +84,7 @@ app.use(express.static(site, { extensions: ["html"], index: "index.html", dotfil
 app.use((_req, res) => notFound(res));
 
 app.listen(port, () => {
-  console.log(`soldenai.com preview on http://localhost:${port}`);
+  console.log(`soldenai.com on http://localhost:${port}`);
 });
 
 function notFound(res) {
@@ -83,7 +96,7 @@ function queryString(req) {
   return index === -1 ? "" : req.originalUrl.slice(index);
 }
 
-// Vercel `source` patterns use path-to-regexp. This site only uses literal paths and (.*).
+// Route `source` patterns are path-to-regexp style. This site only uses literal paths and (.*).
 function sourceToRegExp(source) {
   const escaped = source
     .split("(.*)")
