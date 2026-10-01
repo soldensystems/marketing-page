@@ -103,7 +103,7 @@ test("icons, theme-color, viewport, social image and scripts are identical on ev
   }
 });
 
-const SCRIPT_HOSTS = ["https://eu.umami.is/"]; // the analytics script; everything else is same-origin
+const SCRIPT_HOSTS = ["https://cloud.umami.is/"]; // the analytics script; everything else is same-origin
 test("every script tag is deferred and served from the site or the analytics host", () => {
   for (const page of pages) {
     for (const tag of read(page).match(/<script[^>]*src="[^"]+"[^>]*>/g) || []) {
@@ -116,8 +116,8 @@ test("every script tag is deferred and served from the site or the analytics hos
 
 test("the analytics host is allowed by the content security policy", () => {
   const csp = routes.headers.flatMap((r) => r.headers).find((h) => h.key === "Content-Security-Policy").value;
-  assert.match(csp, /script-src [^;]*https:\/\/eu\.umami\.is/);
-  assert.match(csp, /connect-src [^;]*https:\/\/eu\.umami\.is/);
+  assert.match(csp, /script-src [^;]*https:\/\/cloud\.umami\.is/);
+  assert.match(csp, /connect-src [^;]*https:\/\/cloud\.umami\.is/);
 });
 
 // ------------------------------------------------------------------ Shared chrome

@@ -50,12 +50,12 @@ Redirects, all permanent (308), from `routes.json`:
 
 ## Analytics
 
-Umami Cloud, free tier, EU region. Cookieless, so no consent banner. The content security policy allows exactly `https://eu.umami.is` for scripts and requests, and `track()` in `site.js` forwards events to `window.umami` when the script is present and does nothing otherwise.
+Umami Cloud, free tier. Cookieless, so no consent banner. The content security policy allows exactly `https://cloud.umami.is` for scripts and requests, and `track()` in `site.js` forwards events to `window.umami` when the script is present and does nothing otherwise.
 
-To turn it on: create an account at cloud.umami.is (choose the EU region), add the website `soldenai.com`, copy its website ID, and add this tag after `site.js` on every page:
+The site is registered on the account; this tag sits after `site.js` on every page:
 
 ```html
-<script defer src="https://eu.umami.is/script.js" data-website-id="THE-WEBSITE-ID"></script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="99baca41-1d1e-4286-8ea0-66d90959767c"></script>
 ```
 
 Besides page views the pages send two custom events:
@@ -143,4 +143,4 @@ These are enforced by `tests/site_language.test.mjs` and `tests/site_structure.t
 
 - Vision line: "The finance department becomes infrastructure. Always running, always proven." Chosen by the founder on 1 October 2026 (the earlier "The CFO stays. The grunt work goes." line was judged not visionary) and placed as the heading of the order section on About.
 - Team visibility: names and one-line bios on About, no photos, by decision.
-- Analytics: Umami Cloud, free tier, EU region, chosen by the founder on 1 October 2026. Events and the CSP are wired; the script tag goes in once the website ID exists (see Analytics).
+- Analytics: Umami Cloud, free tier, chosen by the founder on 1 October 2026 and live the same day (see Analytics).

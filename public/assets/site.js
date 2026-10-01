@@ -5,7 +5,7 @@ const loadedAt = Date.now();
 
 document.documentElement.classList.add("js");
 
-// Analytics: Umami (cookieless, EU region) when its script is present; nothing otherwise.
+// Analytics: Umami (cookieless) when its script is present; nothing otherwise.
 function track(name, data) {
   if (window.umami && typeof window.umami.track === "function") {
     window.umami.track(name, data);
