@@ -57,7 +57,7 @@ if (form) {
   let sending = false;
 
   const FALLBACK_FAILURE = "Not sent. Please try again in a few minutes, or reach us on LinkedIn.";
-  const FALLBACK_SUCCESS = "Received. A founder reads it and replies within two business days.";
+  const done = form.parentElement && form.parentElement.querySelector("[data-form-done]");
 
   function show(message, failed) {
     if (!status) return;
@@ -110,7 +110,15 @@ if (form) {
       if (response.ok) {
         track("contact_submitted", { source: data.source });
         form.reset();
-        settle(body.message || FALLBACK_SUCCESS, false);
+        if (done) {
+          // The form gives way to the confirmation: what happens next, not a status line.
+          if (status) status.hidden = true;
+          form.hidden = true;
+          done.hidden = false;
+          done.focus();
+        } else {
+          settle(body.message || "Invite requested. We reply within two business days.", false);
+        }
       } else {
         settle(body.message || FALLBACK_FAILURE, true);
       }

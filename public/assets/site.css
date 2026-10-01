@@ -2317,6 +2317,50 @@ main > .hero:last-child {
   display: none;
 }
 
+/* Confirmation shown in place of the form after a successful request. */
+.form-done {
+  color: var(--dark-muted);
+}
+
+.form-done:focus,
+.form-done:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.form-done[hidden] {
+  display: none;
+}
+
+.form-done .eyebrow {
+  color: var(--teal);
+}
+
+.form-done h3 {
+  margin: 0 0 14px;
+  font: 600 24px/1.2 var(--sans);
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.form-done p {
+  max-width: 44ch;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.form-done p + p {
+  margin-top: 12px;
+}
+
+.form-done a {
+  color: #fff;
+}
+
+.form[hidden] {
+  display: none;
+}
+
 /* ---------------------------------------------------------------- Prose (legal pages) */
 
 .prose {
