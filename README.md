@@ -83,7 +83,7 @@ Cache tokens (`?v=`) on the CSS and JS links are bumped by hand when those files
 
 The site runs on Railway in the project **Solden AI**, as the service **solden**, from the `main` branch of `soldensystems/marketing-page`. That service already owns the custom domains `soldenai.com` and `www.soldenai.com` and already holds the Resend key and the inbox, so a deploy to it brings the domain back without any DNS change. (The service called **marketing** in the same project is a different product's site, clearledgr.com; leave it alone.) Every push to `main` redeploys. `railway.json` sets the start command, the `/healthz` health check and the restart policy; Nixpacks detects Node from `package.json` and runs `npm ci`.
 
-1. In the service's Settings, Source: connect the GitHub repo `soldensystems/marketing-page`, branch `main`, root directory `/` (the previous source was `soldensystems/solden` with root `/soldenai-landing`; both must change). No build command.
+1. The service's source is the GitHub repo `soldensystems/marketing-page`, branch `main`, with the root directory left empty (a value of `/` or the old `/soldenai-landing` makes the build fail with "prefix not found"). No build command. Both were set on 1 October 2026 and need no further action; this step matters only if the service is ever recreated.
 2. Variables on the service:
 
    | Variable | Required | Purpose |
