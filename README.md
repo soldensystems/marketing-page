@@ -50,12 +50,12 @@ Redirects, all permanent (308), from `routes.json`:
 
 ## Analytics
 
-Umami Cloud, free tier. Cookieless, so no consent banner. The content security policy allows exactly `https://cloud.umami.is` for scripts and requests, and `track()` in `site.js` forwards events to `window.umami` when the script is present and does nothing otherwise.
+Umami Cloud, free tier. Cookieless, so no consent banner. The content security policy allows `https://cloud.umami.is` for the script and `https://gateway.umami.is` for the events it posts, and `track()` in `site.js` forwards events to `window.umami` when the script is present and does nothing otherwise.
 
 The site is registered on the account; this tag sits after `site.js` on every page:
 
 ```html
-<script defer src="https://cloud.umami.is/script.js" data-website-id="99baca41-1d1e-4286-8ea0-66d90959767c"></script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="acc68f86-db4f-4a1f-b46f-77ef17ac6cdd"></script>
 ```
 
 Besides page views the pages send two custom events:

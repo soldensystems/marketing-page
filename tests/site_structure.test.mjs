@@ -118,6 +118,7 @@ test("the analytics host is allowed by the content security policy", () => {
   const csp = routes.headers.flatMap((r) => r.headers).find((h) => h.key === "Content-Security-Policy").value;
   assert.match(csp, /script-src [^;]*https:\/\/cloud\.umami\.is/);
   assert.match(csp, /connect-src [^;]*https:\/\/cloud\.umami\.is/);
+  assert.match(csp, /connect-src [^;]*https:\/\/gateway\.umami\.is/, "Umami posts events to gateway.umami.is");
 });
 
 // ------------------------------------------------------------------ Shared chrome
