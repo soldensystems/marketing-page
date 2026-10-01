@@ -487,7 +487,7 @@ h2 + .lede {
 
 /* Home hero: an editorial two-column set. Headline left, lede and actions right, bottoms aligned. */
 .hero-home {
-  padding-block: 48px 0;
+  padding-block: 96px 0;
 }
 
 .hero-home .wrap {
@@ -2900,7 +2900,7 @@ main > .hero:last-child {
 
   /* Home hero on phones: one column, left-aligned, the button full width and the link beneath it. */
   .hero-home {
-    padding-top: 40px;
+    padding-top: 56px;
   }
 
   .hero-home .wrap {
