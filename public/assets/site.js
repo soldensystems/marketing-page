@@ -146,10 +146,13 @@ if (form) {
   let logTimers = [];
 
   function setStatus(k, cls, text) {
-    const st = row(k).querySelector("[data-st]");
+    const r = row(k); const st = r.querySelector("[data-st]");
     st.className = "st " + cls; st.textContent = text;
-    row(k).classList.toggle("running", cls === "st-running");
-    row(k).classList.toggle("sel", cls === "st-call");
+    r.dataset.state = cls.slice(3);
+    r.classList.toggle("running", cls === "st-running");
+    r.classList.toggle("sel", cls === "st-call");
+    // Leaving the running state hands the line back to the description and the result.
+    if (cls !== "st-running") { const lv = r.querySelector("[data-live]"); lv.textContent = ""; lv.className = "live"; }
   }
   function setResult(k, text) { const r = row(k).querySelector("[data-res]"); r.textContent = text; r.classList.add("in"); }
   // Handover: the workstream's owner changes from a named team member to Solden, with a short flash on the row.
@@ -163,22 +166,31 @@ if (form) {
     q("[data-k-done]").textContent = counts.done; q("[data-k-review]").textContent = counts.review; q("[data-k-call]").textContent = counts.call;
     q("[data-k-ev]").textContent = counts.ev; q("[data-k-time]").textContent = counts.time;
     q("[data-bar]").className = "progress-bar " + `p-${counts.done}-${counts.review}-${counts.call}`;
+    q("[data-spark]").setAttribute("data-ev", counts.ev);
     const exc = q("[data-exc]"); exc.hidden = counts.call === 0; exc.textContent = counts.call;
   }
   function clearLogTimers() {
     for (const id of logTimers) clearTimeout(id);
     logTimers = [];
   }
+  // The running workstream's line streams its evidence, one line at a time, in place of its description.
   function log(title, step, lines) {
-    q("[data-log-title]").textContent = title; q("[data-log-step]").textContent = step;
-    const ol = q("[data-log-lines]"); ol.innerHTML = "";
     clearLogTimers();
-    const append = (l) => {
-      const li = document.createElement("li"); li.className = "new" + (l.startsWith("ok ") ? " ok" : ""); li.textContent = l.replace(/^ok /, "");
-      ol.appendChild(li);
+    const r = q("[data-row].running");
+    if (!r) return;
+    const live = r.querySelector("[data-live]");
+    const show = (l) => {
+      if (!r.classList.contains("running")) return;
+      live.className = "live" + (l.startsWith("ok ") ? " ok" : "");
+      live.textContent = l.replace(/^ok /, "");
+      if (!reduce) { void live.offsetWidth; live.classList.add("new"); }
     };
-    if (reduce) { lines.forEach(append); return; }
-    lines.forEach((l, i) => logTimers.push(setTimeout(() => append(l), 220 * i)));
+    if (reduce) { show(lines[lines.length - 1]); return; }
+    lines.forEach((l, i) => logTimers.push(setTimeout(() => show(l), 480 * i)));
+  }
+  // Something that needs the controller joins the card beside the work.
+  function flag(html) {
+    const li = document.createElement("li"); li.className = "new"; li.innerHTML = html; q("[data-calls]").appendChild(li);
   }
   function act(text) {
     const ol = q("[data-activity]"); const li = document.createElement("li"); li.className = "new";
@@ -245,10 +257,9 @@ if (form) {
       setStatus("fs", "st-running", "Running"); log("Assembling the statements", "15 of 16", ["P&L, balance sheet and cash flow from locked workstreams", "ok Net income ties · cash ties · statements articulate", "Reviewer J. Mensah released the pack"]); }],
     [1900, () => { setStatus("fs", "st-done", "Complete"); setResult("fs", "Assembled"); counts.done = 15; counts.ev = 287; key();
       setStatus("lock", "st-call", "Ready to attest"); q("[data-lock-btn]").classList.remove("pbtn-disabled"); badge("Ready to attest"); camera("wide");
-      log("Waiting on the controller", "16 of 16", ["All workstreams complete · evidence attached · exceptions resolved", "Attestation gate open"]); }],
+      flag("<i></i><span><b>Attest and lock April 2026</b><small>All evidence attached</small></span><em>Attest</em>"); }],
     [1800, () => { q("[data-lock-btn]").classList.add("pressed"); }],
     [500, () => { setStatus("lock", "st-done", "Locked"); setResult("lock", "Attested 8 May"); row("lock").classList.add("signed"); frame.classList.add("locked"); counts.done = 16; counts.time = "1.7 h"; key(); badge("Attested and locked", "ok");
-      q("[data-runlog]").classList.add("quiet"); log("Close locked", "", ["ok April 2026 locked · immutable · exportable for auditors"]);
       act("<time>14:42</time><span><b>H. Whitmore</b> attested and locked April 2026</span>"); view("pack"); camera("panel"); }],
     [4200, () => { reset(); }],
     [900, () => {}],
