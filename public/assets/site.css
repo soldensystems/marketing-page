@@ -89,22 +89,21 @@ h2 {
 }
 
 h1 {
-  font-weight: 600;
-  font-size: clamp(38px, 5vw, 64px);
+  font-weight: 500;
+  font-size: clamp(38px, 4.4vw, 60px);
   line-height: 1.02;
 }
 
 h2 {
-  font-weight: 560;
+  font-weight: 500;
   font-size: clamp(32px, 3.4vw, 48px);
   line-height: 1.05;
 }
 
 h3 {
   font-family: var(--sans);
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.015em;
+  font-size: 18px;
+  font-weight: 500;
   line-height: 1.25;
 }
 
@@ -140,7 +139,7 @@ img {
 }
 
 strong {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--ink);
 }
 
@@ -165,6 +164,7 @@ strong {
   padding: 8px 12px;
   border-radius: 8px;
   z-index: 100;
+  font-size: 15px;
 }
 
 .skip-link:focus {
@@ -203,14 +203,14 @@ strong {
 .eyebrow {
   display: block;
   font: 500 11px/1 var(--mono);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 16px;
 }
 
 .lede {
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.55;
   color: var(--muted);
   max-width: 56ch;
@@ -261,7 +261,7 @@ h2 + .lede {
 }
 
 .why p {
-  font-size: 19px;
+  font-size: 18px;
   line-height: 1.6;
   color: var(--muted);
   text-wrap: pretty;
@@ -281,10 +281,10 @@ h2 + .lede {
   font-family: var(--serif);
   font-optical-sizing: auto;
   font-variation-settings: "opsz" 96;
-  font-weight: 560;
-  font-size: clamp(26px, 2.6vw, 34px);
+  font-weight: 500;
+  font-size: clamp(26px, 2.6vw, 32px);
   line-height: 1.15;
-  letter-spacing: -0.018em;
+  letter-spacing: -0.015em;
   color: var(--ink);
   text-wrap: balance;
 }
@@ -337,7 +337,6 @@ h2 + .lede {
 }
 
 .split h2 {
-  font-size: clamp(28px, 3vw, 40px);
   max-width: none;
   margin-bottom: 0;
 }
@@ -405,7 +404,7 @@ h2 + .lede {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font: 500 14px/1 var(--sans);
+  font: 500 15px/1 var(--sans);
   padding: 9px 12px;
   border: 1px solid var(--rule-strong);
   border-radius: 8px;
@@ -473,7 +472,7 @@ h2 + .lede {
 
 .btn-small {
   height: 40px;
-  font-size: 14px;
+  font-size: 13px;
   padding: 0 16px;
 }
 
@@ -500,12 +499,13 @@ h2 + .lede {
 
 .actions .link {
   font-weight: 500;
+  font-size: 15px;
 }
 
 .tag {
   display: inline-block;
   font: 500 11px/1 var(--mono);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 6px 9px;
   border-radius: 6px;
@@ -598,8 +598,7 @@ main > .hero:last-child {
 
 .register-meta {
   font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 0.02em;
+  font-size: 13px;
   color: var(--muted);
 }
 
@@ -625,7 +624,7 @@ main > .hero:last-child {
   gap: 24px;
   max-width: 1200px;
   margin: 14px auto 0;
-  font: 400 12px/1.5 var(--mono);
+  font: 400 13px/1.5 var(--sans);
   color: var(--muted);
   text-wrap: pretty;
 }
@@ -670,7 +669,7 @@ main > .hero:last-child {
   border-radius: 50%;
   background: var(--navy);
   color: #fff;
-  font: 600 11px/1 var(--sans);
+  font: 500 11px/1 var(--sans);
 }
 
 /* Pause control: plain mono text in the caption row, underlined on hover. */
@@ -681,7 +680,7 @@ main > .hero:last-child {
   padding: 0;
   border: 0;
   background: none;
-  font: 400 12px/1.5 var(--mono);
+  font: 400 13px/1.5 var(--sans);
   color: var(--muted);
   cursor: pointer;
   text-decoration: none;
@@ -772,7 +771,7 @@ main > .hero:last-child {
   gap: 8px;
   padding: 6px 8px;
   border-radius: 8px;
-  font: 500 12.5px/1.2 var(--sans);
+  font: 500 13px/1.2 var(--sans);
   color: var(--ink);
   white-space: nowrap;
 }
@@ -786,8 +785,7 @@ main > .hero:last-child {
   border-radius: 6px;
   background: var(--navy);
   color: #fff;
-  font: 600 8.5px/1 var(--sans);
-  letter-spacing: 0.02em;
+  font: 500 8px/1 var(--sans);
 }
 
 .side-search {
@@ -800,7 +798,7 @@ main > .hero:last-child {
   border: 1px solid var(--rule);
   border-radius: 8px;
   background: var(--chrome);
-  font: 400 12px/1 var(--sans);
+  font: 400 13px/1 var(--sans);
   color: var(--faint);
 }
 
@@ -846,15 +844,15 @@ main > .hero:last-child {
 .side-h {
   display: block;
   padding: 18px 8px 7px;
-  font: 500 10px/1 var(--sans);
-  letter-spacing: 0.08em;
+  font: 500 11px/1 var(--mono);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--faint);
 }
 
 .side-nav li b {
   margin-left: auto;
-  font: 600 10.5px/1 var(--sans);
+  font: 500 11px/1 var(--sans);
   color: var(--amber-ink);
   background: var(--amber-soft);
   border-radius: 999px;
@@ -887,13 +885,13 @@ main > .hero:last-child {
   gap: 10px;
   padding: 12px 8px 4px;
   border-top: 1px solid var(--rule);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .side-foot strong {
   display: block;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--ink);
 }
 
@@ -928,7 +926,7 @@ main > .hero:last-child {
   align-items: center;
   gap: 8px;
   margin: 0 0 12px;
-  font: 400 11.5px/1 var(--sans);
+  font: 400 11px/1 var(--sans);
   color: var(--muted);
   white-space: nowrap;
 }
@@ -951,10 +949,10 @@ main > .hero:last-child {
   flex-wrap: wrap;
   gap: 14px;
   margin: 0;
-  font: 400 32px/1.05 var(--serif);
+  font: 500 32px/1.05 var(--serif);
   font-optical-sizing: auto;
   font-variation-settings: "opsz" 144;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
   color: var(--ink);
 }
 
@@ -976,7 +974,7 @@ main > .hero:last-child {
 
 .pbtn {
   display: inline-block;
-  font: 500 12px/1 var(--sans);
+  font: 500 13px/1 var(--sans);
   padding: 8px 11px;
   border-radius: 7px;
   border: 1px solid rgba(11, 21, 48, 0.14);
@@ -1040,7 +1038,7 @@ main > .hero:last-child {
   box-shadow: 0 1px 2px rgba(11, 21, 48, 0.03);
 }
 
-.link {
+.cstep {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -1050,7 +1048,7 @@ main > .hero:last-child {
   padding: 18px 22px 18px;
 }
 
-.link + .link {
+.cstep + .cstep {
   border-left: 1px solid rgba(11, 21, 48, 0.06);
 }
 
@@ -1064,9 +1062,11 @@ main > .hero:last-child {
 }
 
 .link-k {
-  font: 400 12px/1 var(--sans);
+  font: 500 11px/1 var(--mono);
   color: var(--muted);
   white-space: nowrap;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .link-who {
@@ -1074,7 +1074,7 @@ main > .hero:last-child {
   align-items: center;
   gap: 7px;
   min-width: 0;
-  font: 500 12px/1 var(--sans);
+  font: 500 13px/1 var(--sans);
   color: var(--ink-soft);
   white-space: nowrap;
   overflow: hidden;
@@ -1094,7 +1094,7 @@ main > .hero:last-child {
   border-radius: 50%;
   background: var(--canvas-2);
   color: var(--ink-soft);
-  font: 600 8px/1 var(--sans);
+  font: 500 8px/1 var(--sans);
   font-style: normal;
 }
 
@@ -1124,10 +1124,10 @@ main > .hero:last-child {
 }
 
 .link-v b {
-  font: 400 42px/1 var(--serif);
+  font: 500 32px/1 var(--serif);
   font-optical-sizing: auto;
   font-variation-settings: "opsz" 144;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
   font-variant-numeric: tabular-nums lining-nums;
   color: var(--ink);
 }
@@ -1136,11 +1136,11 @@ main > .hero:last-child {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
 }
 
-.link .progress-bar,
+.cstep .progress-bar,
 .link-sig {
   margin-top: auto;
 }
@@ -1148,9 +1148,9 @@ main > .hero:last-child {
 .link-sig {
   display: block;
   width: 58%;
-  height: 20px;
+  height: 24px;
   border-bottom: 1px solid rgba(11, 21, 48, 0.4);
-  font: italic 400 17px/1 var(--serif);
+  font: italic 400 20px/1 var(--serif);
   color: var(--ink);
   white-space: nowrap;
 }
@@ -1172,7 +1172,7 @@ main > .hero:last-child {
   border: 1.5px solid var(--teal-ink);
   border-radius: 3px;
   background: rgba(255, 255, 255, 0.94);
-  font: 500 9.5px/1 var(--mono);
+  font: 500 11px/1 var(--mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--teal-ink);
@@ -1324,13 +1324,13 @@ main > .hero:last-child {
 .frame .wcard-head {
   margin: 0;
   padding: 0 18px 11px;
-  font: 500 13.5px/1.2 var(--sans);
+  font: 500 13px/1.2 var(--sans);
   color: var(--ink);
 }
 
 .wcard-head small {
   margin-left: 8px;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 400;
   color: var(--faint);
 }
@@ -1343,7 +1343,7 @@ main > .hero:last-child {
 
 .wrow {
   display: grid;
-  grid-template-columns: 14px minmax(0, 1fr) 34px 40px 104px 62px;
+  grid-template-columns: 14px minmax(0, 1fr) 34px 40px 114px 62px;
   align-items: center;
   column-gap: 12px;
   height: 28px;
@@ -1411,7 +1411,7 @@ main > .hero:last-child {
   inset: 0;
   display: grid;
   place-items: center;
-  font: 700 9.5px/1 var(--sans);
+  font: 500 11px/1 var(--sans);
   color: #fff;
 }
 
@@ -1456,9 +1456,8 @@ main > .hero:last-child {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  font: 600 7.5px/1 var(--sans);
+  font: 500 8px/1 var(--sans);
   font-style: normal;
-  letter-spacing: 0.02em;
 }
 
 .av + .av {
@@ -1524,7 +1523,7 @@ main > .hero:last-child {
 }
 
 .st {
-  font: 400 12px/1.2 var(--sans);
+  font: 400 13px/1.2 var(--sans);
   color: var(--ink-soft);
   white-space: nowrap;
   transition: color 0.4s ease, opacity 0.3s ease;
@@ -1539,7 +1538,7 @@ main > .hero:last-child {
 }
 
 .res {
-  font: 500 12px/1.2 var(--sans);
+  font: 500 13px/1.2 var(--sans);
   font-variant-numeric: tabular-nums;
   color: var(--teal-ink);
   white-space: nowrap;
@@ -1560,7 +1559,7 @@ main > .hero:last-child {
 /* The proof: once a workstream is done, its workpaper is one click away. */
 .wpaper {
   justify-self: end;
-  font: 400 11.5px/1 var(--sans);
+  font: 400 11px/1 var(--sans);
   color: var(--teal-ink);
   text-decoration: underline;
   text-decoration-color: rgba(10, 111, 103, 0.35);
@@ -1633,7 +1632,7 @@ main > .hero:last-child {
 }
 
 .op-head b {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--ink);
 }
 
@@ -1649,7 +1648,7 @@ main > .hero:last-child {
   display: inline-block;
   margin: 0;
   padding: 0 3px;
-  font: 600 22px/1.15 var(--sans);
+  font: 500 26px/1.1 var(--sans);
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
   color: var(--ink);
@@ -1718,7 +1717,7 @@ main > .hero:last-child {
 
 .frame .now-name {
   margin: 0;
-  font: 400 12.5px/1.3 var(--sans);
+  font: 400 13px/1.3 var(--sans);
   color: var(--ink-soft);
 }
 
@@ -1735,7 +1734,7 @@ main > .hero:last-child {
 .now-lines li {
   position: relative;
   padding-left: 13px;
-  font: 400 11px/1.4 var(--mono);
+  font: 400 11px/1.4 var(--sans);
   color: var(--muted);
   white-space: nowrap;
   overflow: hidden;
@@ -1794,12 +1793,12 @@ main > .hero:last-child {
   align-items: center;
   gap: 8px;
   margin: 0;
-  font: 500 13.5px/1.2 var(--sans);
+  font: 500 13px/1.2 var(--sans);
   color: var(--ink);
 }
 
 .panel-count {
-  font: 600 10.5px/1 var(--sans);
+  font: 500 11px/1 var(--sans);
   color: var(--amber-ink);
   background: var(--amber-soft);
   border-radius: 999px;
@@ -1821,7 +1820,7 @@ main > .hero:last-child {
   border: 1px solid var(--rule);
   border-radius: 8px;
   background: var(--chrome);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
 }
 
@@ -1850,7 +1849,7 @@ main > .hero:last-child {
 
 .calls li b {
   display: block;
-  font: 500 12.5px/1.25 var(--sans);
+  font: 500 13px/1.25 var(--sans);
   color: var(--ink);
 }
 
@@ -1864,9 +1863,9 @@ main > .hero:last-child {
 }
 
 .calls li em {
-  font: 500 10.5px/1 var(--mono);
+  font: 500 11px/1 var(--mono);
   font-style: normal;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--amber-ink);
   border: 1px solid rgba(138, 90, 0, 0.3);
@@ -1876,22 +1875,24 @@ main > .hero:last-child {
 
 .panel-k {
   display: block;
-  font: 500 11px/1 var(--sans);
-  letter-spacing: 0.06em;
+  font: 500 11px/1 var(--mono);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--faint);
 }
 
 .panel-head .h4 {
   margin: 4px 0 4px;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--ink);
+  font-family: var(--serif);
+  font-variation-settings: "opsz" 96;
 }
 
 .panel-meta {
-  font-size: 11.5px;
+  font-size: 11px;
   color: var(--muted);
 }
 
@@ -1903,7 +1904,7 @@ main > .hero:last-child {
 }
 
 .panel-sec p {
-  font-size: 12.5px;
+  font-size: 13px;
   line-height: 1.5;
   color: var(--ink-soft);
 }
@@ -1921,7 +1922,7 @@ main > .hero:last-child {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font: 500 10.5px/1 var(--mono);
+  font: 400 11px/1 var(--sans);
   color: var(--ink-soft);
   background: var(--canvas);
   border: 1px solid var(--rule);
@@ -1955,7 +1956,7 @@ main > .hero:last-child {
   margin: 0;
   display: grid;
   gap: 8px;
-  font-size: 11.5px;
+  font-size: 11px;
   color: var(--ink-soft);
 }
 
@@ -1977,7 +1978,7 @@ main > .hero:last-child {
 }
 
 .activity b {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--ink);
 }
 
@@ -1994,7 +1995,7 @@ main > .hero:last-child {
   gap: 12px;
   padding: 9px 0;
   border-top: 1px solid var(--rule);
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--muted);
 }
 
@@ -2003,7 +2004,7 @@ main > .hero:last-child {
 }
 
 .packlist b {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--ink);
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -2123,7 +2124,7 @@ main > .hero:last-child {
 }
 
 .stack-svg .erp-t {
-  font: 700 19px var(--sans);
+  font: 500 18px var(--sans);
   letter-spacing: -0.02em;
   fill: var(--ink);
 }
@@ -2133,7 +2134,7 @@ main > .hero:last-child {
 }
 
 .stack-svg .erp-more text {
-  font: 600 13px var(--sans);
+  font: 500 13px var(--sans);
   fill: var(--ink-soft, var(--ink));
 }
 
@@ -2230,7 +2231,7 @@ main > .hero:last-child {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  font: 600 11px/20px var(--sans);
+  font: 500 11px/20px var(--sans);
   text-align: center;
 }
 
@@ -2267,14 +2268,15 @@ main > .hero:last-child {
 
 .feature-more {
   margin-top: 28px;
+  font-size: 15px;
 }
 
 .feature h3 {
   font-family: var(--serif);
   font-optical-sizing: auto;
   font-variation-settings: "opsz" 96;
-  font-weight: 560;
-  font-size: 36px;
+  font-weight: 500;
+  font-size: 32px;
   line-height: 1.12;
   letter-spacing: -0.012em;
   margin-bottom: 18px;
@@ -2294,7 +2296,7 @@ main > .hero:last-child {
 .feature .check {
   margin-top: 28px;
   gap: 14px;
-  font-size: 16px;
+  font-size: 15px;
   color: var(--ink-soft);
 }
 
@@ -2324,7 +2326,7 @@ main > .hero:last-child {
   border: 1px solid rgba(11, 21, 48, 0.08);
   box-shadow: 0 1px 2px rgba(11, 21, 48, 0.05), 0 18px 40px -12px rgba(11, 21, 48, 0.18);
   padding: 24px 26px 26px;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--ink-soft);
 }
 
@@ -2359,12 +2361,12 @@ main > .hero:last-child {
 }
 
 .p-head strong {
-  font: 600 15px/1.3 var(--sans);
+  font: 500 13px/1.3 var(--sans);
   color: var(--ink);
 }
 
 .p-head span {
-  font: 400 12px/1.3 var(--sans);
+  font: 400 11px/1.3 var(--sans);
   color: var(--muted);
   white-space: nowrap;
 }
@@ -2384,7 +2386,7 @@ main > .hero:last-child {
 
 .fig {
   display: inline-block;
-  font: 600 30px/1.1 var(--sans);
+  font: 500 26px/1.1 var(--sans);
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
   color: var(--ink);
@@ -2393,7 +2395,6 @@ main > .hero:last-child {
 }
 
 .fig-sm {
-  font-size: 24px;
 }
 
 .fig-word {
@@ -2411,7 +2412,6 @@ main > .hero:last-child {
   width: auto;
   max-width: 200px;
   margin-top: 8px;
-  font-size: 22px;
   color: var(--ink);
 }
 
@@ -2423,7 +2423,7 @@ main > .hero:last-child {
 }
 
 .actions-mini span {
-  font: 500 12px/1 var(--sans);
+  font: 500 11px/1 var(--sans);
   padding: 8px 11px;
   border-radius: 999px;
   border: 1px solid var(--rule-strong);
@@ -2481,12 +2481,12 @@ main > .hero:last-child {
 }
 
 .stages h3 {
-  font-size: 17px;
+  font-size: 18px;
   margin-bottom: 8px;
 }
 
 .stages p {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--muted);
 }
 
@@ -2523,10 +2523,11 @@ main > .hero:last-child {
   border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
   padding: 14px 28px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--ink);
   text-align: center;
   min-width: 220px;
+  font-size: 15px;
 }
 
 .org .node small {
@@ -2581,8 +2582,8 @@ main > .hero:last-child {
   border-radius: 8px;
   padding: 16px;
   text-align: center;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--ink);
   display: grid;
   gap: 10px;
@@ -2617,7 +2618,7 @@ main > .hero:last-child {
 
 .team strong {
   display: block;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .team .role {
@@ -2630,7 +2631,7 @@ main > .hero:last-child {
 }
 
 .team p {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--muted);
 }
 
@@ -2756,7 +2757,7 @@ main > .hero:last-child {
 }
 
 .form-status {
-  font: 400 13px/1.5 var(--mono);
+  font: 400 13px/1.5 var(--sans);
   color: #fff;
   padding: 10px 0;
   border-top: 1px solid var(--dark-rule);
@@ -2787,14 +2788,14 @@ main > .hero:last-child {
 
 .form-done h3 {
   margin: 0 0 14px;
-  font: 600 24px/1.2 var(--sans);
-  letter-spacing: -0.02em;
+  font: 500 32px/1.1 var(--serif);
+  letter-spacing: -0.015em;
   color: #fff;
 }
 
 .form-done p {
   max-width: 44ch;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.55;
 }
 
@@ -2819,8 +2820,8 @@ main > .hero:last-child {
 
 .prose h2 {
   font-family: var(--sans);
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 500;
   margin: 48px 0 12px;
 }
 
@@ -2881,7 +2882,7 @@ main > .hero:last-child {
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 24px;
-  font: 400 12px/1.5 var(--mono);
+  font: 400 13px/1.5 var(--sans);
   color: var(--muted);
 }
 
@@ -2987,13 +2988,12 @@ main > .hero:last-child {
 
 .mini h3 {
   margin: 0;
-  font: 600 15px/1.3 var(--sans);
-  letter-spacing: -0.01em;
+  font: 500 15px/1.3 var(--sans);
   color: var(--ink);
 }
 
 .mini p {
-  font-size: 13.5px;
+  font-size: 13px;
   line-height: 1.5;
   color: var(--muted);
 }
@@ -3027,7 +3027,7 @@ main > .hero:last-child {
 .decide-k {
   display: inline-block;
   font: 500 11px/1 var(--mono);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 4px 6px;
   border-radius: 2px;
@@ -3049,7 +3049,7 @@ main > .hero:last-child {
 .ws-label {
   grid-column: 1 / -1;
   padding: 24px 24px 18px;
-  font: 520 22px/1.2 var(--serif);
+  font: 500 22px/1.2 var(--serif);
   font-optical-sizing: auto;
   font-variation-settings: "opsz" 48;
   letter-spacing: -0.01em;
@@ -3081,7 +3081,7 @@ main > .hero:last-child {
 .sheet-head {
   margin: 0 0 12px;
   font: 500 11px/1.4 var(--mono);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -3102,7 +3102,7 @@ main > .hero:last-child {
 
 .sheet-list h3 {
   margin: 0 0 6px;
-  font: 520 22px/1.2 var(--serif);
+  font: 500 22px/1.2 var(--serif);
   font-optical-sizing: auto;
   font-variation-settings: "opsz" 48;
   letter-spacing: -0.01em;
@@ -3195,7 +3195,7 @@ main > .hero:last-child {
 
 .compare tbody th {
   width: 22%;
-  font: 600 14px/1.45 var(--sans);
+  font: 500 15px/1.45 var(--sans);
   color: var(--ink);
 }
 
@@ -3459,19 +3459,19 @@ main > .hero:last-child {
   }
 
   .main-title {
-    font-size: 19px;
+    font-size: 22px;
     gap: 8px;
   }
 
   .frame .main-sub {
-    font-size: 11.5px;
+    font-size: 11px;
   }
 
   .chain {
     margin-top: 16px;
   }
 
-  .link {
+  .cstep {
     height: auto;
     gap: 8px;
     padding: 12px 10px;
@@ -3484,7 +3484,6 @@ main > .hero:last-child {
   }
 
   .link-k {
-    font-size: 10.5px;
   }
 
   .link-who {
@@ -3492,12 +3491,12 @@ main > .hero:last-child {
   }
 
   .link-v b {
-    font-size: 26px;
+    font-size: 22px;
   }
 
   .link-sig {
     width: 100%;
-    font-size: 13px;
+    font-size: 16px;
     height: 16px;
   }
 
@@ -3513,7 +3512,6 @@ main > .hero:last-child {
   }
 
   .wname {
-    font-size: 12.5px;
   }
 
   .wsrc,
@@ -3522,7 +3520,7 @@ main > .hero:last-child {
   }
 
   .res {
-    font-size: 10.5px;
+    font-size: 11px;
   }
 
   /* Phones hide the case card, so the camera never dims the work towards it. */
@@ -3638,14 +3636,14 @@ main > .hero:last-child {
     background: #fff;
     border: 1px solid rgba(11, 21, 48, 0.08);
     box-shadow: var(--shadow-soft);
-    font: 700 16px/1.2 var(--sans);
+    font: 500 15px/1.2 var(--sans);
     color: var(--ink);
     text-align: center;
   }
 
   .stack-mobile .k {
     font: 500 11px/1.4 var(--mono);
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted);
   }
@@ -3658,7 +3656,7 @@ main > .hero:last-child {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font: 700 17px/1.2 var(--sans);
+    font: 500 18px/1.2 var(--sans);
     color: var(--ink);
   }
 
@@ -3684,7 +3682,7 @@ main > .hero:last-child {
     flex-wrap: wrap;
     justify-content: center;
     gap: 6px 14px;
-    font: 600 12px/1.4 var(--sans);
+    font: 500 13px/1.4 var(--sans);
     color: var(--ink);
   }
 
@@ -3780,7 +3778,7 @@ main > .hero:last-child {
   .compare td::before {
     display: block;
     content: attr(data-col);
-    font: 500 10px/1.4 var(--mono);
+    font: 500 11px/1.4 var(--mono);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted);
@@ -3810,7 +3808,6 @@ main > .hero:last-child {
   }
 
   .actions-mini span {
-    font-size: 11px;
     padding: 6px 8px;
   }
 }
@@ -3962,7 +3959,7 @@ main > .hero:last-child {
   margin-top: 24px;
   padding-top: 24px;
   border-top: 1px solid var(--rule);
-  font: 500 20px/1.4 var(--sans);
+  font: 400 18px/1.4 var(--sans);
   color: var(--ink);
 }
 
