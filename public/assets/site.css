@@ -233,8 +233,19 @@ h2 + .lede {
   margin-top: 56px;
 }
 
-/* About, 01: the why, set as prose. The opening paragraph in the darker ink, the rest muted,
-   and one closing line in the display face that hands over to the vision line in 02. */
+/* About: the why runs straight on into the order. The two sections meet with one modest gap
+   instead of two full section paddings, so the closing line leads into the vision line. */
+.section-lead {
+  padding-bottom: 0;
+}
+
+.section-follow {
+  padding-top: clamp(64px, 7vw, 96px);
+  scroll-margin-top: 56px;
+}
+
+/* About: the why, set as prose. The opening paragraph in the darker ink, the rest muted,
+   and one closing line in the display face that hands over to the vision line that opens the order. */
 .centre .why-title {
   max-width: 26ch;
 }
@@ -3096,6 +3107,10 @@ main > .hero:last-child {
   .mini-grid-3,
   .mini-grid-4 {
     grid-template-columns: 1fr;
+  }
+
+  .org .functions::before {
+    display: none;
   }
 
   .ws-reg {
