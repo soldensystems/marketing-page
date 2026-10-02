@@ -267,14 +267,27 @@ test("the cache token on every page is the hash of the stylesheet and the script
   }
 });
 
-test("every page names the company as UK law requires, and the legal pages give its registered office", () => {
+// The registered office is published only once the registered-office service address is filed at
+// Companies House (founder decision, 2 October 2026: the current one is residential). Set this to that
+// address then, and add it to privacy sections 1 and 11, terms sections 1 and 13, and COMPANY in lib/email.js.
+const REGISTERED_OFFICE = null;
+const UK_POSTCODE = /\b[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}\b/g;
+
+test("every page names the company, and no address but the registered office is ever published", () => {
   for (const page of pages) {
     const footer = read(page).slice(read(page).indexOf("<footer"));
     assert.match(footer, /Solden Systems Ltd\./, `${page}: registered name in the footer`);
     assert.match(footer, /Registered in England and Wales, company number(?: |&nbsp;)16823002/, `${page}: place of registration and number`);
   }
-  for (const page of ["privacy.html", "terms.html"]) {
-    assert.match(read(page), /Apartment 16 Apedale Road, Newcastle, England, ST5 6FF/, `${page}: registered office address`);
+  const allowed = REGISTERED_OFFICE ? REGISTERED_OFFICE.match(UK_POSTCODE) || [] : [];
+  const published = [...pages.map((p) => [p, read(p)]), ...["lib/email.js", "README.md"].map((f) => [f, fs.readFileSync(path.join(repo, f), "utf8")])];
+  for (const [name, text] of published) {
+    for (const postcode of text.match(UK_POSTCODE) || []) {
+      assert.ok(allowed.includes(postcode), `${name}: publishes an address (${postcode}) that is not the registered office`);
+    }
+  }
+  if (REGISTERED_OFFICE) {
+    for (const page of ["privacy.html", "terms.html"]) assert.ok(read(page).includes(REGISTERED_OFFICE), `${page}: registered office`);
   }
 });
 
