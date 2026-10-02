@@ -142,22 +142,22 @@ test("every tracked CTA reads exactly Request an invite", () => {
 
 // ------------------------------------------------------------------ Forms
 
-test("both invite forms carry the required fields, the honeypot, the timer and a status region", () => {
-  for (const page of ["index.html", "about.html"]) {
+test("every invite form carries the required fields, the honeypot, the timer and a status region", () => {
+  for (const page of ["index.html", "about.html", "how-it-works.html"]) {
     const html = read(page);
     const forms = html.match(/<form[\s\S]*?<\/form>/g) || [];
     assert.equal(forms.length, 1, `${page}: exactly one form`);
     const form = forms[0];
-    assert.match(form, /<form class="form" method="post" action="\/api\/contact" data-contact-form data-source="[a-z]+">/, `${page}: form posts to /api/contact with a source`);
+    assert.match(form, /<form class="form" method="post" action="\/api\/contact" data-contact-form data-source="[a-z-]+">/, `${page}: form posts to /api/contact with a source`);
     const names = [...form.matchAll(/<(?:input|textarea)[^>]*name="([^"]+)"/g)].map((m) => m[1]).sort();
     assert.deepEqual(names, ["company", "email", "message", "name", "t", "website"], `${page}: form fields`);
     for (const name of ["name", "email", "company", "message"]) {
       assert.match(form, new RegExp(`<(?:input|textarea)[^>]*name="${name}"[^>]*\\srequired\\b`), `${page}: ${name} is required`);
     }
     assert.match(form, /name="email" type="email"/, `${page}: email field is type=email`);
-    assert.match(form, /<div class="field field-hp"><label for="website">[^<]+<\/label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" \/>/, `${page}: honeypot`);
+    assert.match(form, /<div class="field field-hp" aria-hidden="true"><label for="website">[^<]+<\/label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" \/>/, `${page}: honeypot, hidden from assistive technology`);
     assert.match(form, /<input type="hidden" name="t" value="" \/>/, `${page}: fill-time field`);
-    assert.match(form, /<div class="form-status" data-form-status role="status" aria-live="polite" hidden><\/div>/, `${page}: status region`);
+    assert.match(form, /<div class="form-status" data-form-status role="status" aria-live="polite"><\/div>/, `${page}: status region, rendered empty so it is announced`);
     assert.match(form, new RegExp(`<button class="btn btn-light" type="submit" data-cta="contact-submit">${CTA}</button>`), `${page}: submit button`);
     for (const id of ["name", "email", "company", "message"]) {
       assert.match(form, new RegExp(`<label for="${id}">`), `${page}: label for ${id}`);
@@ -226,6 +226,7 @@ function referencedAssets() {
     siteCss,
     siteJs,
     fs.readFileSync(path.join(root, "sitemap.xml"), "utf8"),
+    fs.readFileSync(path.join(repo, "lib", "email.js"), "utf8"), // the emails load the full-size lockup
   ].join("\n");
   return new Set([...sources.matchAll(/\/assets\/[a-zA-Z0-9_./-]+\.(?:svg|png|ico|webp|jpg|woff2|css|js)/g)].map((m) => m[0]));
 }
@@ -253,6 +254,27 @@ test("every asset a page, the stylesheet or the script references exists", () =>
     for (const match of read(page).matchAll(/(?:src|href)="(\/favicon\.ico|\/robots\.txt|\/sitemap\.xml)"/g)) {
       assert.ok(fs.existsSync(path.join(root, match[1])), `${page}: ${match[1]} is missing`);
     }
+  }
+});
+
+test("the cache token on every page is the hash of the stylesheet and the script (run npm run stamp)", async () => {
+  const { assetToken } = await import("../scripts/stamp.mjs");
+  const token = assetToken();
+  for (const page of pages) {
+    for (const match of read(page).matchAll(/\/assets\/site\.(?:css|js)\?v=([^"]+)"/g)) {
+      assert.equal(match[1], token, `${page}: stale cache token ?v=${match[1]}, expected ${token}. Run npm run stamp.`);
+    }
+  }
+});
+
+test("every page names the company as UK law requires, and the legal pages give its registered office", () => {
+  for (const page of pages) {
+    const footer = read(page).slice(read(page).indexOf("<footer"));
+    assert.match(footer, /Solden Systems Ltd\./, `${page}: registered name in the footer`);
+    assert.match(footer, /Registered in England and Wales, company number(?: |&nbsp;)16823002/, `${page}: place of registration and number`);
+  }
+  for (const page of ["privacy.html", "terms.html"]) {
+    assert.match(read(page), /Apartment 16 Apedale Road, Newcastle, England, ST5 6FF/, `${page}: registered office address`);
   }
 });
 

@@ -124,12 +124,12 @@ test("every statistic on every page carries a source in the same block", () => {
   }
 });
 
-test("both invite forms ask only for name, work email, company and message", () => {
-  for (const page of ["index.html", "about.html"]) {
+test("every invite form asks only for name, work email, company and message", () => {
+  for (const page of ["index.html", "about.html", "how-it-works.html"]) {
     const html = read(page);
     const names = [...html.matchAll(/<(?:input|textarea)[^>]*name="([^"]+)"/g)].map((m) => m[1]).sort();
     assert.deepEqual(names, ["company", "email", "message", "name", "t", "website"], page);
-    assert.match(html, /<div class="form-status" data-form-status role="status" aria-live="polite" hidden>/, `${page}: status region`);
+    assert.match(html, /<div class="form-status" data-form-status role="status" aria-live="polite">/, `${page}: status region, rendered from the start`);
     assert.match(html, /class="field field-hp"/, `${page}: honeypot`);
   }
 });

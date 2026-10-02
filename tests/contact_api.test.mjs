@@ -30,7 +30,7 @@ function fakeResponse() {
 }
 
 const env = { RESEND_API_KEY: "re_test", LEAD_NOTIFY_TO: "founders@example.com", CONTACT_MAX_PER_IP_PER_HOUR: "2" };
-const valid = { name: "Ada Lovelace", email: "ada@example.com", company: "Analytical Engines Ltd", message: "We run NetSuite with four entities." };
+const valid = { name: "Ada Lovelace", email: "ada@example.com", company: "Analytical Engines Ltd", message: "We run NetSuite with four entities.", t: "8500" };
 const formHeaders = { "content-type": "application/x-www-form-urlencoded", accept: "text/html" };
 
 function okFetch(calls) {
@@ -102,7 +102,7 @@ test("missing fields return 400 and send nothing", async () => {
   const res = fakeResponse();
   await handle(fakeRequest({ body: { name: "Ada" } }), res);
   assert.equal(res.statusCode, 400);
-  assert.match(JSON.parse(res.body).message, /email, company, message/);
+  assert.match(JSON.parse(res.body).message, /Please fill in: Work email, Company, How your close runs today\./);
   assert.equal(calls.length, 0);
 });
 
@@ -141,7 +141,14 @@ test("bot timing: t is elapsed milliseconds, only a fast finite value is rejecte
   assert.equal(res.statusCode, 200);
   assert.equal(calls.length, 2);
 
-  // Missing t passes through.
+  // A body without t at all did not come from either form: swallowed, no email.
+  res = fakeResponse();
+  const { t: _omitted, ...withoutT } = valid;
+  await handle(fakeRequest({ body: withoutT }), res);
+  assert.equal(res.statusCode, 200);
+  assert.equal(calls.length, 2);
+
+  // A legitimate send again, so the counts below carry on in pairs.
   res = fakeResponse();
   await handle(fakeRequest({ body: valid }), res);
   assert.equal(calls.length, 4);
@@ -418,4 +425,69 @@ test("Postgres TLS verifies by default, with a documented opt-out and CA overrid
   const ca = "-----BEGIN CERTIFICATE-----\nabc\n-----END CERTIFICATE-----";
   assert.deepEqual(sslOptionsFromEnv({ DB_SSL_CA: ca, DB_SSL_NO_VERIFY: "true" }), { ca, rejectUnauthorized: true });
   assert.deepEqual(sslOptionsFromEnv({ DB_SSL_CA: ca.replace(/\n/g, "\\n") }), { ca, rejectUnauthorized: true });
+});
+
+test("a browser post from another site is refused before anything is read or sent", async () => {
+  const calls = [];
+  const handle = createContactHandler({ env, fetch: okFetch(calls) });
+  let res = fakeResponse();
+  await handle(fakeRequest({ body: valid, headers: { origin: "https://evil.example", host: "soldenai.com" } }), res);
+  assert.equal(res.statusCode, 403);
+  assert.match(JSON.parse(res.body).message, /hello@soldenai\.com/);
+  res = fakeResponse();
+  await handle(fakeRequest({ body: valid, headers: { origin: "null", host: "soldenai.com" } }), res);
+  assert.equal(res.statusCode, 403);
+  assert.equal(calls.length, 0);
+
+  // The site's own origin, and a client that sends no Origin, both go through.
+  res = fakeResponse();
+  await handle(fakeRequest({ body: valid, headers: { origin: "https://soldenai.com", host: "soldenai.com" } }), res);
+  assert.equal(res.statusCode, 200);
+  assert.equal(calls.length, 2);
+});
+
+test("the confirmation never mails back what was typed, and greets only a plain first name", async () => {
+  const calls = [];
+  const handle = createContactHandler({ env, fetch: okFetch(calls) });
+  const spam = { ...valid, name: "http://spam.example/win Now", company: "Visit spam.example", message: "Cheap pills at spam.example" };
+  await handle(fakeRequest({ body: spam }), fakeResponse());
+  const confirmation = calls[1].init;
+  assert.deepEqual(confirmation.to, ["ada@example.com"]);
+  for (const part of [confirmation.html, confirmation.text, confirmation.subject]) {
+    assert.doesNotMatch(part, /spam\.example|pills/, "nothing submitted is echoed");
+  }
+  assert.match(confirmation.text, /Thanks, there\./);
+  assert.match(confirmation.text, /company number 16823002/, "the trading disclosure is in the email");
+});
+
+test("confirmations stop site-wide after the hourly cap, while team emails keep going", async () => {
+  const calls = [];
+  const handle = createContactHandler({ env: { ...env, CONTACT_MAX_PER_IP_PER_HOUR: "50", CONTACT_MAX_CONFIRMATIONS_PER_HOUR: "2" }, fetch: okFetch(calls) });
+  await quiet(async () => {
+    for (let i = 0; i < 3; i += 1) {
+      await handle(fakeRequest({ body: valid, ip: `203.0.113.${10 + i}` }), fakeResponse());
+    }
+  });
+  const toTeam = calls.filter((c) => c.init.to.includes("founders@example.com")).length;
+  const toProspect = calls.filter((c) => c.init.to.includes("ada@example.com")).length;
+  assert.equal(toTeam, 3);
+  assert.equal(toProspect, 2);
+});
+
+test("the message keeps its line breaks in the team email", async () => {
+  const calls = [];
+  const handle = createContactHandler({ env, fetch: okFetch(calls) });
+  await handle(fakeRequest({ body: { ...valid, message: "NetSuite, four entities.\r\n\r\n\r\nWe close   on day 9." } }), fakeResponse());
+  assert.match(calls[0].init.text, /NetSuite, four entities\.\n\nWe close on day 9\./);
+  assert.match(calls[0].init.html, /NetSuite, four entities\.<br><br>We close on day 9\./);
+});
+
+test("a plain form post from an unknown page returns to /about, never to a page that does not exist", async () => {
+  const handle = createContactHandler({ env, fetch: okFetch([]) });
+  let res = fakeResponse();
+  await handle(fakeRequest({ body: "name=Ada&t=", headers: { ...formHeaders, referer: "https://soldenai.com/phish" } }), res);
+  assert.equal(res.headers.location, "/about?sent=0&why=invalid#contact");
+  res = fakeResponse();
+  await handle(fakeRequest({ body: "name=Ada&t=", headers: { ...formHeaders, referer: "https://soldenai.com/how-it-works" } }), res);
+  assert.equal(res.headers.location, "/how-it-works?sent=0&why=invalid#contact");
 });

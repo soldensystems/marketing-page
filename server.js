@@ -81,7 +81,7 @@ app.all("/api/contact", (req, res) => contact(req, res));
 // A malformed or oversized body must answer with plain JSON, never an Express error page.
 app.use("/api", (error, _req, res, _next) => {
   const status = Number.isInteger(error?.status) ? error.status : 500;
-  res.status(status).set("Cache-Control", "no-store").json({ ok: false, message: "Could not read the form." });
+  res.status(status).set("Cache-Control", "no-store").json({ ok: false, message: "Could not read the form. Please email hello@soldenai.com." });
 });
 app.all(/^\/api(\/|$)/, (_req, res) => res.status(404).set("Cache-Control", "no-store").json({ ok: false, message: "Not found." }));
 

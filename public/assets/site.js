@@ -1,5 +1,6 @@
 // Progressive enhancement only. The page works without this file.
-// The mobile menu is a <details> element and needs no script; this file only adds Escape and click-outside closing.
+// The mobile menu is a <details> element and needs no script; this file only adds closing on Escape, on a click
+// outside it and on choosing one of its links.
 
 const loadedAt = Date.now();
 
@@ -30,6 +31,13 @@ document.addEventListener("click", (event) => {
     if (!menu.contains(event.target)) menu.open = false;
   }
 });
+// An in-page link (Request an invite) would otherwise leave the menu open over the section it scrolled to.
+for (const link of document.querySelectorAll("details.nav-menu nav a")) {
+  link.addEventListener("click", () => {
+    const menu = link.closest("details");
+    if (menu) menu.open = false;
+  });
+}
 
 // Reveal sections as they enter the viewport. Respects reduced-motion through CSS.
 const reveals = document.querySelectorAll(".reveal");
@@ -60,11 +68,36 @@ if (form) {
   const FALLBACK_FAILURE = "Not sent. Please try again in a few minutes, or email hello@soldenai.com.";
   const done = form.parentElement && form.parentElement.querySelector("[data-form-done]");
 
+  // The status region is always rendered, empty until there is something to say, so screen readers
+  // register it before its first message.
+  if (status && !status.id) status.id = "form-status";
+  const fields = [
+    ["name", "Name"],
+    ["company", "Company"],
+    ["email", "Work email"],
+    ["message", "How your close runs today"],
+  ];
+  // Mark the fields a failure names, and point them at the message that explains it.
+  function markInvalid(message) {
+    for (const [name, label] of fields) {
+      const input = form.elements.namedItem(name);
+      if (!input) continue;
+      const named = message.includes(label) || (name === "email" && /work email/i.test(message) && !/^Please fill in/.test(message));
+      if (named) {
+        input.setAttribute("aria-invalid", "true");
+        if (status) input.setAttribute("aria-describedby", status.id);
+      } else {
+        input.removeAttribute("aria-invalid");
+        input.removeAttribute("aria-describedby");
+      }
+    }
+  }
+
   function show(message, failed) {
     if (!status) return;
     status.setAttribute("role", failed ? "alert" : "status");
-    status.hidden = false;
     status.textContent = message;
+    if (failed) markInvalid(message);
   }
 
   // Final result: announce it and move focus to it so keyboard and screen-reader users land on the outcome.
@@ -82,7 +115,8 @@ if (form) {
     if (params.get("sent") === "0") {
       const reasons = {
         invalid: "Not sent. Please check your name, work email and message, then try again.",
-        limit: "Not sent. Too many messages from this connection. Please try again later.",
+        limit: "Not sent. Too many messages from this connection. Please email hello@soldenai.com.",
+        origin: "Not sent. Please use the form on this page, or email hello@soldenai.com.",
         config: "Not sent. The contact form is unavailable right now. Please email hello@soldenai.com.",
         delivery: "Not sent. Your message could not be delivered. Please try again in a few minutes, or email hello@soldenai.com.",
       };
@@ -100,6 +134,7 @@ if (form) {
     data.source = form.dataset.source || "site";
     data.t = Date.now() - loadedAt; // elapsed milliseconds since page load, never a timestamp
     if (submit) submit.setAttribute("aria-busy", "true");
+    markInvalid("");
     show("Sending.", false);
     try {
       const response = await fetch(form.action, {
@@ -113,7 +148,7 @@ if (form) {
         form.reset();
         if (done) {
           // The form gives way to the confirmation: what happens next, not a status line.
-          if (status) status.hidden = true;
+          if (status) status.textContent = "";
           form.hidden = true;
           done.hidden = false;
           done.focus();
@@ -133,17 +168,18 @@ if (form) {
 }
 
 // Hero demo: a directed sequence inside the real mock. Four acts, then a reset. Honours reduced motion.
+// It pauses while the pointer is over it or it has keyboard focus, while it is off-screen and while the tab is hidden.
 (function () {
   const frame = document.querySelector("[data-demo]");
   if (!frame) return;
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const snapshot = frame.innerHTML;
-  const connects = document.getElementById("connects");
 
   const q = (sel) => frame.querySelector(sel);
   const row = (k) => q(`[data-row="${k}"]`);
   let counts;
   let logTimers = [];
+  let logPending = [];
 
   function setStatus(k, cls, text) {
     const r = row(k); const st = r.querySelector("[data-st]");
@@ -169,19 +205,30 @@ if (form) {
   function clearLogTimers() {
     for (const id of logTimers) clearTimeout(id);
     logTimers = [];
+    logPending = [];
+  }
+  function appendLine(l) {
+    const ol = q("[data-now-lines]");
+    const li = document.createElement("li"); li.className = "new" + (l.startsWith("ok ") ? " ok" : ""); li.textContent = l.replace(/^ok /, "");
+    while (ol.children.length >= 3) ol.removeChild(ol.firstChild);
+    ol.appendChild(li);
+  }
+  // A pause mid-stream writes the remaining lines at once, so nothing keeps moving while the demo holds.
+  function flushLog() {
+    const rest = logPending;
+    for (const id of logTimers) clearTimeout(id);
+    logTimers = [];
+    logPending = [];
+    rest.forEach(appendLine);
   }
   // Now running: the panel names the current workstream and streams its evidence, a line at a time.
   function log(title, step, lines) {
     clearLogTimers();
     q("[data-now-name]").textContent = step ? `${title} · ${step}` : title;
-    const ol = q("[data-now-lines]"); ol.innerHTML = "";
-    const append = (l) => {
-      const li = document.createElement("li"); li.className = "new" + (l.startsWith("ok ") ? " ok" : ""); li.textContent = l.replace(/^ok /, "");
-      while (ol.children.length >= 3) ol.removeChild(ol.firstChild);
-      ol.appendChild(li);
-    };
-    if (reduce) { lines.forEach(append); return; }
-    lines.forEach((l, i) => logTimers.push(setTimeout(() => append(l), 380 * i)));
+    q("[data-now-lines]").innerHTML = "";
+    if (reduce) { lines.forEach(appendLine); return; }
+    logPending = lines.slice();
+    lines.forEach((l, i) => logTimers.push(setTimeout(() => { logPending.shift(); appendLine(l); }, 380 * i)));
   }
   // The opening: papers arrive, file into the register, then the department forms around it.
   function papers(n) { q("[data-papers]").dataset.papers = n; }
@@ -214,7 +261,7 @@ if (form) {
       counts = { done: 0, review: 0, call: 0, ev: 0, time: "0 min" };
       key(); view("activity"); camera("wide");
       frame.querySelectorAll("[data-row]").forEach((r) => setStatus(r.dataset.row, "st-queued", "Queued"));
-      act("<time>08:00</time><span>NetSuite sync completed, 1,204 records, read-only</span>");
+      act("<time>08:00</time><span>NetSuite sync completed, 1,204 records, read‑only</span>");
       act("<time>08:01</time><span>Solden opened the April close, 16 workstreams</span>");
     };
     if (firstReset || reduce) { firstReset = false; swap(); frame.classList.remove("resetting"); return; }
@@ -264,22 +311,24 @@ if (form) {
     [1300, () => { view("activity"); camera("main"); run("flux", "Flux and variance", "13 of 16", ["Every line against prior period and budget", "ok 3 movements explained"]); }],
     [1400, () => { finish("flux", "3 explained"); counts.done = 13; counts.ev = 248; key(); run("elim", "Eliminations", "14 of 16", ["ok Generated from reconciled balances"]); }],
     [800, () => { finish("elim", "Generated"); counts.done = 14; counts.ev = 259; key();
-      run("fs", "Financial statements", "15 of 16", ["P&L, balance sheet and cash flow", "ok Statements articulate", "Released by J. Mensah"]); }],
+      run("fs", "Financial statements", "15 of 16", ["P&L, balance sheet and cash flow", "ok Statements articulate", "Reviewed by J. Mensah"]); }],
     [1700, () => { finish("fs", "Assembled"); counts.done = 15; counts.ev = 287; key();
       setStatus("lock", "st-call", "Ready to attest"); q("[data-lock-btn]").classList.remove("pbtn-disabled"); badge("Ready to attest"); camera("wide");
-      log("Attest and lock", "16 of 16", ["All fifteen workstreams complete", "ok Evidence attached · exceptions resolved"]);
+      log("Attest and lock", "16 of 16", ["Fifteen workstreams complete, pack assembled", "ok Evidence attached · exceptions resolved"]);
       flag("<i></i><span><b>Attest and lock April 2026</b><small>All evidence attached</small></span><em>Attest</em>"); }],
     [1800, () => { q("[data-lock-btn]").classList.add("pressed"); }],
     [500, () => { finish("lock", "Attested 8 May"); frame.classList.add("locked"); counts.done = 16; counts.time = "1.7 h"; key(); badge("Attested and locked", "ok");
+      const lockBtn = q("[data-lock-btn]"); lockBtn.textContent = "Locked"; lockBtn.classList.remove("pressed");
       act("<time>14:42</time><span><b>H. Whitmore</b> attested and locked April 2026</span>"); view("pack"); camera("wide"); }],
     [4400, () => { reset(); }],
     [900, () => {}],
   ];
   const LOCKED_STEPS = T.length - 2; // everything up to "Attested and locked"; the last two steps are the reset and a pause.
 
-  // Loop control. Two independent pauses: out of view (visibility) and the Pause button (user).
-  let i = 0, hidden = false, timer = null, stopped = false;
-  const paused = () => hidden;
+  // Loop control. The demo holds while it is off-screen, while the tab is hidden, and while the visitor is
+  // looking at it closely: the pointer over it or keyboard focus inside it. There is no visible control.
+  let i = 0, hidden = false, tabHidden = document.hidden, pointing = false, focused = false, timer = null, stopped = false;
+  const paused = () => hidden || tabHidden || pointing || focused;
 
   function next() {
     if (stopped || paused() || timer !== null) return;
@@ -300,15 +349,28 @@ if (form) {
   }
   function halt() {
     if (timer !== null) { clearTimeout(timer); timer = null; }
+    flushLog();
+    frame.classList.add("held");
   }
   function resume() {
-    if (!paused() && timer === null) next();
+    if (paused()) return;
+    frame.classList.remove("held");
+    if (timer === null) next();
   }
+  function update() {
+    if (paused()) halt(); else resume();
+  }
+
+  frame.addEventListener("pointerenter", (event) => { if (event.pointerType === "mouse") { pointing = true; update(); } });
+  frame.addEventListener("pointerleave", () => { pointing = false; update(); });
+  frame.addEventListener("focusin", () => { focused = true; update(); });
+  frame.addEventListener("focusout", (event) => { if (!frame.contains(event.relatedTarget)) { focused = false; update(); } });
+  document.addEventListener("visibilitychange", () => { tabHidden = document.hidden; update(); });
 
   if ("IntersectionObserver" in window) {
     new IntersectionObserver((entries) => {
       hidden = !entries[0].isIntersecting;
-      if (hidden) halt(); else resume();
+      update();
     }, { threshold: 0.15 }).observe(frame);
   }
 

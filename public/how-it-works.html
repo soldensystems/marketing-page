@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="light" />
-  <title>How it works: responsibility transfers stage by stage · Solden</title>
+  <title>How it works: from read-only to a live close · Solden</title>
   <meta name="description" content="What Solden can touch, when it can write, who decides, and what happens when something is wrong. Five stages from read-only to a live month-end close." />
   <meta name="theme-color" content="#0b1530" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Solden" />
-  <meta property="og:title" content="How it works: responsibility transfers stage by stage · Solden" />
+  <meta property="og:locale" content="en_GB" />
+  <meta property="og:title" content="How it works: from read-only to a live close · Solden" />
   <meta property="og:description" content="What Solden can touch, when it can write, who decides, and what happens when something is wrong. Five stages from read-only to a live month-end close." />
   <meta property="og:url" content="https://soldenai.com/how-it-works" />
   <meta property="og:image" content="https://soldenai.com/assets/og-card.png" />
@@ -18,35 +19,35 @@
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:alt" content="Solden, the AI finance department for growing companies" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@solden_ai" />
   <link rel="canonical" href="https://soldenai.com/how-it-works" />
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="preload" href="/assets/fonts/Fraunces-Variable.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="/assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="/assets/fonts/solden-fonts.css?v=20261006w" />
-  <link rel="stylesheet" href="/assets/site.css?v=20261006w" />
+  <link rel="preload" href="/assets/fonts/InterVariable-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/site.css?v=67224ba32d" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
     <div class="wrap header-inner">
-      <a class="brand" href="/" aria-label="Solden home"><img src="/assets/solden-lockup-dark.png" width="110" height="27" alt="Solden" /></a>
+      <a class="brand" href="/" aria-label="Solden home"><img src="/assets/solden-lockup-220.png" width="110" height="27" alt="Solden" /></a>
       <div class="header-right">
         <nav class="site-nav" aria-label="Primary">
           <a href="/how-it-works" aria-current="page">How it works</a>
           <a href="/about">About</a>
         </nav>
-        <a class="btn btn-small" href="/#invite" data-cta="header">Request an invite</a>
+        <a class="btn btn-small" href="#contact" data-cta="header">Request an invite</a>
       </div>
       <details class="nav-menu">
-        <summary>Menu</summary>
+        <summary><span class="menu-open">Menu</span><span class="menu-close">Close</span></summary>
         <nav aria-label="Primary, mobile">
           <a href="/how-it-works" aria-current="page">How it works</a>
           <a href="/about">About</a>
-          <a href="/#invite" data-cta="menu">Request an invite</a>
+          <a href="#contact" data-cta="menu">Request an invite</a>
         </nav>
       </details>
     </div>
@@ -57,53 +58,53 @@
     <section class="section hero" id="top" aria-labelledby="page-title">
       <div class="wrap">
         <span class="eyebrow">How it works</span>
-        <h1 id="page-title">How responsibility transfers, one stage at a time.</h1>
-        <p class="lede">Written in the order a controller asks about the month-end close: what Solden takes on, what it can touch, when it can write, who decides, what controls apply, and what happens when it is wrong.</p>
+        <h1 id="page-title">From read-only to a live close, one stage at a time.</h1>
+        <p class="lede">Written in the order a controller asks about the month-end close: what Solden takes on, what it can touch, when it can write, what you receive, who decides, what controls apply, and what happens when it is wrong.</p>
       </div>
     </section>
 
-<section class="section centre reveal" id="work" aria-labelledby="work-title">
+    <section class="section centre reveal" id="work" aria-labelledby="work-title">
       <div class="wrap">
         <span class="eyebrow">01 What Solden takes on</span>
-        <h2 id="work-title">Sixteen workstreams of the month-end close. Solden does the work. You decide where judgement stays human.</h2>
-        <p class="lede">Every workstream your controller signs today, with the one decision that stays yours marked on each.</p>
-        <div class="reg ws-reg"><h3 class="ws-label"><span class="ws-n">01</span> Reconciliations</h3><div class="mini"><h3>Bank reconciliations</h3><p>Matched by amount, date and reference</p><span class="decide"><span class="decide-k">You decide</span> Timing or break</span></div><div class="mini"><h3>Intercompany</h3><p>Reciprocal balances matched per pair</p><span class="decide"><span class="decide-k">You decide</span> Which side is right</span></div><div class="mini"><h3>Balance sheet</h3><p>Every in-scope account proved</p><span class="decide"><span class="decide-k">You decide</span> Stale items</span></div><div class="mini"><h3>Payments and processors</h3><p>Payouts, fees and refunds tied to the ledger</p><span class="decide"><span class="decide-k">You decide</span> Unmatched payouts</span></div><h3 class="ws-label"><span class="ws-n">02</span> Subledgers</h3><div class="mini"><h3>Accounts receivable</h3><p>Aged, cash applied, provision computed</p><span class="decide"><span class="decide-k">You decide</span> Provisions, write-offs</span></div><div class="mini"><h3>Accounts payable</h3><p>Aged, accrued, duplicates flagged</p><span class="decide"><span class="decide-k">You decide</span> Estimates without a PO</span></div><div class="mini"><h3>Fixed assets</h3><p>Depreciation run, register tied to GL</p><span class="decide"><span class="decide-k">You decide</span> Capitalise or expense</span></div><div class="mini"><h3>Payroll</h3><p>Payroll run tied to GL by cost centre</p><span class="decide"><span class="decide-k">You decide</span> One-off payments</span></div><h3 class="ws-label"><span class="ws-n">03</span> Journals and schedules</h3><div class="mini"><h3>Accruals and prepaids</h3><p>Schedules run, each tied to its source</p><span class="decide"><span class="decide-k">You decide</span> New accruals</span></div><div class="mini"><h3>FX revaluation</h3><p>Revalued at period end, movement explained</p><span class="decide"><span class="decide-k">You decide</span> Rate disputes</span></div><div class="mini"><h3>Tax provisions</h3><p>VAT, sales tax and income tax per policy</p><span class="decide"><span class="decide-k">You decide</span> Positions, filing sign-off</span></div><div class="mini"><h3>Revenue review</h3><p>Tied to billings, contracts and delivery</p><span class="decide"><span class="decide-k">You decide</span> Recognition timing</span></div><h3 class="ws-label"><span class="ws-n">04</span> Reporting and attestation</h3><div class="mini"><h3>Flux and variance</h3><p>Every line against prior period and budget</p><span class="decide"><span class="decide-k">You decide</span> Commentary</span></div><div class="mini"><h3>Eliminations</h3><p>Generated from reconciled balances</p><span class="decide"><span class="decide-k">You decide</span> Disputed items</span></div><div class="mini"><h3>Financial statements</h3><p>Assembled, and verified to articulate</p><span class="decide"><span class="decide-k">You decide</span> Disclosures</span></div><div class="mini"><h3>Attest and lock</h3><p>Completeness verified, pack assembled</p><span class="decide"><span class="decide-k">You decide</span> The attestation itself</span></div></div>
+        <h2 id="work-title">The sixteen workstreams of the month-end close. Solden does the work. The judgement stays with you.</h2>
+        <p class="lede">The whole checklist, with the one decision that stays yours marked on each.</p>
+        <div class="reg ws-reg"><h3 class="ws-label"><span class="ws-n">01</span> Reconciliations</h3><div class="mini"><h4>Bank reconciliations</h4><p>Matched by amount, date and reference</p><span class="decide"><span class="decide-k">You decide</span> Timing or break</span></div><div class="mini"><h4>Intercompany</h4><p>Reciprocal balances matched per pair</p><span class="decide"><span class="decide-k">You decide</span> Which side is right</span></div><div class="mini"><h4>Balance sheet</h4><p>Every in-scope account proved</p><span class="decide"><span class="decide-k">You decide</span> Stale items</span></div><div class="mini"><h4>Payments and processors</h4><p>Payouts, fees and refunds tied to the ledger</p><span class="decide"><span class="decide-k">You decide</span> Unmatched payouts</span></div><h3 class="ws-label"><span class="ws-n">02</span> Subledgers</h3><div class="mini"><h4>Accounts receivable</h4><p>Aged, cash applied, provision computed</p><span class="decide"><span class="decide-k">You decide</span> Provisions, write-offs</span></div><div class="mini"><h4>Accounts payable</h4><p>Aged, accrued, duplicates flagged</p><span class="decide"><span class="decide-k">You decide</span> Estimates without a PO</span></div><div class="mini"><h4>Fixed assets</h4><p>Depreciation run, register tied to the GL</p><span class="decide"><span class="decide-k">You decide</span> Capitalise or expense</span></div><div class="mini"><h4>Payroll</h4><p>Payroll run tied to the GL by cost centre</p><span class="decide"><span class="decide-k">You decide</span> One-off payments</span></div><h3 class="ws-label"><span class="ws-n">03</span> Journals and schedules</h3><div class="mini"><h4>Accruals and prepaids</h4><p>Schedules run, each tied to its source</p><span class="decide"><span class="decide-k">You decide</span> New accruals</span></div><div class="mini"><h4>FX revaluation</h4><p>Revalued at period end, movement explained</p><span class="decide"><span class="decide-k">You decide</span> Rate disputes</span></div><div class="mini"><h4>Tax provisions</h4><p>VAT, sales tax and income tax per policy</p><span class="decide"><span class="decide-k">You decide</span> Tax positions and filings</span></div><div class="mini"><h4>Revenue review</h4><p>Tied to billings, contracts and delivery</p><span class="decide"><span class="decide-k">You decide</span> Recognition timing</span></div><h3 class="ws-label"><span class="ws-n">04</span> Reporting and attestation</h3><div class="mini"><h4>Flux and variance</h4><p>Every line against prior period and budget</p><span class="decide"><span class="decide-k">You decide</span> Commentary</span></div><div class="mini"><h4>Eliminations</h4><p>Generated from reconciled balances</p><span class="decide"><span class="decide-k">You decide</span> Disputed items</span></div><div class="mini"><h4>Financial statements</h4><p>Assembled, and verified to articulate</p><span class="decide"><span class="decide-k">You decide</span> Disclosures</span></div><div class="mini"><h4>Attest and lock</h4><p>Completeness verified, pack assembled</p><span class="decide"><span class="decide-k">You decide</span> The attestation itself</span></div></div>
       </div>
     </section>
 
     <section class="section centre reveal" id="stages" aria-labelledby="stages-title">
       <div class="wrap">
-        <span class="eyebrow">02 What you can touch, and when you can write</span>
+        <span class="eyebrow">02 What Solden can touch, and when it can write</span>
         <h2 id="stages-title">Five stages. Four of them write nothing.</h2>
-        <p class="lede">Your prior closes are ground truth. Every capability earns its place by reproducing them before it touches the present.</p>
+        <p class="lede">Your past closes are the benchmark. Solden reproduces them before it works on a live period.</p>
         <ol class="reg stages">
-          <li><span class="tag">Writes: none</span><h3>Connect</h3><p>Read-only, least-privilege, every scope shown at grant time. On NetSuite, an integration role with permissions you approve.</p></li>
+          <li><span class="tag">Writes: none</span><h3>Connect</h3><p>Read-only, least-privilege, every scope shown at grant time. In your ERP, a dedicated integration role with only the permissions you approve.</p></li>
           <li><span class="tag">Writes: none</span><h3>Map the work</h3><p>Your checklist, thresholds, templates and approvers, encoded once and versioned with actor and time.</p></li>
           <li><span class="tag">Writes: none</span><h3>Replay history</h3><p>A close you have already done, run in isolation on Solden's operating ledger and set beside what you reported.</p></li>
-          <li><span class="tag">Writes: none</span><h3>Shadow mode</h3><p>Solden closes the current period alongside your team, still read-only. Your review-time baseline is set.</p></li>
-          <li class="live"><span class="tag tag-solden">Writes: journals</span><h3>Live</h3><p>Only on your signed activation. Every post passes through review first and is read back from the ERP.</p></li>
+          <li><span class="tag">Writes: none</span><h3>Shadow mode</h3><p>Solden closes the current period alongside your team, still read-only, and records how much of your time its close needs.</p></li>
+          <li class="live"><span class="tag tag-solden">Writes: journals</span><h3>Live</h3><p>Only after you sign the write activation. Every post passes through review first and is read back from the ERP.</p></li>
         </ol>
         <div class="reg card-grid-2 test-grid">
           <div class="card">
             <span class="panel-k">The buying test</span>
-            <h3>Replay a close you have already done.</h3>
-            <p class="sub">Agree the entity, the period, the scope and the deliverables. Solden runs that close on its operating ledger, never your books, and compares its result with what you reported. It passes when coverage, accuracy, exceptions and pack completeness match yours, or every difference is explained with evidence.</p>
+            <h3>One past close, run again.</h3>
+            <p class="sub">Agree the entity, the period, the scope and the deliverables. Solden runs that close on its operating ledger, never your books, and sets its result beside what you reported. You judge it: the test passes when coverage, accuracy and exceptions match what you reported, or every difference is explained with evidence.</p>
           </div>
           <div class="card">
             <span class="panel-k">What replay does not prove</span>
             <h3>A messy live period.</h3>
-            <p class="sub">An ERP outage mid-close, a chart of accounts changed on day two. Those are covered by shadow mode, by execution that degrades openly with clear status and resume, and by a documented fallback procedure for when execution stops mid-cycle.</p>
+            <p class="sub">An ERP outage mid-close, or a chart of accounts changed on day two. Shadow mode tests Solden against those on a live period, and a written fallback procedure covers a close that stops halfway.</p>
           </div>
         </div>
       </div>
     </section>
 
-<section class="section reveal" id="pack" aria-labelledby="pack-title">
+    <section class="section reveal" id="pack" aria-labelledby="pack-title">
       <div class="wrap split">
         <div class="body-col">
           <span class="eyebrow">03 What you receive</span>
-          <h2 id="pack-title">Solden delivers packs, not figures.</h2>
-          <p class="lede">You do not receive a number, a report or a dashboard. You receive the finished close and everything needed to trust it. Attestation is refused while evidence is missing or an exception is open. Once locked, the pack is immutable and exports as one bundle for your auditors.</p>
+          <h2 id="pack-title">A close pack, not a dashboard.</h2>
+          <p class="lede">You receive the finished close and everything needed to trust it. Attestation is refused while evidence is missing or an exception is open. Once locked, the pack cannot be changed, and it exports as one bundle for your auditors.</p>
         </div>
         <div>
           <div class="sheet">
@@ -111,10 +112,10 @@
             <ul class="sheet-list">
               <li><h3>Work product</h3><p>The financial statements, articulated and tied to every workstream.</p></li>
               <li><h3>Completeness checklist</h3><p>What done meant for this period, each item checked.</p></li>
-              <li><h3>Evidence index</h3><p>Every figure mapped to its lineage, navigable from any number.</p></li>
+              <li><h3>Evidence index</h3><p>Every figure mapped to its source, navigable from any number.</p></li>
               <li><h3>Exception log</h3><p>Every exception with proposal, resolution, decider and time.</p></li>
               <li><h3>Attestation trail</h3><p>Who reviewed and decided what, with the policy version each approval was judged under.</p></li>
-              <li><h3>Lineage manifest</h3><p>Producer, timestamp, source system and version for every record.</p></li>
+              <li><h3>Source log</h3><p>For every record: the system it came from, what produced it, when, and which version.</p></li>
             </ul>
             <div class="sheet-sig">
               <div class="sheet-sig-row"><span class="label">Prepared by</span><span class="tag tag-solden">Solden</span></div>
@@ -130,8 +131,8 @@
       <div class="wrap">
         <span class="eyebrow">04 Who decides</span>
         <h2 id="decides-title">What stays yours, by design.</h2>
-        <p class="lede">Solden acts alone only on routine, reversible, policy-governed work below a threshold. Everything else arrives as a case for a named person on your approval matrix: what happened, what Solden proposes, why it needs you, and the evidence.</p>
-        <div class="reg mini-grid mini-grid-3"><div class="mini"><h3>Posting a material journal</h3><p><span class="mini-k">Solden brings</span>The draft entry, evidence on every line, the policy version it was judged under.</p><span class="decide"><span class="decide-k">Controller decides</span></span></div><div class="mini"><h3>Revenue recognition</h3><p><span class="mini-k">Solden brings</span>The contract, the billing and the question.</p><span class="decide"><span class="decide-k">Controller decides</span></span></div><div class="mini"><h3>Write-offs and provisions</h3><p><span class="mini-k">Solden brings</span>The aged balance and a proposed treatment.</p><span class="decide"><span class="decide-k">CFO decides</span></span></div><div class="mini"><h3>Accounting-policy changes</h3><p><span class="mini-k">Solden brings</span>The encoded policy and every version of it.</p><span class="decide"><span class="decide-k">CFO decides</span></span></div><div class="mini"><h3>Money, payroll, filings</h3><p><span class="mini-k">Solden brings</span>Nothing. Solden never moves money, approves payroll or files.</p><span class="decide"><span class="decide-k">CFO decides</span></span></div><div class="mini"><h3>Attesting and locking</h3><p><span class="mini-k">Solden brings</span>The complete pack, with nothing missing.</p><span class="decide"><span class="decide-k">Controller decides</span></span></div></div>
+        <p class="lede">Solden goes ahead without you only on routine, reversible work within your policy and below your threshold, and its accountants still review it. Everything else arrives as a judgement call for a named person on your approval matrix: what happened, what Solden proposes, why it needs you, and the evidence.</p>
+        <div class="reg mini-grid mini-grid-3"><div class="mini"><h3>Posting a material journal</h3><p><span class="mini-k">Solden brings</span>The draft entry, evidence on every line, the policy version it was judged under.</p><span class="decide"><span class="decide-k">Controller decides</span></span></div><div class="mini"><h3>Revenue recognition</h3><p><span class="mini-k">Solden brings</span>The contract, the billing and the question.</p><span class="decide"><span class="decide-k">Controller decides</span></span></div><div class="mini"><h3>Write-offs and provisions</h3><p><span class="mini-k">Solden brings</span>The aged balance and a proposed treatment.</p><span class="decide"><span class="decide-k">CFO decides</span></span></div><div class="mini"><h3>Accounting policy changes</h3><p><span class="mini-k">Solden brings</span>The encoded policy and every version of it.</p><span class="decide"><span class="decide-k">CFO decides</span></span></div><div class="mini"><h3>Money, payroll, filings</h3><p><span class="mini-k">Solden brings</span>The reconciled figures and their support. Solden never moves money, approves payroll or files a return.</p><span class="decide"><span class="decide-k">CFO decides</span></span></div><div class="mini"><h3>Attesting and locking</h3><p><span class="mini-k">Solden brings</span>The complete pack, with nothing missing.</p><span class="decide"><span class="decide-k">Controller decides</span></span></div></div>
       </div>
     </section>
 
@@ -140,26 +141,56 @@
         <span class="eyebrow">05 Controls</span>
         <h2 id="controls-title">The controls register your security review will ask for.</h2>
         <p class="lede">Every control is designed and written down before any connection is made. The last one is yours to keep.</p>
-        <div class="reg mini-grid mini-grid-3"><div class="mini"><h3>Read-only until you activate writes</h3><p>A separate activation you sign, logged with actor and time.</p></div><div class="mini"><h3>Review gates every action</h3><p>Nothing posts, pays, files or locks without passing through it.</p></div><div class="mini"><h3>Nothing overwritten</h3><p>Versioned policies, mappings, journals and lineage. A correction is a new version.</p></div><div class="mini"><h3>Dirty data quarantined</h3><p>Source data that fails mapping becomes an exception, never silently coerced.</p></div><div class="mini"><h3>Degrades openly</h3><p>Throttled APIs, partial data and failed extractions are visible, never silent.</p></div><div class="mini"><h3>Credentials in a vault</h3><p>Never in application databases. Encryption in transit and at rest.</p></div><div class="mini"><h3>Tenant isolation at the data layer</h3><p>One customer's data is never queryable from another's context.</p></div><div class="mini"><h3>SSO and MFA</h3><p>Google Workspace or SAML. MFA enforced for every role.</p></div><div class="mini"><h3>No training on your data</h3><p>Your ledger, documents and decisions never train a model, ours or a vendor's.</p></div><div class="mini"><h3>Who at Solden can see it</h3><p>The reviewers named to your account. Every view is logged and visible to you.</p></div><div class="mini"><h3>Security review</h3><p>We complete your questionnaire and share the controls register, subprocessor list and DPA before any connection is made.</p></div><div class="mini"><span class="tag mini-tag">Yours</span><h3>Statutory responsibility</h3><p>Solden is not an auditor, a bank or a statutory signatory. That stays with you.</p></div></div>
+        <div class="reg mini-grid mini-grid-3"><div class="mini"><h3>Read-only until you activate writes</h3><p>A separate write activation you sign, logged with actor and time.</p></div><div class="mini"><h3>Review gates every action</h3><p>Nothing posts to your ERP or locks without passing through it.</p></div><div class="mini"><h3>Nothing overwritten</h3><p>Policies, mappings, journals and source records are versioned. Nothing is edited in place.</p></div><div class="mini"><h3>Dirty data quarantined</h3><p>Source data that fails mapping becomes an exception, never silently coerced.</p></div><div class="mini"><h3>Degrades openly</h3><p>Throttled APIs, partial data and failed extractions are visible, never silent.</p></div><div class="mini"><h3>Credentials in a vault</h3><p>Never in application databases. Encryption in transit and at rest.</p></div><div class="mini"><h3>Each customer's data kept apart</h3><p>One customer's data can never be reached from another customer's account.</p></div><div class="mini"><h3>SSO and MFA</h3><p>Google Workspace or SAML. MFA enforced for every role.</p></div><div class="mini"><h3>No training on your data</h3><p>Your ledger, documents and decisions never train a model, ours or a vendor's.</p></div><div class="mini"><h3>Who at Solden can see it</h3><p>The reviewers named to your account. Every view is logged and visible to you.</p></div><div class="mini"><h3>Security review</h3><p>We complete your security questionnaire and share the controls register before you connect anything.</p></div><div class="mini mini-yours"><h3>Statutory responsibility</h3><p>Solden is not an auditor, a bank or a statutory signatory. That stays with you.</p><span class="tag mini-tag">Yours</span></div></div>
       </div>
     </section>
 
     <section class="section centre reveal" id="when-wrong" aria-labelledby="wrong-title">
       <div class="wrap">
         <span class="eyebrow">06 What happens when it is wrong</span>
-        <h2 id="wrong-title">Finance has no partial credit. A blocker is a normal, owned state.</h2>
-        <p class="lede">A job ends as a verified result or an exact, owned blocker with a date on it. There is no third ending.</p>
-        <div class="reg mini-grid mini-grid-3"><div class="mini"><h3>A break</h3><p>Unmatched items, missing support, threshold breaches and duplicates surface as exceptions with a proposal. Never a silent failure.</p></div><div class="mini"><h3>A challenge</h3><p>Your controller can challenge any step in any evidence trail. It routes back as an exception with their note attached.</p></div><div class="mini"><h3>An adjustment</h3><p>Adjustments create new versions. The original, the change, the reason and the actor are all preserved.</p></div><div class="mini"><h3>A degraded source</h3><p>Throttled APIs and partial data show with a clear status and a resume path. A failed run resumes from the last completed workstream.</p></div><div class="mini"><h3>An input outstanding on your side</h3><p>The close cannot be verified while your inputs are outstanding. The pack records whose input each delay waited on.</p></div><div class="mini"><h3>An error caused by Solden</h3><p>Re-performed and re-reviewed, a corrected pack version issued, and the cause recorded in the exception log.</p></div></div>
+        <h2 id="wrong-title">Every task ends checked and complete, or blocked with a name and a date.</h2>
+        <p class="lede">Nothing is left half-done. A blocker says what is wrong, who must act and by when.</p>
+        <div class="reg mini-grid mini-grid-3"><div class="mini"><h3>A break</h3><p>Unmatched items, missing support, threshold breaches and duplicates surface as exceptions with a proposal. Never a silent failure.</p></div><div class="mini"><h3>A challenge</h3><p>Your controller can challenge any step in any evidence trail. It routes back as an exception with their note attached.</p></div><div class="mini"><h3>An adjustment</h3><p>Adjustments create new versions. The original, the change, the reason and the actor are all preserved.</p></div><div class="mini"><h3>A failed run</h3><p>The close resumes from the last completed workstream, and the pack records what was run again and why.</p></div><div class="mini"><h3>An input outstanding on your side</h3><p>The close cannot be verified while your inputs are outstanding. The pack records whose input each delay waited on.</p></div><div class="mini"><h3>An error caused by Solden</h3><p>Re-performed and re-reviewed, a corrected pack version issued, and the cause recorded in the exception log.</p></div></div>
+        <p class="cycle-tail"><a class="link" href="/about#order">Where Solden goes after the close</a></p>
       </div>
     </section>
 
-    <section class="section centre reveal" id="next" aria-labelledby="next-title">
-      <div class="wrap">
-        <h2 id="next-title">Request an invite.</h2>
-        <p class="lede">If your close has outgrown your finance team, we would like to talk. It starts with a replay of a close you have already done.</p>
-        <div class="actions">
-          <a class="btn" href="/#invite" data-cta="how-footer">Request an invite</a>
-          <a href="/about#order">The department, function by function</a>
+    <section class="section-tight" id="contact" aria-labelledby="contact-title">
+      <div class="wrap wrap-wide">
+        <div class="dark-block reveal">
+          <div>
+            <span class="eyebrow">Request an invite</span>
+            <h2 id="contact-title">Start with your close.</h2>
+            <p class="lede">If your close has outgrown your finance team, tell us how it runs today. It starts with a replay.</p>
+            <ul class="check mt-6">
+              <li>One monthly price for the close, set by entities and transaction volume. Not seats or hours. Quoted after the replay.</li>
+              <li>Read-only access for the replay. No migration, no rollout to your team.</li>
+              <li>A reply within two business days, then a short call to scope your replay.</li>
+            </ul>
+          </div>
+          <div class="form-col">
+          <form class="form" method="post" action="/api/contact" data-contact-form data-source="how-it-works">
+            <div class="form-grid">
+              <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required maxlength="120" placeholder="Your name" /></div>
+              <div class="field"><label for="company">Company</label><input id="company" name="company" type="text" autocomplete="organization" required maxlength="160" placeholder="Company" /></div>
+            </div>
+            <div class="field"><label for="email">Work email</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="200" placeholder="you@company.com" /></div>
+            <div class="field"><label for="message">How your close runs today</label><textarea id="message" name="message" rows="3" required maxlength="4000" placeholder="Your ERP, number of entities, business days to close"></textarea></div>
+            <div class="field field-hp" aria-hidden="true"><label for="website">Leave this field empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+            <input type="hidden" name="t" value="" />
+            <div class="form-foot">
+              <button class="btn btn-light" type="submit" data-cta="contact-submit">Request an invite</button>
+              
+            </div>
+            <div class="form-status" data-form-status role="status" aria-live="polite"></div>
+          </form>
+            <div class="form-done" data-form-done hidden tabindex="-1">
+              <span class="eyebrow">Invite requested</span>
+              <h3>We reply within two business days.</h3>
+              <p>Next is a short call to pick the period and scope for your replay: one close you have already reported, run again and set beside your own figures.</p>
+              <p>Meanwhile, read <a href="/about">why Solden exists</a>, and the order in which it takes on the finance department.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -176,11 +207,11 @@
         <a href="/terms">Terms</a>
         <span class="footer-social"><a href="https://linkedin.com/company/soldenai" rel="noopener noreferrer" aria-label="Solden on LinkedIn"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a><a href="https://x.com/solden_ai" rel="noopener noreferrer" aria-label="Solden on X"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg></a></span>
       </nav>
-      <p class="footer-legal"><span>© 2026 Solden Systems Ltd.</span></p>
+      <p class="footer-legal"><span>© 2026 Solden Systems Ltd.</span><span>Registered in England and Wales, company number&nbsp;16823002</span></p>
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20261006w" defer></script>
-  <script defer src="https://cloud.umami.is/script.js" data-website-id="99baca41-1d1e-4286-8ea0-66d90959767c"></script>
+  <script src="/assets/site.js?v=67224ba32d" defer></script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="99baca41-1d1e-4286-8ea0-66d90959767c" data-domains="soldenai.com"></script>
 </body>
 </html>
