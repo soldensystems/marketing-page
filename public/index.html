@@ -25,8 +25,8 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="preload" href="/assets/fonts/Fraunces-Variable.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="/assets/fonts/solden-fonts.css?v=20261006p" />
-  <link rel="stylesheet" href="/assets/site.css?v=20261006p" />
+  <link rel="stylesheet" href="/assets/fonts/solden-fonts.css?v=20261006s" />
+  <link rel="stylesheet" href="/assets/site.css?v=20261006s" />
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","name":"Solden","legalName":"Solden Systems Ltd.","url":"https://soldenai.com/","logo":"https://soldenai.com/assets/og-card.png","description":"The full-stack AI finance department for growing companies.","sameAs":["https://x.com/solden_ai","https://linkedin.com/company/soldenai"]}
   </script>
@@ -70,8 +70,8 @@
     <section class="stage" id="stage" aria-label="A Solden close workspace">
       <figure class="frame-wrap frame-fig">
         <div class="frame-well">
-        <div class="frame" data-demo>
-          <div class="frame-body" role="img" aria-label="A Solden close workspace, mid-review: the April 2026 close runs workstream by workstream, one revenue cut-off exception is raised as a case with its evidence, the controller approves it, and the period is attested and locked with 287 evidence links.">
+        <div class="frame" data-demo data-phase="open">
+          <div class="frame-body" role="img" aria-label="A Solden close workspace: the period's evidence is filed into the close register, all sixteen workstreams run with their sources and workpapers, one revenue cut-off is raised as a case, the controller approves it, and the period is attested and locked with 287 evidence links.">
             <aside class="frame-side">
               <div class="side-brand"><img src="/assets/solden-lockup-dark.png" width="73" height="18" alt="" /></div>
               <div class="side-org"><span class="org-av">UK</span><span>UK operations</span></div>
@@ -100,6 +100,12 @@
             </aside>
 
             <div class="frame-main">
+              <div class="opening" data-papers="0" aria-hidden="true">
+                <div class="op-paper op-1"><p class="op-head"><b>Bank statement</b><span>HSBC · 30 Apr</span></p><i class="op-lines"></i><p class="op-fig">1,904,317.20</p><p class="op-l">Closing balance, Operating GBP</p></div>
+                <div class="op-paper op-2"><p class="op-head"><b>Invoice INV-2041</b><span>28 Apr</span></p><i class="op-lines"></i><p class="op-fig">£18,400.00</p><p class="op-l">Contract C-2041 · delivered 1 May</p></div>
+                <div class="op-paper op-3"><p class="op-head"><b>Vendor bill VB-5588</b><span>Received 5 May</span></p><i class="op-lines"></i><p class="op-fig">27,500.00</p><p class="op-l">Recruitment fee</p></div>
+                <div class="op-paper op-4"><p class="op-head"><b>Payroll run</b><span>Gusto · 28 Apr</span></p><i class="op-lines"></i><p class="op-fig">412,880.00</p><p class="op-l">April, by cost centre</p></div>
+              </div>
               <div class="main-head">
                 <div class="main-id">
                   <p class="main-crumb"><img src="/assets/solden-mark-78.png" width="14" height="14" alt="" /><span>UK operations</span><span class="main-sync"><i></i>NetSuite · synced 14:41</span></p>
@@ -129,26 +135,40 @@
 
               <div class="main-grid">
                 <section class="wcard">
-                  <p class="wcard-head">Workstreams <small>7 of 16 shown</small></p>
+                  <p class="wcard-head">Workstreams <small>All sixteen</small></p>
                   <ul class="wlist">
-                    <li class="wrow" data-row="bank" data-owner="team" data-state="queued"><i class="wicon"></i><b class="wname">Bank reconciliations</b><span class="wwho"><span class="who who-h"><i>AK</i>A. Kaur</span><span class="who who-s"><i><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i>Solden</span></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wsub">6 accounts</span><span class="live" data-live></span></li>
-                    <li class="wrow" data-row="ic" data-owner="team" data-state="queued"><i class="wicon"></i><b class="wname">Intercompany</b><span class="wwho"><span class="who who-h"><i>RP</i>R. Patel</span><span class="who who-s"><i><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i>Solden</span></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wsub">UK to NL, UK to US</span><span class="live" data-live></span></li>
-                    <li class="wrow" data-row="acc" data-owner="team" data-state="queued"><i class="wicon"></i><b class="wname">Accruals and prepaids</b><span class="wwho"><span class="who who-h"><i>TO</i>T. Okafor</span><span class="who who-s"><i><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i>Solden</span></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wsub">From templates and contracts</span><span class="live" data-live></span></li>
-                    <li class="wrow" data-row="rev" data-owner="team" data-state="queued"><i class="wicon"></i><b class="wname">Revenue review</b><span class="wwho"><span class="who who-h"><i>LN</i>L. Novak</span><span class="who who-s"><i><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i>Solden</span></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wsub">Cut-off against delivery evidence</span><span class="live" data-live></span></li>
-                    <li class="wrow" data-row="flux" data-owner="team" data-state="queued"><i class="wicon"></i><b class="wname">Flux and variance</b><span class="wwho"><span class="who who-h"><i>SB</i>S. Byrne</span><span class="who who-s"><i><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i>Solden</span></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wsub">Against prior period and budget</span><span class="live" data-live></span></li>
-                    <li class="wrow" data-row="fs" data-owner="team" data-state="queued"><i class="wicon"></i><b class="wname">Financial statements</b><span class="wwho"><span class="who who-h"><i>DF</i>D. Ferreira</span><span class="who who-s"><i><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i>Solden</span></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wsub">Assembled from locked workstreams</span><span class="live" data-live></span></li>
-                    <li class="wrow" data-row="lock" data-state="queued"><i class="wicon"></i><b class="wname">Attest and lock</b><span class="wwho"><span class="who"><i>HW</i>H. Whitmore</span><span class="sig">H. Whitmore</span></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wsub">Gated on completeness</span><span class="live" data-live></span></li>
+                      <li class="wrow" data-row="bank" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">Bank reconciliations</span><span class="wsrc"><img src="/assets/logos/hsbc.svg" alt="" width="13" height="13" /><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">AK</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow" data-row="ic" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">Intercompany</span><span class="wsrc"><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">RP</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow" data-row="bs" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">Balance sheet</span><span class="wsrc"><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /><img src="/assets/logos/microsoftexcel.svg" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">AK</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow" data-row="pay" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">Payments and processors</span><span class="wsrc"><img src="/assets/logos/stripe.svg" alt="" width="13" height="13" /><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">RP</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow" data-row="ar" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">Accounts receivable</span><span class="wsrc"><img src="/assets/logos/salesforce.svg" alt="" width="13" height="13" /><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">TO</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow" data-row="ap" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">Accounts payable</span><span class="wsrc"><img src="/assets/logos/billcom.svg" alt="" width="13" height="13" /><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">TO</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow" data-row="fa" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">Fixed assets</span><span class="wsrc"><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">SB</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow" data-row="pr" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">Payroll</span><span class="wsrc"><img src="/assets/logos/gusto.svg" alt="" width="13" height="13" /><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">DF</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow" data-row="acc" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">Accruals and prepaids</span><span class="wsrc"><img src="/assets/logos/billcom.svg" alt="" width="13" height="13" /><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">TO</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow" data-row="fx" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">FX revaluation</span><span class="wsrc"><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">RP</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow" data-row="tax" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">Tax provisions</span><span class="wsrc"><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">DF</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow" data-row="rev" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">Revenue review</span><span class="wsrc"><img src="/assets/logos/salesforce.svg" alt="" width="13" height="13" /><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">LN</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow" data-row="flux" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">Flux and variance</span><span class="wsrc"><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /><img src="/assets/logos/microsoftexcel.svg" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">SB</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow" data-row="elim" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">Eliminations</span><span class="wsrc"><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">RP</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow" data-row="fs" data-owner="team" data-state="queued"><i class="wicon"></i><span class="wname">Financial statements</span><span class="wsrc"><img src="/assets/logos/netsuite-mark.png" alt="" width="13" height="13" /></span><span class="wwho"><i class="av av-h">DF</i><i class="av av-s"><img src="/assets/solden-mark-78.png" alt="" width="12" height="12" /></i><i class="av av-r">JM</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Workpaper</span></li>
+                      <li class="wrow wrow-lock" data-row="lock" data-state="queued"><i class="wicon"></i><span class="wname">Attest and lock</span><span class="wsrc"></span><span class="wwho"><i class="av av-c">HW</i></span><span class="wright"><span class="st st-queued" data-st>Queued</span><span class="res" data-res></span></span><span class="wpaper">Close pack</span></li>
                   </ul>
                 </section>
 
                 <aside class="frame-panel" data-panel data-view="activity">
                   <div class="pv pv-activity">
+                    <div class="now">
+                      <p class="panel-title">Now running</p>
+                      <p class="now-name" data-now-name>Opening the April close</p>
+                      <ol class="now-lines" data-now-lines></ol>
+                    </div>
                     <p class="panel-title">Needs your call</p>
                     <ul class="calls" data-calls></ul>
                     <span class="panel-k">Activity</span>
                     <ol class="activity" data-activity></ol>
                   </div>
-    <div class="pv pv-case">
+                  <div class="pv pv-case">
                         <p class="panel-title">Needs your call <b class="panel-count">1</b></p>
                     <div class="panel-head">
                       <span class="panel-k">Exception 3 · Revenue review</span>
@@ -166,7 +186,7 @@
                     </div>
                     <div class="panel-actions" data-actions><span class="pbtn pbtn-primary" data-approve>Approve</span><span class="pbtn">Adjust</span><span class="pbtn">Reject with note</span></div>
                   </div>
-    <div class="pv pv-pack">
+                  <div class="pv pv-pack">
                     <div class="panel-head">
                       <span class="panel-k">Close pack · April 2026</span>
                       <p class="h4">Attested and locked</p>
@@ -451,7 +471,7 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20261006p" defer></script>
+  <script src="/assets/site.js?v=20261006s" defer></script>
   <script defer src="https://cloud.umami.is/script.js" data-website-id="99baca41-1d1e-4286-8ea0-66d90959767c"></script>
 </body>
 </html>
