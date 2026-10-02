@@ -672,32 +672,6 @@ main > .hero:last-child {
   font: 500 11px/1 var(--sans);
 }
 
-/* Pause control: plain mono text in the caption row, underlined on hover. */
-.demo-pause {
-  appearance: none;
-  flex: none;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  font: 400 13px/1.5 var(--sans);
-  color: var(--muted);
-  cursor: pointer;
-  text-decoration: none;
-  text-underline-offset: 3px;
-  transition: color 0.15s ease;
-}
-
-.demo-pause:hover {
-  color: var(--ink);
-  text-decoration: underline;
-}
-
-.demo-pause[aria-pressed="true"] {
-  color: var(--ink);
-  text-decoration: underline;
-}
-
 /* Body grid and camera. The height is fixed, so nothing inside ever moves the frame. */
 
 .frame-body {
@@ -2010,15 +1984,6 @@ main > .hero:last-child {
   font-variant-numeric: tabular-nums;
 }
 
-/* Pause control: everything animated inside the frame, and the diagram's write line, hold still. */
-
-.frame[data-paused] *,
-.frame[data-paused] *::before,
-.frame[data-paused] *::after,
-#connects[data-paused] .line,
-#connects[data-paused] .write {
-  animation-play-state: paused;
-}
 
 /* ---------------------------------------------------------------- Signature line, used on the paper illustrations */
 
@@ -4047,7 +4012,4 @@ main > .hero:last-child {
     display: none;
   }
 
-  .demo-pause {
-    display: none;
-  }
 }

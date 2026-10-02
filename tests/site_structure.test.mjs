@@ -181,7 +181,7 @@ test("every data-* hook site.js queries exists in index.html", () => {
     assert.ok(ids(html).has(match[1]), `index.html: no id="${match[1]}" for getElementById`);
   }
   assert.ok(html.includes("data-contact-form") && read("about.html").includes("data-contact-form"), "both forms are hooked");
-  assert.match(html, /<button type="button" class="demo-pause" data-demo-pause aria-pressed="false">Pause<\/button>/, "the demo has a real pause button");
+  assert.doesNotMatch(html, /data-demo-pause/, "the demo has no pause control, by decision");
 });
 
 test("every progress class the demo can emit has a rule in site.css", () => {

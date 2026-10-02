@@ -208,7 +208,6 @@ if (form) {
     clearLogTimers();
     if (resetTimer !== null) { clearTimeout(resetTimer); resetTimer = null; }
     const swap = () => {
-      const refocus = document.activeElement && document.activeElement.matches("[data-demo-pause]");
       frame.innerHTML = snapshot;
       frame.classList.remove("locked");
       phase("open");
@@ -217,8 +216,6 @@ if (form) {
       frame.querySelectorAll("[data-row]").forEach((r) => setStatus(r.dataset.row, "st-queued", "Queued"));
       act("<time>08:00</time><span>NetSuite sync completed, 1,204 records, read-only</span>");
       act("<time>08:01</time><span>Solden opened the April close, 16 workstreams</span>");
-      syncPauseButtons();
-      if (refocus) { const b = q("[data-demo-pause]"); if (b) b.focus(); }
     };
     if (firstReset || reduce) { firstReset = false; swap(); frame.classList.remove("resetting"); return; }
     frame.classList.add("resetting");
@@ -281,8 +278,8 @@ if (form) {
   const LOCKED_STEPS = T.length - 2; // everything up to "Attested and locked"; the last two steps are the reset and a pause.
 
   // Loop control. Two independent pauses: out of view (visibility) and the Pause button (user).
-  let i = 0, hidden = false, userPaused = false, timer = null, stopped = false;
-  const paused = () => hidden || userPaused;
+  let i = 0, hidden = false, timer = null, stopped = false;
+  const paused = () => hidden;
 
   function next() {
     if (stopped || paused() || timer !== null) return;
@@ -307,28 +304,6 @@ if (form) {
   function resume() {
     if (!paused() && timer === null) next();
   }
-
-  // Pause button. It lives in the figure caption below the frame (outside the rebuilt markup), so delegate on the document and re-sync.
-  function syncPauseButtons() {
-    for (const b of document.querySelectorAll("[data-demo-pause]")) {
-      b.setAttribute("aria-pressed", userPaused ? "true" : "false");
-      b.textContent = userPaused ? "Play" : "Pause";
-    }
-  }
-  function setUserPaused(on) {
-    userPaused = on;
-    for (const el of [frame, connects]) {
-      if (!el) continue;
-      if (on) el.dataset.paused = "true"; else delete el.dataset.paused;
-    }
-    syncPauseButtons();
-    if (on) halt(); else resume();
-  }
-  document.addEventListener("click", (event) => {
-    const b = event.target.closest && event.target.closest("[data-demo-pause]");
-    if (!b) return;
-    setUserPaused(!userPaused);
-  });
 
   if ("IntersectionObserver" in window) {
     new IntersectionObserver((entries) => {
