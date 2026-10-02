@@ -10,7 +10,7 @@ Everything the visitor can fetch lives in `public/`. The server serves that dire
 
 | Route | File | Purpose |
 | --- | --- | --- |
-| `/` | `public/index.html` | Hero with the animated close frame, the systems diagram (`#connects`), what you are hiring (`#hiring`), the close end to end (`#close`), the boundary (`#boundary`), access and controls (`#controls`), the buying test (`#test`), invite form (`#invite`) |
+| `/` | `public/index.html` | Hero with the animated close frame, the systems diagram (`#connects`), what you are hiring (`#hiring`), the close end to end (`#close`), access and controls (`#controls`), the buying test (`#test`), invite form (`#invite`) |
 | `/how-it-works` | `public/how-it-works.html` | What Solden takes on (`#work`), the pack (`#pack`), who decides (`#who-decides`), the controls register (`#controls`, also `#security`), what happens when it is wrong (`#when-wrong`) |
 | `/about` | `public/about.html` | Why Solden (`#why`), the order of functions (`#order`), invite form (`#contact`) |
 | `/privacy`, `/terms` | `public/privacy.html`, `public/terms.html` | Legal |

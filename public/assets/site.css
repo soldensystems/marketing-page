@@ -223,6 +223,7 @@ h2 + .lede {
 
 .centre .lede + .stack,
 .centre .lede + .compare,
+.centre h2 + .compare,
 .centre .lede + .test-cells,
 .centre .lede + .ws-reg,
 .centre .lede + .stages,
@@ -1898,6 +1899,10 @@ main > .hero:last-child {
   line-height: 1.12;
   letter-spacing: -0.012em;
   margin-bottom: 18px;
+}
+
+.feature h3:last-child {
+  margin-bottom: 0;
 }
 
 .feature .lede {
