@@ -62,12 +62,17 @@ for (const rule of routes.redirects || []) {
 }
 
 // cleanUrls + trailingSlash:false. /x.html -> /x, /index.html -> /, /x/ -> /x.
+// Every redirect stays on this site: leading slashes and backslashes collapse to one "/", so a path
+// such as //evil.example/ can never become a protocol-relative Location that leaves soldenai.com.
+function localPath(p) {
+  return "/" + String(p).replace(/^[\\/]+/, "");
+}
 app.get(/^\/(.*)\.html$/, (req, res) => {
-  const clean = req.params[0] === "index" ? "/" : `/${req.params[0]}`;
+  const clean = req.params[0] === "index" ? "/" : localPath(req.params[0]);
   res.redirect(308, clean + queryString(req));
 });
 app.get(/^\/(.+)\/$/, (req, res) => {
-  res.redirect(308, `/${req.params[0]}` + queryString(req));
+  res.redirect(308, localPath(req.params[0]) + queryString(req));
 });
 
 app.use("/api", express.json({ limit: "32kb" }));
