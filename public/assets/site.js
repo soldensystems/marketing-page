@@ -163,10 +163,9 @@ if (form) {
     setTimeout(() => r.classList.remove("handoff"), 400);
   }
   function key() {
-    q("[data-k-done]").textContent = counts.done; q("[data-k-review]").textContent = counts.review; q("[data-k-call]").textContent = counts.call;
-    q("[data-k-ev]").textContent = counts.ev; q("[data-k-time]").textContent = counts.time;
+    const set = (sel, v) => { const el = q(sel); if (el) el.textContent = v; };
+    set("[data-k-done]", counts.done); set("[data-k-ev]", counts.ev); set("[data-k-time]", counts.time);
     q("[data-bar]").className = "progress-bar " + `p-${counts.done}-${counts.review}-${counts.call}`;
-    q("[data-spark]").setAttribute("data-ev", counts.ev);
     const exc = q("[data-exc]"); exc.hidden = counts.call === 0; exc.textContent = counts.call;
   }
   function clearLogTimers() {
