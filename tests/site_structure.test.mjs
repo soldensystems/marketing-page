@@ -158,7 +158,7 @@ test("every invite form carries the required fields, the honeypot, the timer and
     assert.match(form, /<div class="field field-hp" aria-hidden="true"><label for="website">[^<]+<\/label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" \/>/, `${page}: honeypot, hidden from assistive technology`);
     assert.match(form, /<input type="hidden" name="t" value="" \/>/, `${page}: fill-time field`);
     assert.match(form, /<div class="form-status" data-form-status role="status" aria-live="polite"><\/div>/, `${page}: status region, rendered empty so it is announced`);
-    assert.match(form, new RegExp(`<button class="btn btn-light" type="submit" data-cta="contact-submit">${CTA}</button>`), `${page}: submit button`);
+    assert.match(form, new RegExp(`<button class="btn btn-light" type="submit" data-cta="contact-submit" disabled>${CTA}</button>`), `${page}: submit button`);
     for (const id of ["name", "email", "company", "message"]) {
       assert.match(form, new RegExp(`<label for="${id}">`), `${page}: label for ${id}`);
     }

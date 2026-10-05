@@ -1,493 +1,301 @@
 import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
 import test from "node:test";
-import { createContactHandler, parseMaxPerHour } from "../lib/contact.js";
+import { createContactHandler, contactConfiguration, parseMaxPerHour } from "../lib/contact.js";
 import { sslOptionsFromEnv } from "../lib/store.js";
 
-function fakeRequest({ body, headers = {}, method = "POST", ip = "203.0.113.5" }) {
-  return {
-    method,
-    headers: { "content-type": "application/json", accept: "application/json", "x-forwarded-for": ip, ...headers },
-    body,
-    socket: { remoteAddress: ip },
-  };
-}
-
-function fakeResponse() {
-  const res = {
-    statusCode: 200,
-    headers: {},
-    body: "",
-    setHeader(key, value) {
-      this.headers[key.toLowerCase()] = value;
-    },
-    end(chunk) {
-      this.body = chunk || "";
-      this.ended = true;
-    },
-  };
-  return res;
-}
-
-const env = { RESEND_API_KEY: "re_test", LEAD_NOTIFY_TO: "founders@example.com", CONTACT_MAX_PER_IP_PER_HOUR: "2" };
-const valid = { name: "Ada Lovelace", email: "ada@example.com", company: "Analytical Engines Ltd", message: "We run NetSuite with four entities.", t: "8500" };
+const env = { RESEND_API_KEY: "re_test", LEAD_NOTIFY_TO: "founders@example.com", TURNSTILE_SITE_KEY: "test-site", TURNSTILE_SECRET_KEY: "test-secret" };
+const valid = { name: "Ada Lovelace", email: "ada@example.com", company: "Analytical Engines Ltd", message: "We run NetSuite with four entities.", t: "8500", "cf-turnstile-response": "test-token" };
 const formHeaders = { "content-type": "application/x-www-form-urlencoded", accept: "text/html" };
-
-function okFetch(calls) {
-  return async (url, init) => {
-    calls.push({ url, init: JSON.parse(init.body) });
-    return { ok: true, status: 200 };
+function request(body = valid, { headers = {}, ip = "203.0.113.5", ...rest } = {}) {
+  return { method: "POST", headers: { "content-type": "application/json", accept: "application/json", origin: "https://soldenai.com", host: "soldenai.com", ...headers }, body, socket: { remoteAddress: ip }, ...rest };
+}
+function response() {
+  return { statusCode: 200, headers: {}, body: "", setHeader(key, value) { this.headers[key.toLowerCase()] = value; }, end(chunk) { this.body = chunk || ""; } };
+}
+async function submit(handle, body = valid, options = {}) {
+  const res = response(); await handle(request(body, options), res); return res;
+}
+// Purpose-built contract fake, not a substitute for the real PostgreSQL integration suite.
+function fakeStore() {
+  const records = new Map();
+  const claims = [];
+  return {
+    records, claims,
+    async claimSubmission(args) {
+      claims.push(args);
+      let row = records.get(args.dedupKey);
+      if (row?.busy) return { status: "busy" };
+      if (row?.teamSent && (!row.confirmation || row.confirmationSent)) return { status: "complete" };
+      if (!row) {
+        const messages = args.buildMessages(records.size + 1);
+        row = { id: String(records.size + 1), leaseToken: "lease", ...messages, teamSent: false, confirmationSent: false };
+        records.set(args.dedupKey, row);
+      }
+      row.busy = true;
+      return { ...row, status: "claimed" };
+    },
+    async authorizeConfirmation(_id, _leaseToken, limit) { return limit > 0; },
+    async markSent(id, leaseToken, kind) { const row = [...records.values()].find((r) => r.id === id); row[`${kind}Sent`] = true; return true; },
+    async finishSubmission(id) { [...records.values()].find((r) => r.id === id).busy = false; return true; },
   };
 }
-
-function quiet(fn) {
-  const { error, warn } = console;
-  console.error = () => {};
-  console.warn = () => {};
-  return Promise.resolve()
-    .then(fn)
-    .finally(() => {
-      console.error = error;
-      console.warn = warn;
-    });
-}
-
-test("valid submission emails the founder inbox with reply-to set", async () => {
+function harness(options = {}) {
   const calls = [];
-  const handle = createContactHandler({ env, fetch: okFetch(calls) });
-  const res = fakeResponse();
-  await handle(fakeRequest({ body: valid }), res);
-  assert.equal(res.statusCode, 200);
-  assert.equal(JSON.parse(res.body).ok, true);
-  assert.equal(calls.length, 2, "team note, then the prospect confirmation");
-  assert.equal(calls[0].url, "https://api.resend.com/emails");
-  assert.deepEqual(calls[0].init.to, ["founders@example.com"]);
-  assert.equal(calls[0].init.reply_to, "ada@example.com");
-  assert.match(calls[0].init.text, /four entities/);
-  assert.match(calls[0].init.html, /Analytical Engines Ltd/);
-  assert.match(calls[0].init.html, /<!doctype html>/i);
-  assert.deepEqual(calls[1].init.to, ["ada@example.com"]);
-  assert.equal(calls[1].init.reply_to, "founders@example.com");
-  assert.equal(calls[1].init.subject, "Your invite request to Solden");
-  assert.match(calls[1].init.html, /Thanks, Ada\./);
-  assert.match(calls[1].init.text, /two business days/);
-});
-
-test("a failed prospect confirmation does not fail the request", async () => {
-  const calls = [];
+  const store = options.store ?? fakeStore();
   const fetch = async (url, init) => {
-    calls.push({ url, init: JSON.parse(init.body) });
-    return { ok: calls.length === 1, status: calls.length === 1 ? 200 : 500 };
+    const call = { url, ...init, payload: JSON.parse(init.body) }; calls.push(call);
+    if (url.endsWith("/siteverify")) return { ok: true, json: async () => ({ success: true, hostname: "soldenai.com", action: "contact" }) };
+    assert.equal(url, "https://api.resend.com/emails", "no unexpected network destination");
+    return { ok: true };
   };
-  const handle = createContactHandler({ env, fetch });
-  const res = fakeResponse();
-  await quiet(() => handle(fakeRequest({ body: valid }), res));
+  const handle = createContactHandler({ env, fetch, store, ...options });
+  return { calls, store, handle, emails: () => calls.filter((c) => c.url.endsWith("/emails")) };
+}
+
+test("verified submission reserves durable admission before sending both keyed emails", async () => {
+  const h = harness(); const res = await submit(h.handle);
   assert.equal(res.statusCode, 200);
-  assert.equal(calls.length, 2);
+  assert.equal(h.calls[0].url, "https://challenges.cloudflare.com/turnstile/v0/siteverify");
+  assert.equal(h.calls[0].payload.secret, "test-secret");
+  assert.equal(h.store.claims.length, 1);
+  const [team, confirmation] = h.emails();
+  assert.deepEqual(team.payload.to, ["founders@example.com"]);
+  assert.equal(team.payload.reply_to, "ada@example.com");
+  assert.match(team.payload.text, /four entities/);
+  assert.equal(team.payload.subject, "Invite request: Analytical Engines Ltd");
+  assert.match(team.headers["Idempotency-Key"], /^contact-team\//);
+  assert.match(confirmation.headers["Idempotency-Key"], /^contact-confirmation\//);
+  assert.notEqual(team.headers["Idempotency-Key"], confirmation.headers["Idempotency-Key"]);
+  assert.deepEqual(confirmation.payload.to, ["ada@example.com"]);
+  assert.match(confirmation.payload.text, /Thanks, Ada\./);
 });
 
-test("email subject is an invite request and never uses retired language", async () => {
-  const calls = [];
-  const handle = createContactHandler({ env, fetch: okFetch(calls) });
-  await handle(fakeRequest({ body: valid }), fakeResponse());
-  assert.equal(calls[0].init.subject, "Invite request: Analytical Engines Ltd");
-  assert.doesNotMatch(calls[0].init.subject, /design[- ]partner/i);
-  assert.doesNotMatch(calls[0].init.text, /design[- ]partner/i);
-  assert.doesNotMatch(calls[0].init.html + calls[1].init.html, /design[- ]partner|founder inbox/i);
-});
-
-test("missing fields return 400 and send nothing", async () => {
-  const calls = [];
-  const handle = createContactHandler({ env, fetch: okFetch(calls) });
-  const res = fakeResponse();
-  await handle(fakeRequest({ body: { name: "Ada" } }), res);
-  assert.equal(res.statusCode, 400);
-  assert.match(JSON.parse(res.body).message, /Please fill in: Work email, Company, How your close runs today\./);
-  assert.equal(calls.length, 0);
-});
-
-test("invalid email returns 400", async () => {
-  const calls = [];
-  const handle = createContactHandler({ env, fetch: okFetch(calls) });
-  const res = fakeResponse();
-  await handle(fakeRequest({ body: { ...valid, email: "not-an-email" } }), res);
-  assert.equal(res.statusCode, 400);
-  assert.equal(calls.length, 0);
-});
-
-test("honeypot submissions are swallowed silently", async () => {
-  const calls = [];
-  const handle = createContactHandler({ env, fetch: okFetch(calls) });
-  const res = fakeResponse();
-  await handle(fakeRequest({ body: { ...valid, website: "http://spam.example" } }), res);
-  assert.equal(res.statusCode, 200);
-  assert.equal(JSON.parse(res.body).ok, true);
-  assert.equal(calls.length, 0);
-});
-
-test("bot timing: t is elapsed milliseconds, only a fast finite value is rejected", async () => {
-  const calls = [];
-  const handle = createContactHandler({ env: { ...env, CONTACT_MAX_PER_IP_PER_HOUR: "50" }, fetch: okFetch(calls) });
-
-  // Too fast: swallowed with a fake success, no email.
-  let res = fakeResponse();
-  await handle(fakeRequest({ body: { ...valid, t: "500" } }), res);
-  assert.equal(res.statusCode, 200);
-  assert.equal(calls.length, 0);
-
-  // Legitimate elapsed time sends the email.
-  res = fakeResponse();
-  await handle(fakeRequest({ body: { ...valid, t: "8500" } }), res);
-  assert.equal(res.statusCode, 200);
-  assert.equal(calls.length, 2);
-
-  // A body without t at all did not come from either form: swallowed, no email.
-  res = fakeResponse();
-  const { t: _omitted, ...withoutT } = valid;
-  await handle(fakeRequest({ body: withoutT }), res);
-  assert.equal(res.statusCode, 200);
-  assert.equal(calls.length, 2);
-
-  // A legitimate send again, so the counts below carry on in pairs.
-  res = fakeResponse();
-  await handle(fakeRequest({ body: valid }), res);
-  assert.equal(calls.length, 4);
-
-  // Empty and non-numeric t pass through as well.
-  res = fakeResponse();
-  await handle(fakeRequest({ body: { ...valid, t: "" } }), res);
-  assert.equal(calls.length, 6);
-  res = fakeResponse();
-  await handle(fakeRequest({ body: { ...valid, t: "abc" } }), res);
-  assert.equal(calls.length, 8);
-
-  // A negative value is not in [0, MIN_FILL_MS), so it passes too.
-  res = fakeResponse();
-  await handle(fakeRequest({ body: { ...valid, t: "-4" } }), res);
-  assert.equal(calls.length, 10);
-});
-
-test("per-IP rate limit applies after the configured number of sends", async () => {
-  const calls = [];
-  const handle = createContactHandler({ env, fetch: okFetch(calls) });
-  for (let i = 0; i < 2; i += 1) {
-    const res = fakeResponse();
-    await handle(fakeRequest({ body: valid }), res);
-    assert.equal(res.statusCode, 200);
-  }
-  const res = fakeResponse();
-  await handle(fakeRequest({ body: valid }), res);
-  assert.equal(res.statusCode, 429);
-  assert.equal(calls.length, 4);
-});
-
-test("rate limit window slides: hits older than an hour are swept", async () => {
-  const calls = [];
-  let clock = 1_000_000;
-  const handle = createContactHandler({ env, fetch: okFetch(calls), now: () => clock });
-  for (let i = 0; i < 2; i += 1) await handle(fakeRequest({ body: valid }), fakeResponse());
-  let res = fakeResponse();
-  await handle(fakeRequest({ body: valid }), res);
-  assert.equal(res.statusCode, 429);
-  clock += 60 * 60 * 1000 + 1;
-  res = fakeResponse();
-  await handle(fakeRequest({ body: valid }), res);
-  assert.equal(res.statusCode, 200);
-  assert.equal(calls.length, 6);
-});
-
-test("rate limit key prefers req.ip, then x-real-ip, over x-forwarded-for", async () => {
-  const calls = [];
-  const handle = createContactHandler({ env: { ...env, CONTACT_MAX_PER_IP_PER_HOUR: "1" }, fetch: okFetch(calls) });
-  // Same real client, rotating a spoofed x-forwarded-for each time.
-  await handle(fakeRequest({ body: valid, headers: { "x-real-ip": "198.51.100.7", "x-forwarded-for": "1.1.1.1" } }), fakeResponse());
-  const res = fakeResponse();
-  await handle(fakeRequest({ body: valid, headers: { "x-real-ip": "198.51.100.7", "x-forwarded-for": "2.2.2.2" } }), res);
-  assert.equal(res.statusCode, 429);
-
-  const viaExpress = createContactHandler({ env: { ...env, CONTACT_MAX_PER_IP_PER_HOUR: "1" }, fetch: okFetch(calls) });
-  await viaExpress({ ...fakeRequest({ body: valid, ip: "3.3.3.3" }), ip: "10.0.0.9" }, fakeResponse());
-  const second = fakeResponse();
-  await viaExpress({ ...fakeRequest({ body: valid, ip: "4.4.4.4" }), ip: "10.0.0.9" }, second);
-  assert.equal(second.statusCode, 429);
-});
-
-test("IP hash is an HMAC when IP_HASH_SECRET is set", async () => {
-  const seen = [];
-  const store = {
-    async countRecent() {
-      return 0;
-    },
-    async insertLead(lead) {
-      seen.push(lead.ip_hash);
-      return 1;
-    },
-  };
-  const plain = createContactHandler({ env, fetch: okFetch([]), store });
-  const keyed = createContactHandler({ env: { ...env, IP_HASH_SECRET: "s3cret" }, fetch: okFetch([]), store });
-  await plain(fakeRequest({ body: valid }), fakeResponse());
-  await keyed(fakeRequest({ body: valid }), fakeResponse());
-  assert.notEqual(seen[0], seen[1]);
-  assert.equal(seen[1], createHmac("sha256", "s3cret").update("203.0.113.5").digest("hex").slice(0, 32));
-});
-
-test("CONTACT_MAX_PER_IP_PER_HOUR falls back to 5 unless it is a positive number", async () => {
-  await quiet(() => {
-    assert.equal(parseMaxPerHour(undefined), 5);
-    assert.equal(parseMaxPerHour(""), 5);
-    assert.equal(parseMaxPerHour("abc"), 5);
-    assert.equal(parseMaxPerHour("0"), 5);
-    assert.equal(parseMaxPerHour("-3"), 5);
-    assert.equal(parseMaxPerHour("Infinity"), 5);
-    assert.equal(parseMaxPerHour("7"), 7);
+for (const token of [undefined, "", " ", null, [], {}, "x".repeat(2049)]) {
+  test(`missing or malformed token rejected before persistence: ${typeof token}/${String(token).length}`, async () => {
+    const h = harness(); const res = await submit(h.handle, { ...valid, "cf-turnstile-response": token });
+    assert.equal(res.statusCode, 403); assert.equal(h.calls.length, 0); assert.equal(h.store.claims.length, 0);
   });
-  const calls = [];
-  const handle = await quiet(() => createContactHandler({ env: { ...env, CONTACT_MAX_PER_IP_PER_HOUR: "abc" }, fetch: okFetch(calls) }));
-  for (let i = 0; i < 5; i += 1) {
-    const res = fakeResponse();
-    await handle(fakeRequest({ body: valid }), res);
-    assert.equal(res.statusCode, 200);
-  }
-  const res = fakeResponse();
-  await handle(fakeRequest({ body: valid }), res);
-  assert.equal(res.statusCode, 429);
+}
+for (const validation of [
+  { success: false, "error-codes": ["invalid-input-response"] },
+  { success: false, "error-codes": ["timeout-or-duplicate"] },
+  { success: true, hostname: "evil.example", action: "contact" },
+  { success: true, hostname: "soldenai.com", action: "login" },
+  { success: "true", hostname: "soldenai.com", action: "contact" }, null,
+]) {
+  test(`invalid, expired, replayed or mismatched challenge fails closed: ${JSON.stringify(validation)}`, async () => {
+    const h = harness({ fetch: async () => ({ ok: true, json: async () => validation }) });
+    assert.equal((await submit(h.handle)).statusCode, 403); assert.equal(h.store.claims.length, 0);
+  });
+}
+for (const failure of [
+  async () => { throw new Error("offline"); },
+  async () => ({ ok: false, status: 503 }),
+  async () => ({ ok: true, json: async () => { throw new SyntaxError("bad JSON"); } }),
+  async () => new Promise(() => {}),
+  async () => ({ ok: true, json: () => new Promise(() => {}) }),
+]) {
+  test("verification transport, status, malformed response and hung body failures are bounded", async () => {
+    const h = harness({ fetch: failure, verificationTimeoutMs: 10 }); const start = Date.now();
+    assert.equal((await submit(h.handle)).statusCode, 503); assert.equal(h.store.claims.length, 0); assert.ok(Date.now() - start < 1000);
+  });
+}
+
+test("a token cannot be replayed even on an otherwise duplicate request", async () => {
+  const h = harness(); let used = false;
+  const handle = createContactHandler({ env, store: h.store, fetch: async (url, init) => {
+    if (url.endsWith("/siteverify")) { const success = !used; used = true; return { ok: true, json: async () => ({ success, hostname: "soldenai.com", action: "contact" }) }; }
+    h.calls.push({ url, payload: JSON.parse(init.body) }); return { ok: true };
+  } });
+  assert.equal((await submit(handle)).statusCode, 200);
+  assert.equal((await submit(handle)).statusCode, 403);
+  assert.equal(h.store.claims.length, 1); assert.equal(h.calls.length, 2);
 });
 
-test("missing configuration returns 503 instead of pretending", async () => {
-  const handle = createContactHandler({ env: {}, fetch: okFetch([]) });
-  const res = fakeResponse();
-  await quiet(() => handle(fakeRequest({ body: valid }), res));
-  assert.equal(res.statusCode, 503);
+for (const origin of [undefined, "", "null", "https://evil.example", "http://soldenai.com", "https://soldenai.com.evil.example"]) {
+  test(`origin is exact and required: ${origin}`, async () => {
+    const h = harness(); assert.equal((await submit(h.handle, valid, { headers: { origin, "x-forwarded-host": "evil.example", host: "evil.example" } })).statusCode, 403);
+    assert.equal(h.calls.length, 0);
+  });
+}
+for (const t of [undefined, "", "abc", -1, 2999, Infinity, null, [], {}]) {
+  test(`untrusted/missing timer has no bypass: ${String(t)}`, async () => {
+    const h = harness(); assert.equal((await submit(h.handle, { ...valid, t })).statusCode, 400); assert.equal(h.calls.length, 0);
+  });
+}
+test("honeypot is silent and validation errors send nothing", async () => {
+  const h = harness(); assert.equal((await submit(h.handle, { ...valid, website: "spam" })).statusCode, 200);
+  assert.equal((await submit(h.handle, { name: "Ada" })).statusCode, 400);
+  assert.equal((await submit(h.handle, { ...valid, email: "bad" })).statusCode, 400); assert.equal(h.calls.length, 0);
 });
 
-test("email provider failure returns 502", async () => {
-  const handle = createContactHandler({ env, fetch: async () => ({ ok: false, status: 500 }) });
-  const res = fakeResponse();
-  await quiet(() => handle(fakeRequest({ body: valid }), res));
-  assert.equal(res.statusCode, 502);
+test("attempt slots are reserved before concurrent verification; raw forwarding headers cannot evade", async () => {
+  const h = harness({ env: { ...env, CONTACT_MAX_ATTEMPTS_PER_IP_PER_HOUR: "2" } });
+  const results = await Promise.all(Array.from({ length: 8 }, (_, i) => submit(h.handle, { ...valid, message: String(i) }, { headers: { "x-forwarded-for": `1.1.1.${i}`, "x-real-ip": `2.2.2.${i}` } })));
+  assert.equal(results.filter((r) => r.statusCode === 429).length, 6);
+  assert.equal(h.calls.filter((c) => c.url.endsWith("/siteverify")).length, 2);
+});
+test("attempt window expires, and trusted Express req.ip wins over the connection", async () => {
+  let clock = 1000;
+  const h = harness({ now: () => clock, env: { ...env, CONTACT_MAX_ATTEMPTS_PER_IP_PER_HOUR: "1" } });
+  assert.equal((await submit(h.handle)).statusCode, 200);
+  assert.equal((await submit(h.handle)).statusCode, 429);
+  assert.equal((await submit(h.handle, { ...valid, message: "other" }, { ip: "1.2.3.4" })).statusCode, 200);
+  clock += 3_600_001;
+  assert.equal((await submit(h.handle)).statusCode, 200);
+});
+test("IP HMAC, normalized content and quotas reach atomic admission", async () => {
+  const h = harness({ env: { ...env, IP_HASH_SECRET: "test-only", CONTACT_MAX_PER_IP_PER_HOUR: "2", CONTACT_MAX_PER_RECIPIENT_PER_HOUR: "1", CONTACT_MAX_CONFIRMATIONS_PER_HOUR: "4" } });
+  await submit(h.handle, { ...valid, email: " ADA@EXAMPLE.COM ", name: " Ada   Lovelace ", message: "A\r\n\r\n\r\nB   C" });
+  const args = h.store.claims[0];
+  assert.equal(args.lead.ip_hash, createHmac("sha256", "test-only").update("203.0.113.5").digest("hex").slice(0, 32));
+  assert.equal(args.lead.email, "ada@example.com"); assert.equal(args.lead.message, "A\n\nB C");
+  assert.deepEqual(args.limits, { ipPerHour: 2, recipientPerHour: 1, confirmationsPerHour: 4 });
 });
 
-test("non-object JSON bodies are treated as empty and return 400, not 500", async () => {
-  const calls = [];
-  const handle = createContactHandler({ env, fetch: okFetch(calls) });
-  for (const raw of ["null", '"a string"', "123", "[1,2]", "true"]) {
-    const res = fakeResponse();
-    await handle(fakeRequest({ body: raw }), res);
-    assert.equal(res.statusCode, 400, `raw body ${raw}`);
-    assert.match(JSON.parse(res.body).message, /Please fill in/);
-  }
-  for (const parsed of [[], [valid], 42, true]) {
-    const res = fakeResponse();
-    await handle(fakeRequest({ body: parsed }), res);
-    assert.equal(res.statusCode, 400, `pre-parsed body ${JSON.stringify(parsed)}`);
-  }
-  assert.equal(calls.length, 0);
+test("shared store deduplicates concurrent handlers, then returns completed success", async () => {
+  const h = harness(); const second = harness({ store: h.store });
+  const results = await Promise.all([submit(h.handle), submit(second.handle)]);
+  assert.deepEqual(results.map((r) => r.statusCode).sort(), [200, 409]);
+  assert.equal(h.emails().length + second.emails().length, 2);
+  assert.equal((await submit(second.handle, { ...valid, email: "ADA@EXAMPLE.COM", source: "about" }, { ip: "198.51.100.5" })).statusCode, 200);
+  assert.equal(h.emails().length + second.emails().length, 2);
 });
+for (const status of ["limited", "expired"]) {
+  test(`durable admission ${status} sends no email`, async () => {
+    const h = harness({ store: { claimSubmission: async () => ({ status }) } });
+    assert.equal((await submit(h.handle)).statusCode, status === "limited" ? 429 : 503); assert.equal(h.emails().length, 0);
+  });
+}
+for (const options of [
+  { getStore: async () => null }, { getStore: async () => { throw new Error("database offline"); } },
+  { getStore: () => new Promise(() => {}) },
+  { store: { claimSubmission: async () => { throw new Error("transaction failed"); } } },
+  { store: { claimSubmission: () => new Promise(() => {}) } },
+]) {
+  test("missing, failed or hanging durable store blocks email", async () => {
+    const h = harness({ ...options, storeTimeoutMs: 10 });
+    assert.equal((await submit(h.handle)).statusCode, 503); assert.equal(h.emails().length, 0);
+  });
+}
 
-test("malformed JSON returns 400", async () => {
-  const handle = createContactHandler({ env, fetch: okFetch([]) });
-  const res = fakeResponse();
-  await handle(fakeRequest({ body: "{not json" }), res);
-  assert.equal(res.statusCode, 400);
-  assert.match(JSON.parse(res.body).message, /Could not read the form/);
-});
-
-test("plain form posts redirect to /thanks and are stored when a store is present", async () => {
-  const inserted = [];
-  const store = {
-    async countRecent() {
-      return 0;
-    },
-    async insertLead(lead) {
-      inserted.push(lead);
-      return 42;
-    },
+test("delivery failure retries the same immutable payload and key, even after config/source changes", async () => {
+  const h = harness(); const calls = []; let failTeam = true;
+  const fetch = async (url, init) => {
+    if (url.endsWith("/siteverify")) return { ok: true, json: async () => ({ success: true, hostname: "soldenai.com", action: "contact" }) };
+    calls.push({ body: init.body, key: init.headers["Idempotency-Key"] });
+    if (failTeam) { failTeam = false; return { ok: false }; } return { ok: true };
   };
-  const calls = [];
-  const handle = createContactHandler({ env, fetch: okFetch(calls), store });
-  const res = fakeResponse();
-  const form = new URLSearchParams(valid).toString();
-  await handle(fakeRequest({ body: form, headers: formHeaders }), res);
-  assert.equal(res.statusCode, 303);
-  assert.equal(res.headers.location, "/thanks");
-  assert.equal(inserted.length, 1);
-  assert.equal(inserted[0].email, "ada@example.com");
-  assert.match(calls[0].init.text, /Lead: 42/);
+  let handle = createContactHandler({ env, store: h.store, fetch });
+  assert.equal((await submit(handle)).statusCode, 502);
+  handle = createContactHandler({ env: { ...env, LEAD_NOTIFY_TO: "new@example.com" }, store: h.store, fetch });
+  assert.equal((await submit(handle, { ...valid, source: "how-it-works" })).statusCode, 200);
+  assert.deepEqual(calls[0], calls[1]); assert.equal(calls.length, 3);
 });
-
-test("plain form posts that fail redirect back to the form with a reason", async () => {
-  const form = new URLSearchParams(valid).toString();
-
-  let handle = createContactHandler({ env: {}, fetch: okFetch([]) });
-  let res = fakeResponse();
-  await quiet(() => handle(fakeRequest({ body: form, headers: formHeaders }), res));
-  assert.equal(res.statusCode, 303);
-  assert.equal(res.headers.location, "/about?sent=0&why=config#contact");
-
-  handle = createContactHandler({ env, fetch: okFetch([]) });
-  res = fakeResponse();
-  await handle(fakeRequest({ body: "name=Ada", headers: { ...formHeaders, referer: "https://soldenai.com/about" } }), res);
-  assert.equal(res.statusCode, 303);
-  assert.equal(res.headers.location, "/about?sent=0&why=invalid#contact");
-
-  res = fakeResponse();
-  await handle(fakeRequest({ body: "name=Ada", headers: { ...formHeaders, referer: "https://soldenai.com/" } }), res);
-  assert.equal(res.headers.location, "/?sent=0&why=invalid#invite");
-
-  // A foreign or odd Referer never becomes an off-site redirect.
-  res = fakeResponse();
-  await handle(fakeRequest({ body: "name=Ada", headers: { ...formHeaders, referer: "https://evil.example//evil.example/x" } }), res);
-  assert.equal(res.headers.location, "/about?sent=0&why=invalid#contact");
-
-  handle = createContactHandler({ env, fetch: async () => ({ ok: false, status: 500 }) });
-  res = fakeResponse();
-  await quiet(() => handle(fakeRequest({ body: form, headers: formHeaders }), res));
-  assert.equal(res.headers.location, "/about?sent=0&why=delivery#contact");
-
-  handle = createContactHandler({ env: { ...env, CONTACT_MAX_PER_IP_PER_HOUR: "1" }, fetch: okFetch([]) });
-  await handle(fakeRequest({ body: form, headers: formHeaders }), fakeResponse());
-  res = fakeResponse();
-  await handle(fakeRequest({ body: form, headers: formHeaders }), res);
-  assert.equal(res.headers.location, "/about?sent=0&why=limit#contact");
-});
-
-test("a hanging or failing store never blocks the email", async () => {
-  const calls = [];
-  const hanging = {
-    countRecent: () => new Promise(() => {}),
-    insertLead: () => new Promise(() => {}),
+test("ambiguous Resend timeout is bounded and replay keeps its idempotency key", async () => {
+  const h = harness(); const calls = []; let hang = true;
+  const fetch = async (url, init) => {
+    if (url.endsWith("/siteverify")) return { ok: true, json: async () => ({ success: true, hostname: "soldenai.com", action: "contact" }) };
+    calls.push(init);
+    if (hang) { hang = false; return new Promise(() => {}); } return { ok: true };
   };
-  let handle = createContactHandler({ env, fetch: okFetch(calls), store: hanging, storeTimeoutMs: 20 });
-  let res = fakeResponse();
-  const startedAt = Date.now();
-  await quiet(() => handle(fakeRequest({ body: valid }), res));
-  assert.equal(res.statusCode, 200);
-  assert.equal(calls.length, 2);
-  assert.doesNotMatch(calls[0].init.text, /Lead:/);
-  assert.ok(Date.now() - startedAt < 1000);
-
-  const failing = {
-    async countRecent() {
-      throw new Error("connection refused");
-    },
-    async insertLead() {
-      throw new Error("connection refused");
-    },
+  const handle = createContactHandler({ env, store: h.store, fetch, deliveryTimeoutMs: 10 });
+  assert.equal((await submit(handle)).statusCode, 502);
+  assert.equal((await submit(handle)).statusCode, 200);
+  assert.equal(calls[0].headers["Idempotency-Key"], calls[1].headers["Idempotency-Key"]);
+});
+test("failed receipt persistence never proceeds to confirmation and retries the same team payload", async () => {
+  const h = harness(); let fail = true; const mark = h.store.markSent;
+  h.store.markSent = async (...args) => { if (fail) { fail = false; throw new Error("database lost"); } return mark(...args); };
+  assert.equal((await submit(h.handle)).statusCode, 502); assert.equal(h.emails().length, 1);
+  assert.equal((await submit(h.handle)).statusCode, 200);
+  assert.deepEqual(h.emails()[0].payload, h.emails()[1].payload);
+  assert.equal(h.emails()[0].headers["Idempotency-Key"], h.emails()[1].headers["Idempotency-Key"]);
+});
+test("lost lease stops sending; failed release cannot erase receipt flags", async () => {
+  const h = harness(); h.store.markSent = async () => false;
+  assert.equal((await submit(h.handle)).statusCode, 502); assert.equal(h.emails().length, 1);
+  const other = harness(); other.store.finishSubmission = async () => { throw new Error("offline"); };
+  assert.equal((await submit(other.handle)).statusCode, 200);
+  assert.equal([...other.store.records.values()][0].teamSent, true);
+});
+test("confirmation failure still acknowledges team delivery, retry sends only the confirmation", async () => {
+  const h = harness(); const calls = []; let fail = true;
+  const fetch = async (url, init) => {
+    if (url.endsWith("/siteverify")) return { ok: true, json: async () => ({ success: true, hostname: "soldenai.com", action: "contact" }) };
+    calls.push(init); if (init.headers["Idempotency-Key"].includes("confirmation") && fail) { fail = false; return { ok: false }; } return { ok: true };
   };
-  handle = createContactHandler({ env, fetch: okFetch(calls), store: failing });
-  res = fakeResponse();
-  await quiet(() => handle(fakeRequest({ body: valid }), res));
-  assert.equal(res.statusCode, 200);
-  assert.equal(calls.length, 4);
-
-  // A store factory that hangs on connect is raced too.
-  handle = createContactHandler({ env, fetch: okFetch(calls), getStore: () => new Promise(() => {}), storeTimeoutMs: 20 });
-  res = fakeResponse();
-  await quiet(() => handle(fakeRequest({ body: valid }), res));
-  assert.equal(res.statusCode, 200);
-  assert.equal(calls.length, 6);
+  const handle = createContactHandler({ env, store: h.store, fetch });
+  assert.equal((await submit(handle)).statusCode, 200); assert.equal((await submit(handle)).statusCode, 200);
+  assert.equal(calls.length, 3); assert.equal(calls[1].body, calls[2].body); assert.deepEqual(calls[1].headers, calls[2].headers);
 });
-
-test("the store's recent count enforces the limit when it answers in time", async () => {
-  const store = {
-    async countRecent() {
-      return 99;
-    },
-    async insertLead() {
-      return 1;
-    },
-  };
-  const calls = [];
-  const handle = createContactHandler({ env, fetch: okFetch(calls), store });
-  const res = fakeResponse();
-  await handle(fakeRequest({ body: valid }), res);
-  assert.equal(res.statusCode, 429);
-  assert.equal(calls.length, 0);
+test("reserved confirmation suppression never suppresses the team", async () => {
+  const h = harness(); const claim = h.store.claimSubmission;
+  h.store.claimSubmission = async (args) => { const row = await claim(args); row.confirmation = null; return row; };
+  assert.equal((await submit(h.handle)).statusCode, 200); assert.equal(h.emails().length, 1);
 });
-
-test("GET is rejected with JSON whatever the client accepts", async () => {
-  const handle = createContactHandler({ env, fetch: okFetch([]) });
-  let res = fakeResponse();
-  await handle(fakeRequest({ body: {}, method: "GET" }), res);
-  assert.equal(res.statusCode, 405);
-  res = fakeResponse();
-  await handle(fakeRequest({ body: undefined, method: "GET", headers: { accept: "*/*", "content-type": "" } }), res);
-  assert.equal(res.statusCode, 405);
-  assert.equal(res.headers.allow, "POST");
-  assert.match(res.headers["content-type"], /application\/json/);
-});
-
-test("Postgres TLS verifies by default, with a documented opt-out and CA override", () => {
-  assert.equal(sslOptionsFromEnv({}), undefined);
-  assert.equal(sslOptionsFromEnv({ DB_SSL: "true" }), true);
-  assert.deepEqual(sslOptionsFromEnv({ DB_SSL: "true", DB_SSL_NO_VERIFY: "true" }), { rejectUnauthorized: false });
-  assert.deepEqual(sslOptionsFromEnv({ DB_SSL_NO_VERIFY: "true" }), { rejectUnauthorized: false });
-  const ca = "-----BEGIN CERTIFICATE-----\nabc\n-----END CERTIFICATE-----";
-  assert.deepEqual(sslOptionsFromEnv({ DB_SSL_CA: ca, DB_SSL_NO_VERIFY: "true" }), { ca, rejectUnauthorized: true });
-  assert.deepEqual(sslOptionsFromEnv({ DB_SSL_CA: ca.replace(/\n/g, "\\n") }), { ca, rejectUnauthorized: true });
-});
-
-test("a browser post from another site is refused before anything is read or sent", async () => {
-  const calls = [];
-  const handle = createContactHandler({ env, fetch: okFetch(calls) });
-  let res = fakeResponse();
-  await handle(fakeRequest({ body: valid, headers: { origin: "https://evil.example", host: "soldenai.com" } }), res);
-  assert.equal(res.statusCode, 403);
-  assert.match(JSON.parse(res.body).message, /hello@soldenai\.com/);
-  res = fakeResponse();
-  await handle(fakeRequest({ body: valid, headers: { origin: "null", host: "soldenai.com" } }), res);
-  assert.equal(res.statusCode, 403);
-  assert.equal(calls.length, 0);
-
-  // The site's own origin, and a client that sends no Origin, both go through.
-  res = fakeResponse();
-  await handle(fakeRequest({ body: valid, headers: { origin: "https://soldenai.com", host: "soldenai.com" } }), res);
-  assert.equal(res.statusCode, 200);
-  assert.equal(calls.length, 2);
-});
-
-test("the confirmation never mails back what was typed, and greets only a plain first name", async () => {
-  const calls = [];
-  const handle = createContactHandler({ env, fetch: okFetch(calls) });
-  const spam = { ...valid, name: "http://spam.example/win Now", company: "Visit spam.example", message: "Cheap pills at spam.example" };
-  await handle(fakeRequest({ body: spam }), fakeResponse());
-  const confirmation = calls[1].init;
-  assert.deepEqual(confirmation.to, ["ada@example.com"]);
-  for (const part of [confirmation.html, confirmation.text, confirmation.subject]) {
-    assert.doesNotMatch(part, /spam\.example|pills/, "nothing submitted is echoed");
-  }
+test("confirmation never repeats submitted links or message, while team HTML escapes them", async () => {
+  const h = harness(); await submit(h.handle, { ...valid, name: "http://spam.example/win Now", company: "<script>spam.example</script>", message: "<b>Cheap pills</b>" });
+  const [team, confirmation] = h.emails().map((c) => c.payload);
+  assert.match(team.html, /&lt;script&gt;/); assert.doesNotMatch(team.html, /<script>/);
+  assert.doesNotMatch(confirmation.html + confirmation.text + confirmation.subject, /spam\.example|pills/);
   assert.match(confirmation.text, /Thanks, there\./);
-  assert.match(confirmation.text, /company number 16823002/, "the trading disclosure is in the email");
 });
 
-test("confirmations stop site-wide after the hourly cap, while team emails keep going", async () => {
-  const calls = [];
-  const handle = createContactHandler({ env: { ...env, CONTACT_MAX_PER_IP_PER_HOUR: "50", CONTACT_MAX_CONFIRMATIONS_PER_HOUR: "2" }, fetch: okFetch(calls) });
-  await quiet(async () => {
-    for (let i = 0; i < 3; i += 1) {
-      await handle(fakeRequest({ body: valid, ip: `203.0.113.${10 + i}` }), fakeResponse());
-    }
-  });
-  const toTeam = calls.filter((c) => c.init.to.includes("founders@example.com")).length;
-  const toProspect = calls.filter((c) => c.init.to.includes("ada@example.com")).length;
-  assert.equal(toTeam, 3);
-  assert.equal(toProspect, 2);
-});
-
-test("the message keeps its line breaks in the team email", async () => {
-  const calls = [];
-  const handle = createContactHandler({ env, fetch: okFetch(calls) });
-  await handle(fakeRequest({ body: { ...valid, message: "NetSuite, four entities.\r\n\r\n\r\nWe close   on day 9." } }), fakeResponse());
-  assert.match(calls[0].init.text, /NetSuite, four entities\.\n\nWe close on day 9\./);
-  assert.match(calls[0].init.html, /NetSuite, four entities\.<br><br>We close on day 9\./);
-});
-
-test("a plain form post from an unknown page returns to /about, never to a page that does not exist", async () => {
-  const handle = createContactHandler({ env, fetch: okFetch([]) });
-  let res = fakeResponse();
-  await handle(fakeRequest({ body: "name=Ada&t=", headers: { ...formHeaders, referer: "https://soldenai.com/phish" } }), res);
+test("plain form posts have no no-JS verification bypass, and errors return only local paths", async () => {
+  const h = harness();
+  let res = await submit(h.handle, new URLSearchParams({ ...valid, "cf-turnstile-response": "" }).toString(), { headers: { ...formHeaders, referer: "https://evil.example/how-it-works" } });
+  assert.equal(res.statusCode, 303); assert.equal(res.headers.location, "/how-it-works?sent=0&why=verification#contact");
+  res = await submit(h.handle, new URLSearchParams(valid).toString(), { headers: formHeaders });
+  assert.equal(res.headers.location, "/thanks");
+  res = await submit(h.handle, "name=Ada&t=8500", { headers: { ...formHeaders, referer: "https://evil.example/phish" } });
   assert.equal(res.headers.location, "/about?sent=0&why=invalid#contact");
-  res = fakeResponse();
-  await handle(fakeRequest({ body: "name=Ada&t=", headers: { ...formHeaders, referer: "https://soldenai.com/how-it-works" } }), res);
-  assert.equal(res.headers.location, "/how-it-works?sent=0&why=invalid#contact");
+});
+test("GET always returns 405 JSON; malformed JSON fails safely", async () => {
+  const h = harness(); let res = await submit(h.handle, null, { method: "GET", headers: formHeaders });
+  assert.equal(res.statusCode, 405); assert.equal(res.headers.allow, "POST");
+  assert.equal((await submit(h.handle, "{bad")).statusCode, 400); assert.equal(h.calls.length, 0);
+});
+test("configuration is fail-closed, rejects test keys in production and never derives origins from a request", async () => {
+  for (const patch of [{ TURNSTILE_SITE_KEY: "" }, { TURNSTILE_SECRET_KEY: "" }, { CONTACT_ALLOWED_ORIGINS: "https://evil.example/path" }, { CONTACT_ALLOWED_ORIGINS: "http://soldenai.com" }, { NODE_ENV: "production", TURNSTILE_SITE_KEY: "1x00000000000000000000AA" }, { RAILWAY_ENVIRONMENT: "production", TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA" }]) {
+    assert.equal(contactConfiguration({ ...env, ...patch }), null);
+    const h = harness({ env: { ...env, ...patch } }); assert.equal((await submit(h.handle)).statusCode, 503); assert.equal(h.calls.length, 0);
+  }
+  assert.deepEqual(contactConfiguration({ ...env, CONTACT_ALLOWED_ORIGINS: "http://localhost:8080" }).origins, ["http://localhost:8080"]);
+  for (const patch of [{ RESEND_API_KEY: "" }, { LEAD_NOTIFY_TO: "" }]) assert.equal((await submit(harness({ env: { ...env, ...patch } }).handle)).statusCode, 503);
+});
+test("hourly limits are positive integers and TLS verification remains explicit", () => {
+  for (const value of [undefined, "", "nope", "0", "-1", "1.5", "Infinity"]) assert.equal(parseMaxPerHour(value, 7), 7);
+  assert.equal(parseMaxPerHour("2"), 2);
+  assert.equal(sslOptionsFromEnv({}), undefined); assert.equal(sslOptionsFromEnv({ DB_SSL: "true" }), true);
+  assert.deepEqual(sslOptionsFromEnv({ DB_SSL_NO_VERIFY: "true" }), { rejectUnauthorized: false });
+  assert.deepEqual(sslOptionsFromEnv({ DB_SSL_CA: "a\\nb", DB_SSL_NO_VERIFY: "true" }), { ca: "a\nb", rejectUnauthorized: true });
+});
+
+test("zero confirmation budget is passed through as a deliberate off switch", async () => {
+  const h = harness({ env: { ...env, CONTACT_MAX_CONFIRMATIONS_PER_HOUR: "0" } });
+  await submit(h.handle);
+  assert.equal(h.store.claims[0].limits.confirmationsPerHour, 0);
+});
+
+test("confirmation dispatch must receive durable permission immediately before sending", async () => {
+  for (const permit of [async () => false, async () => { throw new Error("database lost"); }, () => new Promise(() => {})]) {
+    const h = harness({ storeTimeoutMs: 10 }); h.store.authorizeConfirmation = permit;
+    assert.equal((await submit(h.handle)).statusCode, 200);
+    assert.equal(h.emails().length, 1);
+    assert.equal([...h.store.records.values()][0].teamSent, true);
+  }
+});
+
+test("JSON object/array fields cannot throw through coercion before verification", async () => {
+  for (const key of ["name", "email", "company", "message"]) {
+    for (const value of [{ toString: 0 }, ["Ada"], 42, null]) {
+      const h = harness();
+      assert.equal((await submit(h.handle, { ...valid, [key]: value })).statusCode, 400);
+      assert.equal(h.calls.length, 0);
+    }
+  }
+  const h = harness();
+  assert.equal((await submit(h.handle, { ...valid, website: { toString: 0 }, source: { toString: 0 } })).statusCode, 200);
 });

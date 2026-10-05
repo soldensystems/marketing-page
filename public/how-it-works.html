@@ -27,7 +27,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="preload" href="/assets/fonts/Fraunces-Variable.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/assets/fonts/InterVariable-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="/assets/site.css?v=67224ba32d" />
+  <link rel="stylesheet" href="/assets/site.css?v=f7826c6418" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -178,10 +178,17 @@
             <div class="field"><label for="message">How your close runs today</label><textarea id="message" name="message" rows="3" required maxlength="4000" placeholder="Your ERP, number of entities, business days to close"></textarea></div>
             <div class="field field-hp" aria-hidden="true"><label for="website">Leave this field empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
             <input type="hidden" name="t" value="" />
+            <div class="form-verification" role="group" aria-label="Spam protection">
+              <div class="form-verification-widget" data-turnstile></div>
+              <div class="form-verification-status" data-verification-status role="status" aria-live="polite"></div>
+              <button class="btn btn-light btn-small" type="button" data-verification-retry hidden>Retry verification</button>
+            </div>
             <div class="form-foot">
-              <button class="btn btn-light" type="submit" data-cta="contact-submit">Request an invite</button>
+              <button class="btn btn-light" type="submit" data-cta="contact-submit" disabled>Request an invite</button>
               
             </div>
+            <p class="form-alternative">Prefer email? <a href="mailto:hello@soldenai.com">hello@soldenai.com</a></p>
+            <noscript><p class="form-alternative">The form needs JavaScript for spam protection. Please <a href="mailto:hello@soldenai.com">email hello@soldenai.com</a> to request an invite.</p></noscript>
             <div class="form-status" data-form-status role="status" aria-live="polite"></div>
           </form>
             <div class="form-done" data-form-done hidden tabindex="-1">
@@ -211,7 +218,7 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=67224ba32d" defer></script>
+  <script src="/assets/site.js?v=f7826c6418" defer></script>
   <script defer src="https://cloud.umami.is/script.js" data-website-id="99baca41-1d1e-4286-8ea0-66d90959767c" data-domains="soldenai.com"></script>
 </body>
 </html>

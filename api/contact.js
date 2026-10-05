@@ -1,8 +1,7 @@
 // POST /api/contact, mounted by server.js
 //
-// The handler is built immediately so a request never waits on Postgres. The store is
-// attached lazily on the first request that needs it; a failed connection is logged,
-// forgotten, and retried on the next request rather than memoised for the instance.
+// The handler is built immediately. Durable admission is attached lazily; a failed
+// connection is forgotten and retried on the next request. No store means no email.
 import { createContactHandler } from "../lib/contact.js";
 import { createPgStore, sslOptionsFromEnv } from "../lib/store.js";
 
@@ -12,7 +11,7 @@ function getStore() {
   if (!process.env.DATABASE_URL) return null;
   if (!storePromise) {
     storePromise = createPgStore(process.env.DATABASE_URL, { ssl: sslOptionsFromEnv(process.env) }).catch((error) => {
-      console.error("contact: could not connect to Postgres, continuing without storage", error?.message || error);
+      console.error("contact: could not connect to Postgres; form unavailable");
       storePromise = null;
       return null;
     });
