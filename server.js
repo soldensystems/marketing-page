@@ -8,6 +8,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import contact from "./api/contact.js";
+import { contactConfiguration, TURNSTILE_ACTION } from "./lib/contact.js";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const site = path.join(root, "public");
@@ -77,7 +78,16 @@ app.get(/^\/(.+)\/$/, (req, res) => {
 
 app.use("/api", express.json({ limit: "32kb" }));
 app.use("/api", express.urlencoded({ extended: false, limit: "32kb" }));
-app.all("/api/contact", (req, res) => contact(req, res));
+// Only the public widget key is exposed. Never return the secret or request-derived hosts.
+app.get("/api/contact-config", (_req, res) => {
+  const configuration = contactConfiguration(process.env);
+  res.set("Cache-Control", "no-store");
+  if (!configuration) return res.status(503).json({ ok: false, message: "Please email hello@soldenai.com." });
+  return res.json({ siteKey: configuration.siteKey, action: TURNSTILE_ACTION });
+});
+app.all("/api/contact", (req, res, next) => {
+  Promise.resolve(contact(req, res)).catch(next);
+});
 // A malformed or oversized body must answer with plain JSON, never an Express error page.
 app.use("/api", (error, _req, res, _next) => {
   const status = Number.isInteger(error?.status) ? error.status : 500;

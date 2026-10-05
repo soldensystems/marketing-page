@@ -1,4 +1,4 @@
-// Progressive enhancement only. The page works without this file.
+// Page content works without this file. Protected contact requests need JavaScript; email is always available.
 // The mobile menu is a <details> element and needs no script; this file only adds closing on Escape, on a click
 // outside it and on choosing one of its links.
 
@@ -58,26 +58,123 @@ if (reveals.length && "IntersectionObserver" in window) {
   for (const el of reveals) el.classList.add("in");
 }
 
-// Contact form: submit as JSON and show the result inline instead of navigating to /thanks.
-const form = document.querySelector("[data-contact-form]");
-if (form) {
+// Contact protection loads once, only on pages with an invite form. The public config contains no secret.
+// Both network operations are bounded so a blocked script or unavailable endpoint has an email fallback.
+async function contactJson(url, options = {}, timeoutMs = 10000) {
+  const controller = new AbortController();
+  let timer;
+  try {
+    return await Promise.race([
+      fetch(url, { ...options, signal: controller.signal }).then(async (response) => ({
+        response,
+        body: await response.json().catch(() => ({})),
+      })),
+      new Promise((_, reject) => {
+        timer = setTimeout(() => {
+          controller.abort();
+          reject(new Error("Contact request timed out"));
+        }, timeoutMs);
+      }),
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+let turnstileLoad;
+function loadTurnstile() {
+  if (turnstileLoad) return turnstileLoad;
+  turnstileLoad = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    let settled = false;
+    const finish = (error) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      script.onload = null;
+      script.onerror = null;
+      if (error) {
+        script.remove();
+        reject(error);
+      } else {
+        resolve(window.turnstile);
+      }
+    };
+    const timer = setTimeout(() => finish(new Error("Verification script timed out")), 10000);
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    script.async = true;
+    script.onload = () => {
+      if (settled) return;
+      if (!window.turnstile || typeof window.turnstile.ready !== "function") {
+        finish(new Error("Verification script unavailable"));
+        return;
+      }
+      try {
+        window.turnstile.ready(() => finish());
+      } catch (error) {
+        finish(error);
+      }
+    };
+    script.onerror = () => finish(new Error("Verification script blocked"));
+    document.head.appendChild(script);
+  }).catch((error) => {
+    turnstileLoad = null; // A deliberate retry can recover from a blocked or interrupted load.
+    throw error;
+  });
+  return turnstileLoad;
+}
+
+let contactProtection;
+function loadContactProtection() {
+  if (contactProtection) return contactProtection;
+  contactProtection = (async () => {
+    const { response, body } = await contactJson("/api/contact-config", {
+      headers: { Accept: "application/json" },
+      cache: "no-store",
+    });
+    if (!response.ok || typeof body.siteKey !== "string" || !body.siteKey.trim() || body.action !== "contact") {
+      throw new Error("Contact protection unavailable");
+    }
+    const api = await loadTurnstile();
+    return { api, siteKey: body.siteKey, action: body.action };
+  })().catch((error) => {
+    contactProtection = null;
+    throw error;
+  });
+  return contactProtection;
+}
+
+// Each form owns its token and widget. The server must independently verify every token.
+for (const [index, form] of [...document.querySelectorAll("[data-contact-form]")].entries()) {
   const status = form.querySelector("[data-form-status]");
   const submit = form.querySelector('button[type="submit"]');
+  const widget = form.querySelector("[data-turnstile]");
+  const verificationStatus = form.querySelector("[data-verification-status]");
+  const retry = form.querySelector("[data-verification-retry]");
+  const done = form.parentElement && form.parentElement.querySelector("[data-form-done]");
   let sending = false;
+  let completed = false;
+  let initialising = false;
+  let protection;
+  let widgetId = null;
+  let token = "";
+  let tokenExpiresAt = 0;
 
   const FALLBACK_FAILURE = "Not sent. Please try again in a few minutes, or email hello@soldenai.com.";
-  const done = form.parentElement && form.parentElement.querySelector("[data-form-done]");
+  const VERIFICATION_FAILURE = "Verification is unavailable. Please retry verification, or email hello@soldenai.com.";
 
-  // The status region is always rendered, empty until there is something to say, so screen readers
-  // register it before its first message.
-  if (status && !status.id) status.id = "form-status";
+  // Live regions exist in the original markup, before their first announcement.
+  if (status && !status.id) status.id = `form-status-${index}`;
+  if (verificationStatus) {
+    verificationStatus.id = `verification-status-${index}`;
+    if (submit) submit.setAttribute("aria-describedby", verificationStatus.id);
+  }
   const fields = [
     ["name", "Name"],
     ["company", "Company"],
     ["email", "Work email"],
     ["message", "How your close runs today"],
   ];
-  // Mark the fields a failure names, and point them at the message that explains it.
   function markInvalid(message) {
     for (const [name, label] of fields) {
       const input = form.elements.namedItem(name);
@@ -100,7 +197,6 @@ if (form) {
     if (failed) markInvalid(message);
   }
 
-  // Final result: announce it and move focus to it so keyboard and screen-reader users land on the outcome.
   function settle(message, failed) {
     show(message, failed);
     if (!status) return;
@@ -108,8 +204,108 @@ if (form) {
     status.focus();
   }
 
-  // A script-blocked visitor whose plain post failed is redirected back here with ?sent=0&why=...
-  // If this script does run on that landing, explain why the message was not sent.
+  function updateSubmit() {
+    if (submit) submit.disabled = sending || completed || !token;
+    if (retry) retry.disabled = sending || initialising || completed;
+  }
+
+  function verification(message, canRetry = false) {
+    if (verificationStatus) verificationStatus.textContent = message;
+    if (retry) retry.hidden = !canRetry;
+    updateSubmit();
+  }
+
+  function clearToken() {
+    token = "";
+    tokenExpiresAt = 0;
+    updateSubmit();
+  }
+
+  function resetVerification() {
+    clearToken();
+    if (completed) return;
+    verification("Please complete the verification below.");
+    try {
+      if (!protection || widgetId === null) throw new Error("Verification unavailable");
+      protection.api.reset(widgetId);
+    } catch {
+      // A removed or broken widget needs a fresh render, rather than endless failed resets.
+      try { protection?.api.remove(widgetId); } catch { /* The widget may already be gone. */ }
+      widgetId = null;
+      verification(VERIFICATION_FAILURE, true);
+    }
+  }
+
+  async function initialiseVerification() {
+    if (initialising || completed) return;
+    initialising = true;
+    clearToken();
+    verification("Loading verification.");
+    try {
+      if (!widget) throw new Error("Verification container missing");
+      protection = await loadContactProtection();
+      verification("Please complete the verification below.");
+      widgetId = protection.api.render(widget, {
+        sitekey: protection.siteKey,
+        action: protection.action,
+        theme: "dark",
+        // Flexible widgets have a 300px minimum; compact also fits small phone layouts.
+        size: widget.clientWidth >= 300 ? "flexible" : "compact",
+        tabindex: 0,
+        "response-field": false, // Keep the token in memory and add it explicitly to JSON.
+        retry: "auto",
+        "refresh-expired": "auto",
+        "refresh-timeout": "auto",
+        callback: (value) => {
+          if (sending || completed) return;
+          if (typeof value !== "string" || !value) {
+            clearToken();
+            verification(VERIFICATION_FAILURE, true);
+            return;
+          }
+          token = value;
+          // Also check age on submit, in case a sleeping tab delayed the expiry callback.
+          tokenExpiresAt = Date.now() + 290000;
+          verification("Verification complete. You can request an invite.");
+        },
+        "expired-callback": () => {
+          if (completed) return;
+          clearToken();
+          verification("Verification expired. Please verify again.", true);
+        },
+        "error-callback": () => {
+          if (completed) return;
+          clearToken();
+          verification(VERIFICATION_FAILURE, true);
+        },
+        "timeout-callback": () => {
+          if (completed) return;
+          clearToken();
+          verification("Verification timed out. Please verify again.", true);
+        },
+        "unsupported-callback": () => {
+          if (completed) return;
+          clearToken();
+          verification("This browser cannot complete verification. Please email hello@soldenai.com.");
+        },
+      });
+      if (widgetId === null || widgetId === undefined) throw new Error("Verification did not start");
+    } catch {
+      widgetId = null;
+      verification(VERIFICATION_FAILURE, true);
+    } finally {
+      initialising = false;
+      updateSubmit();
+    }
+  }
+
+  if (retry) retry.addEventListener("click", () => {
+    if (sending || initialising || completed) return;
+    if (widgetId !== null) resetVerification();
+    else initialiseVerification();
+  });
+
+  // A plain post from an old cached page still gets a clear failure, never a verification bypass.
   try {
     const params = new URLSearchParams(window.location.search);
     if (params.get("sent") === "0") {
@@ -118,6 +314,7 @@ if (form) {
         limit: "Not sent. Too many messages from this connection. Please email hello@soldenai.com.",
         origin: "Not sent. Please use the form on this page, or email hello@soldenai.com.",
         config: "Not sent. The contact form is unavailable right now. Please email hello@soldenai.com.",
+        verification: "Not sent. Please complete verification and try again, or email hello@soldenai.com.",
         delivery: "Not sent. Your message could not be delivered. Please try again in a few minutes, or email hello@soldenai.com.",
       };
       settle(reasons[params.get("why")] || FALLBACK_FAILURE, true);
@@ -126,28 +323,37 @@ if (form) {
     // URLSearchParams unavailable: nothing to explain.
   }
 
+  form.addEventListener("reset", () => {
+    if (!sending && !completed) resetVerification();
+  });
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    if (sending) return;
-    sending = true;
+    if (sending || completed) return;
+    if (!token || Date.now() >= tokenExpiresAt) {
+      if (token) resetVerification();
+      settle("Not sent. Please complete verification below, or email hello@soldenai.com.", true);
+      return;
+    }
     const data = Object.fromEntries(new FormData(form).entries());
     data.source = form.dataset.source || "site";
     data.t = Date.now() - loadedAt; // elapsed milliseconds since page load, never a timestamp
+    data["cf-turnstile-response"] = token;
+    sending = true;
+    clearToken(); // Never reuse a submitted token, even if the response is lost.
     if (submit) submit.setAttribute("aria-busy", "true");
     markInvalid("");
     show("Sending.", false);
     try {
-      const response = await fetch(form.action, {
+      const { response, body } = await contactJson(form.action, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(data),
-      });
-      const body = await response.json().catch(() => ({}));
+      }, 35000);
       if (response.ok) {
-        track("contact_submitted", { source: data.source });
+        completed = true;
         form.reset();
         if (done) {
-          // The form gives way to the confirmation: what happens next, not a status line.
           if (status) status.textContent = "";
           form.hidden = true;
           done.hidden = false;
@@ -155,16 +361,24 @@ if (form) {
         } else {
           settle(body.message || "Invite requested. We reply within two business days.", false);
         }
+        // Analytics must never turn successful delivery into a retry.
+        try { track("contact_submitted", { source: data.source }); } catch { /* Optional analytics. */ }
       } else {
         settle(body.message || FALLBACK_FAILURE, true);
       }
     } catch {
-      settle("Not sent. Could not reach the server. Please try again in a few minutes, or email hello@soldenai.com.", true);
+      settle("We could not confirm delivery. Please try again in a few minutes, or email hello@soldenai.com.", true);
     } finally {
       sending = false;
       if (submit) submit.removeAttribute("aria-busy");
+      // Validation, delivery, network and timeout failures all require a fresh challenge.
+      if (!completed) resetVerification();
+      updateSubmit();
     }
   });
+
+  // Register handlers first, keeping the form fail-closed throughout asynchronous startup.
+  initialiseVerification();
 }
 
 // Hero demo: a directed sequence inside the real mock. Four acts, then a reset. Honours reduced motion.

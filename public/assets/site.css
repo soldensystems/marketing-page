@@ -2145,6 +2145,7 @@ main > .hero:last-child {
 }
 
 .form-col {
+  min-width: 0;
   display: grid;
   gap: 32px;
   align-content: start;
@@ -2809,6 +2810,7 @@ main > .hero:last-child {
 }
 
 .form {
+  min-width: 0;
   display: grid;
   gap: 18px;
 }
@@ -2872,6 +2874,38 @@ main > .hero:last-child {
   align-items: center;
   gap: 18px;
   margin-top: 6px;
+}
+
+/* Verification stays keyboard accessible and fits the narrowest form layout. */
+.form-verification {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.form-verification-widget {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.form-verification-status,
+.form-alternative {
+  font: 400 13px/1.5 var(--sans);
+  color: var(--dark-muted);
+}
+
+.form-verification .btn {
+  justify-self: start;
+  min-height: 44px;
+}
+
+.form-verification [hidden] {
+  display: none;
+}
+
+.form .btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 
 .form-status {
