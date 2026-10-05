@@ -82,17 +82,20 @@ async function contactJson(url, options = {}, timeoutMs = 10000) {
 }
 
 let turnstileLoad;
+let turnstileLoadAttempt = 0;
 function loadTurnstile() {
   if (turnstileLoad) return turnstileLoad;
   turnstileLoad = new Promise((resolve, reject) => {
     const script = document.createElement("script");
     let settled = false;
+    const callbackName = `soldenTurnstileLoaded${++turnstileLoadAttempt}`;
     const finish = (error) => {
       if (settled) return;
       settled = true;
       clearTimeout(timer);
       script.onload = null;
       script.onerror = null;
+      delete window[callbackName];
       if (error) {
         script.remove();
         reject(error);
@@ -101,20 +104,19 @@ function loadTurnstile() {
       }
     };
     const timer = setTimeout(() => finish(new Error("Verification script timed out")), 10000);
-    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
-    script.async = true;
-    script.onload = () => {
+    // Cloudflare rejects ready() for an async/defer script. Its named onload
+    // callback signals API readiness, independently of the script element's load event.
+    // Use a different name per retry so a late old callback cannot settle a new load.
+    window[callbackName] = () => {
       if (settled) return;
-      if (!window.turnstile || typeof window.turnstile.ready !== "function") {
+      if (!window.turnstile || typeof window.turnstile.render !== "function") {
         finish(new Error("Verification script unavailable"));
         return;
       }
-      try {
-        window.turnstile.ready(() => finish());
-      } catch (error) {
-        finish(error);
-      }
+      finish();
     };
+    script.src = `https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=${callbackName}`;
+    script.async = true;
     script.onerror = () => finish(new Error("Verification script blocked"));
     document.head.appendChild(script);
   }).catch((error) => {

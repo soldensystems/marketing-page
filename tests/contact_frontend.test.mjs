@@ -85,10 +85,16 @@ async function browser(options = {}) {
   let now = 100000;
   let configCalls = 0;
   let posts = 0;
+  let readyCalls = 0;
+  const providerCallbacks = [];
   const api = {
     ready(callback) {
-      if (options.readyThrows) throw new Error("Readiness unavailable");
-      if (!options.readyHangs) callback();
+      readyCalls++;
+      // Cloudflare rejects ready() when api.js was loaded with async/defer.
+      // This guard reproduces the production integration failure, rather than
+      // making every provider-readiness callback succeed synchronously.
+      if (scripts.some((script) => script.async || script.defer)) throw new Error("Remove async/defer before using turnstile.ready()");
+      callback();
     },
     render(element, config) {
       if (options.renderThrows) throw new Error("Render unavailable");
@@ -118,14 +124,22 @@ async function browser(options = {}) {
       scripts.push(element);
       queueMicrotask(() => {
         if (options.scriptFails) element.onerror?.();
-        else if (!options.scriptHangs) { window.turnstile = api; element.onload?.(); }
+        else if (!options.scriptHangs) {
+          window.turnstile = options.providerApiMissing ? {} : api;
+          const callbackName = new URL(element.src).searchParams.get("onload");
+          const callback = window[callbackName];
+          providerCallbacks.push({ name: callbackName, callback });
+          if (options.callbackBeforeScriptLoad && !options.providerCallbackHangs) callback?.();
+          element.onload?.();
+          if (!options.callbackBeforeScriptLoad && !options.providerCallbackHangs) queueMicrotask(() => callback?.());
+        }
       });
     },
   };
   const window = { location: { search: options.search || "" } };
   class TestDate extends Date { static now() { return now; } }
   const context = vm.createContext({
-    document, window, URLSearchParams, AbortController, Date: TestDate,
+    document, window, URL, URLSearchParams, AbortController, Date: TestDate,
     FormData: class { constructor(form) { this.data = form.values; } entries() { return this.data.entries(); } },
     setTimeout(callback, delay) {
       const id = ++nextTimer;
@@ -147,7 +161,8 @@ async function browser(options = {}) {
   vm.runInContext(script, context, { filename: "site.js" });
   await flush();
   return {
-    forms, calls, scripts, widgets, options, api,
+    forms, calls, scripts, widgets, options, api, providerCallbacks,
+    readyCalls: () => readyCalls,
     posts: () => calls.filter((call) => call.init.method === "POST"),
     solve(index = 0, token = "verified-token") { widgets[index].config.callback(token); },
     async advance(ms) {
@@ -202,7 +217,7 @@ test("one config request and explicit script initialise independent contact widg
   assert.equal(b.calls[0].url, "/api/contact-config");
   assert.equal(b.calls[0].init.cache, "no-store");
   assert.equal(b.scripts.length, 1);
-  assert.equal(b.scripts[0].src, "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit");
+  assert.equal(b.scripts[0].src, "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=soldenTurnstileLoaded1");
   assert.equal(b.scripts[0].async, true);
   assert.equal(b.widgets.length, 3);
   for (const [index, form] of b.forms.entries()) {
@@ -368,7 +383,7 @@ for (const [label, options] of [
   ["wrong action", { configFetch: async () => response(true, { siteKey: "key", action: "login" }) }],
   ["script blocked", { scriptFails: true }],
   ["render error", { renderThrows: true }],
-  ["script readiness error", { readyThrows: true }],
+  ["provider API missing", { providerApiMissing: true }],
 ]) {
   test(`${label} shows an email fallback and leaves submit disabled`, async () => {
     const b = await browser(options);
@@ -385,7 +400,7 @@ for (const [label, options] of [
 for (const [label, options] of [
   ["configuration request", { configFetch: () => new Promise(() => {}) }],
   ["script request", { scriptHangs: true }],
-  ["script readiness", { readyHangs: true }],
+  ["provider readiness callback", { providerCallbackHangs: true }],
 ]) {
   test(`stalled ${label} times out with an email fallback and retry`, async () => {
     const b = await browser(options);
@@ -460,4 +475,45 @@ test("a failed widget reset can recover by rendering a replacement widget", asyn
   assert.equal(b.widgets.length, 2);
   b.solve(1, "replacement-widget-token");
   assert.equal(b.forms[0].submit.disabled, false);
+});
+
+
+test("async provider loading never calls ready(), which Cloudflare rejects for async/defer", async () => {
+  const b = await browser({ pages: ["index.html", "about.html", "how-it-works.html"] });
+  assert.equal(b.scripts[0].async, true);
+  assert.equal(b.widgets.length, 3);
+  assert.equal(b.readyCalls(), 0);
+});
+
+test("the provider callback may run before the script element load event", async () => {
+  const b = await browser({ callbackBeforeScriptLoad: true });
+  assert.equal(b.widgets.length, 1);
+  assert.equal(b.readyCalls(), 0);
+  b.solve();
+  assert.equal(b.forms[0].submit.disabled, false);
+});
+
+test("script load alone does not resolve readiness; a late callback renders the widget", async () => {
+  const b = await browser({ providerCallbackHangs: true });
+  assert.equal(b.widgets.length, 0);
+  b.providerCallbacks[0].callback();
+  await flush();
+  assert.equal(b.widgets.length, 1);
+});
+
+test("a stale callback cannot settle a retried script load", async () => {
+  const options = { providerCallbackHangs: true };
+  const b = await browser(options);
+  const stale = b.providerCallbacks[0];
+  await b.advance(10000);
+  await b.forms[0].retry.dispatch("click");
+  await flush();
+  assert.equal(b.providerCallbacks.length, 2);
+  assert.notEqual(stale.name, b.providerCallbacks[1].name);
+  stale.callback();
+  await flush();
+  assert.equal(b.widgets.length, 0);
+  b.providerCallbacks[1].callback();
+  await flush();
+  assert.equal(b.widgets.length, 1);
 });
