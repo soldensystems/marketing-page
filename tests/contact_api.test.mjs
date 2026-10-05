@@ -236,9 +236,9 @@ test("reserved confirmation suppression never suppresses the team", async () => 
   assert.equal((await submit(h.handle)).statusCode, 200); assert.equal(h.emails().length, 1);
 });
 test("confirmation never repeats submitted links or message, while team HTML escapes them", async () => {
-  const h = harness(); await submit(h.handle, { ...valid, name: "http://spam.example/win Now", company: "<script>spam.example</script>", message: "<b>Cheap pills</b>" });
+  const h = harness(); await submit(h.handle, { ...valid, name: "http://spam.example/win Now", company: "<ScRiPt>spam.example</ScRiPt>", message: "<b>Cheap pills</b>" });
   const [team, confirmation] = h.emails().map((c) => c.payload);
-  assert.match(team.html, /&lt;script&gt;/); assert.doesNotMatch(team.html, /<script>/);
+  assert.match(team.html, /&lt;script&gt;/i); assert.doesNotMatch(team.html, /<script\b/i);
   assert.doesNotMatch(confirmation.html + confirmation.text + confirmation.subject, /spam\.example|pills/);
   assert.match(confirmation.text, /Thanks, there\./);
 });
