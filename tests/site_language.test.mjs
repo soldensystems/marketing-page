@@ -134,6 +134,23 @@ test("every invite form asks only for name, work email, company and message", ()
   }
 });
 
+test("every invitation keeps the close problem and qualifies UK-first prospects across accounting systems", () => {
+  const introductions = {
+    "index.html": "If your close has outgrown your finance team, tell us how it runs today.",
+    "about.html": "Tell us how it runs today. If it is a fit, Solden reproduces a period you have already closed, and you judge the result against your own.",
+    "how-it-works.html": "If your close has outgrown your finance team, tell us how it runs today. It starts with a replay.",
+  };
+  for (const [page, introduction] of Object.entries(introductions)) {
+    const html = read(page);
+    const invitation = html.match(/<section[^>]*id="(?:invite|contact)"[^>]*>[\s\S]*?<\/section>/)?.[0];
+    assert.ok(invitation, `${page}: invitation section`);
+    assert.ok(invitation.includes(`<p class="lede">${introduction}</p>`), `${page}: existing close-led introduction`);
+    assert.match(invitation, /<p>We are starting with UK companies\.<\/p>/, `${page}: UK-first recruitment`);
+    assert.match(invitation, /<textarea[^>]*name="message"[^>]*placeholder="Accounting system and version, country, number of entities, business days to close"/, `${page}: exact accounting-system qualification prompt`);
+    assert.doesNotMatch(invitation, /<select\b/, `${page}: no platform eligibility dropdown`);
+  }
+});
+
 test("retired CTA and apology lines stay off every page, the script and the stylesheet", () => {
   for (const file of scanned) {
     const text = read(file);
