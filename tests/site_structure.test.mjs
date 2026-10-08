@@ -33,7 +33,7 @@ function pageFor(target, current) {
 }
 
 const FOOTER_LINE = "The finance department becomes infrastructure. Always running, always proven.";
-const CTA = "Request an invite";
+const CTA = "BOOK A CALL";
 
 // ------------------------------------------------------------------ Anchors
 
@@ -132,7 +132,7 @@ test("the footer line and the header CTA are on every page", () => {
   }
 });
 
-test("every tracked CTA reads exactly Request an invite", () => {
+test("every tracked CTA reads exactly BOOK A CALL", () => {
   for (const page of pages) {
     for (const match of read(page).matchAll(/<(a|button)\b[^>]*\sdata-cta="([^"]+)"[^>]*>([^<]*)<\/\1>/g)) {
       assert.equal(match[3].trim(), CTA, `${page}: data-cta="${match[2]}" reads "${match[3].trim()}"`);

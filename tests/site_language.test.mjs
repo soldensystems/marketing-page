@@ -22,7 +22,7 @@ const BANNED = [
   [/modern companies/i, '"growing companies", never "modern companies"'],
   [/—/, "no em-dashes"],
   [/launching soon|coming soon/i, "never promise timelines"],
-  [/request a demo|book a demo|see it in action|watch the demo/i, "no demo language; the CTA is an invite"],
+  [/request a demo|book a demo|see it in action|watch the demo/i, "no demo language; the CTA is BOOK A CALL"],
   [/\bper[- ]seat|\bper[- ]action|\bcredits\b|credit[- ]based|\bper[- ]credit/i, "outcomes pricing only"],
   [/\bagents? (?:that|who) (?:run|handle)|our agents\b/i, "agents are workers inside the department, never the product"],
   [/runs your (?:month-end )?close|built by operators|backed by y ?combinator/i, "Billow owns this device"],
@@ -156,7 +156,7 @@ test("retired CTA and apology lines stay off every page, the script and the styl
     const text = read(file);
     assert.doesNotMatch(text, /design[- ]partner/i, `${file}: design partner language is retired`);
     assert.doesNotMatch(text, /pre-build|not yet held|we do not hold|now onboarding|\bnot yet\b|planned for|coming later/i, `${file}: no apologetic copy`);
-    assert.doesNotMatch(text, /request a demo|book a demo/i, `${file}: the CTA is "Request an invite"`);
+    assert.doesNotMatch(text, /request a demo|book a demo/i, `${file}: the CTA is "BOOK A CALL"`);
   }
 });
 
