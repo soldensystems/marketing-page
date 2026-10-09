@@ -48,3 +48,13 @@ slack.svg: current Slack mark (2019), from gilbarbara/logos (CC0), slack-icon.sv
 googlesheets.svg: current Google Sheets icon (2020), "Google Sheets 2020 Logo.svg" from Wikimedia Commons (PD-shape), fetched 2026-09-30. Google trademark; used nominatively to indicate compatibility.
 microsoftexcel.svg: current Excel icon (2019 to present), "Microsoft Office Excel (2019–present).svg" from Wikimedia Commons (free content, simple-shape logo), cleaned of Adobe metadata and entities, fetched 2026-09-30. Microsoft trademark; used nominatively to indicate compatibility.
 microsoftoutlook.svg: current Outlook icon (2018 to present), "Microsoft Office Outlook (2018–present).svg" from Wikimedia Commons (free content, simple-shape logo), fetched 2026-09-30; replaces the simple-icons silhouette. Microsoft trademark; used nominatively to indicate compatibility.
+
+AI summary footer marks
+
+The inline ChatGPT, Claude, Gemini, Grok and Perplexity marks identify the
+external services linked in the footer, not Solden integrations. Paths were
+verified against the recognizable provider marks displayed in the AI-summary
+row at https://stacks.ai/ on 9 October 2026. They are reproduced as monochrome
+SVG shapes, without the reference site’s component code or styling. All
+marks remain the trademarks of their respective owners; no endorsement or
+affiliation is implied.

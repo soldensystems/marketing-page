@@ -3014,6 +3014,7 @@ main > .hero:last-child {
 }
 
 .footer-nav {
+  align-self: start;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -3079,88 +3080,44 @@ main > .hero:last-child {
   display: block;
 }
 
-/* Optional AI hand-off. No embedded chat, provider script or API connection. */
+/* An understated AI summary row beneath the footer's brand line. */
 .footer-ai {
-  grid-column: 1 / -1;
+  margin-top: 28px;
 }
 
-.footer-ai h2 {
-  margin: 0 0 16px;
-  font: 500 22px/1.3 var(--serif);
-  color: var(--ink);
+.footer-ai > p {
+  margin: 0 0 8px;
+  font: 400 13px/1.5 var(--sans);
+  color: var(--muted);
 }
 
 .footer-ai-links {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
+  margin-left: -8px;
 }
 
-.footer-ai-links a,
-.footer-ai-copy-button {
+.footer-ai-links a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  min-height: 44px;
-  padding: 10px 16px;
-  border: 1px solid var(--rule-strong);
-  border-radius: 6px;
-  background: transparent;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
   color: var(--ink-soft);
-  font: 400 13px/1.5 var(--sans);
   text-decoration: none;
-  cursor: pointer;
 }
 
-.footer-ai-links a:hover,
-.footer-ai-copy-button:hover {
-  border-color: var(--ink);
-  background: var(--canvas-2);
+.footer-ai-links a:hover {
+  color: var(--ink);
 }
 
 .footer-ai-links svg {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.footer-ai-prompt {
-  margin-top: 16px;
-  max-width: 72ch;
-  font: 400 13px/1.5 var(--sans);
-}
-
-.footer-ai-prompt summary {
-  width: fit-content;
-  min-height: 44px;
-  padding-block: 12px;
-  cursor: pointer;
-  color: var(--muted);
-}
-
-.footer-ai-help {
-  margin: 8px 0 12px;
-}
-
-.footer-ai-copy {
-  margin: 0 0 16px;
-  padding: 16px;
-  border-left: 2px solid var(--rule-strong);
-  background: var(--canvas-2);
-  color: var(--ink-soft);
-  user-select: text;
-}
-
-.footer-ai-status {
-  display: inline-block;
-  margin: 8px 12px;
-}
-
-.footer-ai [hidden] {
-  display: none;
+  display: block;
+  width: 28px;
+  height: 28px;
+  fill: currentColor;
 }
 
 /* ---------------------------------------------------------------- Inner pages: tiles */
