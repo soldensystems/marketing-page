@@ -607,3 +607,25 @@ for (const [index, form] of [...document.querySelectorAll("[data-contact-form]")
   }
   next();
 })();
+
+// AI summary hand-off: the visible prompt remains usable without JavaScript or clipboard access.
+for (const summary of document.querySelectorAll("[data-ai-summary]")) {
+  const prompt = summary.querySelector("[data-ai-prompt]");
+  const button = summary.querySelector("[data-ai-copy]");
+  const status = summary.querySelector("[data-ai-status]");
+  if (!prompt || !button || !status) continue;
+  button.hidden = false;
+  button.addEventListener("click", async () => {
+    if (button.disabled) return;
+    button.disabled = true;
+    status.textContent = "";
+    try {
+      await navigator.clipboard.writeText(prompt.textContent.trim());
+      status.textContent = "Prompt copied. Paste it into your chosen AI.";
+    } catch {
+      status.textContent = "Copy isn’t available here. Select and copy the prompt above.";
+    } finally {
+      button.disabled = false;
+    }
+  });
+}
